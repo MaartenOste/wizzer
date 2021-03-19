@@ -1,0 +1,9 @@
+@import '../_sass/abstracts/index';
+
+.page{
+    background-color: $color-yellow;
+    .page-main{
+        box-sizing: border-box;
+        height: 100%;
+    }
+}

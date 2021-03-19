@@ -1,0 +1,24 @@
+.button{
+	&--primary{
+		background-color: $color-black;
+		border: none;
+		color: $color-white;
+		border-radius: 50px;
+		padding: 10px 20px;
+		font-size: $font-size-medium;
+		font-family:  $font-family-base;
+	}
+
+	&--invite{
+		background-color: $color-black;
+		border: none;
+		color: $color-white;
+		border-radius: 50px;
+		height: fit-content;
+		padding: 10px;
+		font-size: $font-size-small;
+		text-transform: capitalize;
+		font-family:  $font-family-base;
+		line-height: $font-size-small;
+	}
+}

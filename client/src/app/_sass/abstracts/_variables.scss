@@ -1,0 +1,36 @@
+$color-black: #000000;
+$color-grey-dark: #828282;
+$color-grey-middle: #aeaeae;
+$color-grey-light: #f7f7f7;
+$color-white: #FFFFFF;
+
+$color-blue: #88ffe1;
+$color-yellow: #ffde53;
+$color-green:#36d25b;
+$color-red: #d23636;
+
+$font-family-base: 'Montserrat', sans-serif;
+$font-family-calculator: 'DotGothic16', sans-serif;
+
+$font-size-small: 15px;
+$font-size-medium: 18px;
+$font-size-large: 25px;
+
+$grid-columns: 12 !default;
+$grid-gutter-width: 48px !default;
+$grid-row-columns: 6 !default;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1360px
+) !default;

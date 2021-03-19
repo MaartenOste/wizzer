@@ -1,0 +1,46 @@
+nav{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	background-color: $color-black;
+	color: $color-white;
+	height: 10vh;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+
+	div{
+		width: 50%;
+		height: inherit;
+		text-align: center;
+		display: flex;
+		position: relative;
+
+		svg{
+			color: white;
+			height: 50%;
+			margin: auto;
+			padding-bottom: 5px;
+		}
+
+		&.active{
+			svg{
+				border-bottom: $color-blue solid 2px;
+			}
+		}
+
+		&:nth-child(1)::before{
+			content : "";
+			position: absolute;
+			right: -1px;
+			top: 25%;
+			height: 50%;
+			width:  2px;
+			border-right: $color-blue solid 2px;
+			opacity: 0.5;
+		}
+	}
+}

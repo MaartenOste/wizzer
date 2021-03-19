@@ -1,0 +1,59 @@
+.title{
+	position: relative;
+	width: fit-content;
+	height: fit-content;
+	position: relative;
+	margin: 0 0 7px 7px;
+
+	.title--text{
+		position: inherit;
+		background-color: $color-white;
+		width: fit-content;
+		font-size: $font-size-large;
+		font-weight: bold;
+		text-transform: capitalize;
+		box-sizing: border-box;
+		padding: 2px 4px;
+		z-index: 2;
+		border: 2px solid $color-black;
+	}
+
+	.title--bg{
+		position: absolute;
+		width: calc(100% + 7px);
+		height: calc(100% + 7px);
+		left: -7px;
+		bottom: -7px;
+		background-color: $color-black;
+		z-index: 1;
+		-webkit-clip-path:polygon(0 7px, 7px 0, 90% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+		clip-path: polygon(0 7px, 7px 0, 90% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+	}
+
+	.title--bg::before{
+		content: '';
+		position: absolute;
+		width: calc(100% - 2px);
+		height: calc(100% - 2.5px);
+		background-color: $color-white;
+		z-index: 2;
+		-webkit-clip-path: polygon(0 7px, 7px 0, 90% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+		clip-path: polygon(0 7px, 7px 0, 90% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+		display: block;
+		position: absolute;
+		top: 1px;
+		left: 1.5px;
+	}
+
+	.title--bg::after{
+		content: '';
+		background-color: $color-black;
+		width: 1.5px;
+		height: 10px;
+		position: absolute;
+		left: 4.6px;
+		bottom: 0px;
+		transform: rotate(45deg);
+		z-index: 3;
+	}
+}

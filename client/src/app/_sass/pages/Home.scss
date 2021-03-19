@@ -1,0 +1,15 @@
+.homePage-container{
+	box-sizing: border-box;
+	padding: 25px;
+	min-height: 90vh;
+	padding-bottom: 15vh;
+
+	.homePage--heading{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 25px;
+	}
+}

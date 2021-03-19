@@ -1,0 +1,42 @@
+.filter-container{
+	background-color: $color-white;
+	border-radius: 15px;
+	margin: 15px 0;
+	box-shadow: -2px 3px 3px #00000070;
+	text-transform: capitalize;
+	cursor: pointer;
+	font-size: $font-size-medium;
+
+
+	&__heading{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 20px;
+		font-weight: bold;
+		padding: 15px;
+
+		&.openedCard{
+			border-bottom: 1px solid #aeaeae88;
+		}
+
+		.filter-arrow{
+			font-size: $font-size-large;
+		}
+	}
+
+	&__body{
+		padding: 0 15px 15px;
+		display: flex;
+		flex-direction: column;
+
+		&-row{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			margin-top: 15px;
+		}
+	}
+}
