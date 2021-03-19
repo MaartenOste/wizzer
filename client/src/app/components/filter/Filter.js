@@ -6,9 +6,11 @@ import {FaRegEye, FaBook} from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import Switch from "react-switch";
 
-const Filter = (props) => {
+const Filter = ({}) => {
 	const history = useHistory();
 	const [open, setOpen] = useState(false);
+
+	const [filters, setFilters] = useState([{type: 'Getallenkennis', active:false},{type: 'Bewerkingen', active:false}, { type: 'Meetkunde', active:false}, { type: 'Meten en metend rekenen', active:false}, {type: 'Toepassingen', active:false}]);
 
   return (
     <div className='filter-container'>
@@ -23,6 +25,10 @@ const Filter = (props) => {
 						Categorieën
 					</div>
 					<div className='filter-container__body-row__filters'>
+						{filters && filters.map((filter, i)=>{
+							return <div className={`filterItem ${filter.type.split(' ').join('_')}${filter.active?'-active':''}`} onClick={()=>{let temp = filters; filters[i].active= !filter.active; setFilters([...temp])}}>{filter.type}</div>
+						})}
+
 					</div>
 				</div>
 				<div className='filter-container__body-row'>

@@ -27,16 +27,106 @@
 	}
 
 	&__body{
-		padding: 0 15px 15px;
+
 		display: flex;
 		flex-direction: column;
 
 		&-row{
 			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			align-items: center;
+			flex-direction: column;
 			margin-top: 15px;
+
+			&__subtitle{
+				padding: 0 15px;
+				margin-bottom: 5px;
+			}
+
+			&__filters{
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: space-around;
+
+				.filterItem{
+					font-size: 13px;
+					margin: 5px 0;
+					&.Getallenkennis{
+						color: $color-red;
+						border: 1px solid $color-red;
+						border-radius: 30px;
+						padding: 5px 10px;
+
+						&-active{
+							color: $color-white;
+							border: 1px solid $color-red;
+							background-color: $color-red;
+							border-radius: 30px;
+							padding: 5px 10px;
+						}
+					}
+
+					&.Bewerkingen{
+						color: $color-blue-dark;
+						border: 1px solid $color-blue-dark;
+						border-radius: 30px;
+						padding: 5px 10px;
+
+						&-active{
+							color: $color-white;
+							border: 1px solid $color-blue-dark;
+							background-color: $color-blue-dark;
+							border-radius: 30px;
+							padding: 5px 10px;
+						}
+					}
+
+					&.Meetkunde{
+						color: $color-purple;
+						border: 1px solid $color-purple;
+						border-radius: 30px;
+						padding: 5px 10px;
+
+						&-active{
+							color: $color-white;
+							border: 1px solid $color-purple;
+							background-color: $color-purple;
+							border-radius: 30px;
+							padding: 5px 10px;
+						}
+					}
+
+					
+					&.Meten_en_metend_rekenen{
+						color: $color-orange;
+						border: 1px solid $color-orange;
+						border-radius: 30px;
+						padding: 5px 10px;
+
+						&-active{
+							color: $color-white;
+							border: 1px solid $color-orange;
+							background-color: $color-orange;
+							border-radius: 30px;
+							padding: 5px 10px;
+						}
+					}
+
+					&.Toepassingen{
+						color: $color-green;
+						border: 1px solid $color-green;
+						border-radius: 30px;
+						padding: 5px 10px;
+
+						&-active{
+							color: $color-white;
+							border: 1px solid $color-green;
+							background-color: $color-green;
+							border-radius: 30px;
+							padding: 5px 10px;
+						}
+					}
+				}
+			}
 		}
 	}
 }
