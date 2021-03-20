@@ -1,16 +1,49 @@
-import { default as React, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import * as Routes from '../../routes';
 import {RiArrowDropDownFill, RiArrowDropUpFill} from 'react-icons/ri';
-import {FaRegEye, FaBook} from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
-import Switch from "react-switch";
+import {SearchBar} from './';
 
-const Filter = ({}) => {
+const Filter = ({data, setData}) => {
 	const history = useHistory();
 	const [open, setOpen] = useState(false);
-
+	const [searchText, setSearchText] = useState('');
 	const [filters, setFilters] = useState([{type: 'Getallenkennis', active:false},{type: 'Bewerkingen', active:false}, { type: 'Meetkunde', active:false}, { type: 'Meten en metend rekenen', active:false}, {type: 'Toepassingen', active:false}]);
+
+	const handleFilter =(i=-1) =>{
+		let result = data;
+
+		if(searchText != ''){
+			result = result.filter(compareStrToSearch);
+		}
+
+		let temp = filters;
+		if (i>=0) {
+			temp[i].active= !filters[i].active;
+			setFilters([...temp]);
+		}
+
+		if (filters.map((x)=> x.active).includes(true)) {
+			result = result.filter((x)=>{return temp.map((x)=> x.active && x.type).includes(x.type)});
+		}
+
+		if (result.length === 0 && !filters.map((x)=> x.active).includes(true) && searchText == '') {
+			setData(null);
+		} else{
+			setData([...result]);
+		}
+	}
+
+	const compareStrToSearch = (value)=>{
+		return value.name.toLowerCase().includes(searchText.toLowerCase())
+	}
+
+	useEffect(()=>{
+		const timeout = setTimeout(() => {
+			handleFilter()
+		}, 750);
+		return () => clearTimeout(timeout);
+	}, [searchText])
 
   return (
     <div className='filter-container'>
@@ -26,15 +59,16 @@ const Filter = ({}) => {
 					</div>
 					<div className='filter-container__body-row__filters'>
 						{filters && filters.map((filter, i)=>{
-							return <div className={`filterItem ${filter.type.split(' ').join('_')}${filter.active?'-active':''}`} onClick={()=>{let temp = filters; filters[i].active= !filter.active; setFilters([...temp])}}>{filter.type}</div>
+							return <div key={i} className={`filterItem ${filter.type.split(' ').join('_')}${filter.active?'-active':''}`} onClick={()=>{ handleFilter(i);}}>{filter.type}</div>
 						})}
-
 					</div>
 				</div>
 				<div className='filter-container__body-row'>
 					<div className='filter-container__body-row__subtitle'>
+						Zoeken
 					</div>
 					<div className='filter-container__body-row__filters'>
+						<SearchBar text={searchText} setText={setSearchText}/>
 					</div>
 				</div>
 
