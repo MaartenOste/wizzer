@@ -6,6 +6,13 @@
 	text-transform: capitalize;
 	cursor: pointer;
 	font-size: $font-size-medium;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+    user-select: none;
 
 
 	&__heading{
@@ -46,10 +53,15 @@
 				flex-direction: row;
 				flex-wrap: wrap;
 				justify-content: space-around;
+				margin-top: 5px;
+				padding: 0 15px;
+				
 
 				.filterItem{
 					font-size: 13px;
 					margin: 5px 0;
+					text-align: center;
+
 					&.Getallenkennis{
 						color: $color-red;
 						border: 1px solid $color-red;
@@ -126,6 +138,15 @@
 						}
 					}
 				}
+			}
+
+			&__searchbar{
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: space-around;
+				margin-top: 5px;
+				
 			}
 		}
 	}

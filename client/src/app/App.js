@@ -1,22 +1,25 @@
 import React from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
+//import { MemoryRouter } from 'react-router';
 import * as Routes from './routes';
 import {
   ClassPage,
 	CreateExercisePage,
 	ExerciseDetailPage,
 	ExercisesPage,
+  ErrorPage,
   HomePage,
 	JoinClassGroupPage,
 	LoginPage,
 	StudentDetailPage } from './pages';
 import { AuthRouteWithLayout, RouteWithLayout } from './utilities';
 import { ApiProvider, AuthProvider } from './services';
-import { PageLayout } from './layouts';
+import { ErrorLayout, PageLayout } from './layouts';
 
 import './app.scss';
 
 function App() {
+
   return (
     <div className="app">
       <AuthProvider>
@@ -31,8 +34,10 @@ function App() {
               <AuthRouteWithLayout exact path={Routes.STUDENT_DETAIL} layout={PageLayout} component={StudentDetailPage}/>
               
               <AuthRouteWithLayout exact path={Routes.EXERCISE} layout={PageLayout} component={ExercisesPage}/>
-              <AuthRouteWithLayout exact path={Routes.EXERCISE_DETAIL} layout={PageLayout} component={ExerciseDetailPage}/>
               <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE} layout={PageLayout} component={CreateExercisePage}/>
+              <AuthRouteWithLayout exact path={Routes.EXERCISE_DETAIL} layout={PageLayout} component={ExerciseDetailPage}/>
+
+              <RouteWithLayout exact path={'*'} layout={ErrorLayout} component={ErrorPage} />
             </Switch>
           </Router>
         </ApiProvider>

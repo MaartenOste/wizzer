@@ -2,31 +2,45 @@ import { default as React, Fragment, useCallback, useState} from 'react';
 import { Link } from 'react-router-dom';
 import * as Routes from '../routes';
 import { useAuth } from '../services';
-import { useHistory } from 'react-router';
-import { Button, Footer, Input } from '../components';
+import { Route, useHistory } from 'react-router';
+import { NavBar, NewExOptionCard, Title } from '../components';
+import {IoMdCreate} from 'react-icons/io'
+import { IoSearch } from 'react-icons/io5';
+
 
 const CreateExercisePage = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const [newExOption, setNewExOption] = useState('');
 
 	const history = useHistory();
 	const { signIn, currentUser } = useAuth();
 
-	const handleLogin = async () =>{
-		console.log('log in');
+	const handleHome = (tabToShow) =>{
+		sessionStorage.setItem('HomeTab', tabToShow);
+		history.push(Routes.HOME);
 	}
 
   return (
-    <Fragment>
-      <div className='createExercisePage-container'>
-		<div className='login-form'>
-			<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>
-			<Input label={'Wachtwoord'} text={password} textChange={setPassword}/>
-			<Button text={'Aanmelden'} type={'primary'} onClick={handleLogin}/>
+	<>
+		<div className='createExPage-container'>
+			<div className='createExPage--heading'>
+				<Title text='Nieuwe oefening'/>
+			</div>
+			{newExOption === ''?
+			<>
+				<div className='createExPage--options'>
+					<NewExOptionCard title={'Nieuwe oefening maken'} text={'Wanneer u voor deze optie kiest kan u zelf uw oefening samen-stellen op basis van parameters.'} icon={<IoMdCreate />} onClick={()=>{setNewExOption('create')}}/>
+					<NewExOptionCard title={'Oefening kiezen'} text={'Wanneer u voor deze optie kiest kan u kiezen uit een lange lijst oefeningen die reeds door andere leerkrachten gemaakt werden op wizzer.'} icon={<IoSearch />} onClick={()=>{setNewExOption('choose')}}/>
+				</div>
+			</>
+			:
+			newExOption === 'create'?
+			'Create'
+			:
+			'Choose'
+			}
 		</div>
-	</div>
-	<Footer/>
-    </Fragment>
+		<NavBar active={'exercises'} extraOnClick={(tab)=> {handleHome(tab)}}/>
+	</>
   );
 };
 

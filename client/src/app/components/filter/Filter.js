@@ -8,7 +8,7 @@ const Filter = ({data, setData}) => {
 	const history = useHistory();
 	const [open, setOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
-	const [filters, setFilters] = useState([{type: 'Getallenkennis', active:false},{type: 'Bewerkingen', active:false}, { type: 'Meetkunde', active:false}, { type: 'Meten en metend rekenen', active:false}, {type: 'Toepassingen', active:false}]);
+	const [filters, setFilters] = useState([{type: 'Getallenkennis', active:false},{type: 'Bewerkingen', active:false}, { type: 'Meetkunde', active:false}, {type: 'Toepassingen', active:false}, { type: 'Meten en metend rekenen', active:false}]);
 
 	const handleFilter =(i=-1) =>{
 		let result = data;
@@ -67,7 +67,7 @@ const Filter = ({data, setData}) => {
 					<div className='filter-container__body-row__subtitle'>
 						Zoeken
 					</div>
-					<div className='filter-container__body-row__filters'>
+					<div className='filter-container__body-row__searchbar'>
 						<SearchBar text={searchText} setText={setSearchText}/>
 					</div>
 				</div>

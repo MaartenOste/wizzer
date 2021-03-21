@@ -18,14 +18,7 @@ const ExerciseDetailPage = () => {
 
   return (
     <Fragment>
-      <div className='exerciseDetailPage-container'>
-		<div className='login-form'>
-			<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>
-			<Input label={'Wachtwoord'} text={password} textChange={setPassword}/>
-			<Button text={'Aanmelden'} type={'primary'} onClick={handleLogin}/>
-		</div>
-	</div>
-	<Footer/>
+      yeet
     </Fragment>
   );
 };

@@ -8,3 +8,5 @@ export const JOIN_CLASSGROUP = '/join/:id';
 export const EXERCISE = '/oefeningen';
 export const EXERCISE_DETAIL = '/oefeningen/:id';
 export const CREATE_EXERCISE = '/oefeningen/nieuw';
+
+export const ERROR = '/404';
