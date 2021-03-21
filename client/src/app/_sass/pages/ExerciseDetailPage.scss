@@ -1,0 +1,16 @@
+.exerciseDetail-container{
+	box-sizing: border-box;
+	padding: 7vw;
+	min-height: 90vh;
+	padding-bottom: 15vh;
+	position: relative;
+
+	.homePage--heading{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 25px;
+	}
+}

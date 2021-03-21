@@ -19,7 +19,7 @@ const LoginPage = () => {
 			setErrorPopup(resp.error);
 		} else {
 			sessionStorage.setItem('user', JSON.stringify(resp));
-			history.push(Routes.HOME);
+			history.push(Routes.CLASSGROUP);
 		}
 	}
 

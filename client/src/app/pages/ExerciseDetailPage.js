@@ -1,26 +1,39 @@
-import { default as React, Fragment, useCallback, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
+import { Link, useParams } from 'react-router-dom';
 import * as Routes from '../routes';
-import { useAuth } from '../services';
+import { useApi } from '../services';
 import { useHistory } from 'react-router';
-import { Button, Footer, Input } from '../components';
+import { NavBar, Title } from '../components';
 
 const ExerciseDetailPage = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const {id} = useParams();
+	const [exercise, setExercise] = useState();
+	const { getExerciseById } = useApi();
 
-	const history = useHistory();
-	const { signIn, currentUser } = useAuth();
+	const initFetch = useCallback(() => {
+		const fetchdata = async () => {
+			let data = await getExerciseById(id);
+			console.log(data);
+			setExercise(data);
+		}
+		fetchdata();
+	},[]);
 
-	const handleLogin = async () =>{
-		console.log('log in');
-	}
+	useEffect(() => {
+		initFetch();
+	}, [initFetch]);
 
-  return (
-    <Fragment>
-      yeet
-    </Fragment>
-  );
+	return (
+		<Fragment>
+		<div className='exerciseDetail-container'>
+			{exercise && 
+				<Title text={exercise[0].exerciseName}/>
+			}
+			
+		</div>
+		<NavBar active={'exercises'}/>
+		</Fragment>
+	);
 };
 
 export default ExerciseDetailPage;

@@ -1,4 +1,4 @@
-import { default as React, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import * as Routes from '../../routes';
 import {RiArrowDropDownFill, RiArrowDropUpFill} from 'react-icons/ri';
@@ -7,18 +7,19 @@ import { MdDelete } from 'react-icons/md';
 import Switch from "react-switch";
 
 
-const ExerciseCard = ({id, name, isPublic = true}) => {
+const ExerciseCard = ({id, name, isPublic = true, deleteExercise=()=>{}, makeExercisePublic=()=>{}}) => {
 	const history = useHistory();
 	const [open, setOpen] = useState(false);
 	const [localPublic, setLocalPublic] = useState(isPublic);
 
 	const makePublic = () =>{
-		setLocalPublic(!localPublic)
+		makeExercisePublic(id);
+		setLocalPublic(!localPublic);
 	}
 
-	const deleteExercise = () =>{
-		console.log('delete exercise', name);
-	}
+	useEffect(()=>{
+		setOpen(false);
+	}, [id])
 
 	return (
 	<div className='ExerciseCard--container'>
@@ -28,13 +29,13 @@ const ExerciseCard = ({id, name, isPublic = true}) => {
 		</div>
 		{open && 
 			<div className='ExerciseCard--container__body' >
-				<div className='ExerciseCard--container__body-row' onClick={()=> {makePublic()}}>
+				<div className='ExerciseCard--container__body-row' >
 					<FaRegEye/> publiek <Switch className='switchComponent' checkedIcon={null} uncheckedIcon={null} checked={localPublic} onChange={()=>{makePublic()}}/>
 				</div>
 				<div className='ExerciseCard--container__body-row' onClick={()=> {history.push(Routes.EXERCISE_DETAIL.replace(':id', id))}}>
 					<FaBook /> punten
 				</div>
-				<div className='ExerciseCard--container__body-row' onClick={()=> {deleteExercise()}}>
+				<div className='ExerciseCard--container__body-row' onClick={(e)=> {e.preventDefault(); deleteExercise(id)}}>
 					<MdDelete/> verwijderen
 				</div>
 			</div>

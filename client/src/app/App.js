@@ -8,7 +8,6 @@ import {
 	ExerciseDetailPage,
 	ExercisesPage,
   ErrorPage,
-  HomePage,
 	JoinClassGroupPage,
 	LoginPage,
 	StudentDetailPage } from './pages';
@@ -27,7 +26,6 @@ function App() {
           <Router basename='/'>
             <Switch>
               <RouteWithLayout exact path={Routes.LOGIN} layout={PageLayout} component={LoginPage} />
-              <AuthRouteWithLayout exact path={Routes.HOME} layout={PageLayout} component={HomePage} />
 
               <AuthRouteWithLayout exact path={Routes.CLASSGROUP} layout={PageLayout} component={ClassPage}/>
               <AuthRouteWithLayout exact path={Routes.JOIN_CLASSGROUP} layout={PageLayout} component={JoinClassGroupPage}/>
