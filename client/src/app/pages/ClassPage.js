@@ -1,20 +1,28 @@
 import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import * as Routes from '../routes';
-import { useApi } from '../services';
+import { useApi, useAuth } from '../services';
 import { useHistory } from 'react-router';
 import { Button, Title, StudentCard, NavBar } from '../components';
 import {useSwipeable} from 'react-swipeable';
 
 const ClassPage = () => {
 	const history = useHistory();
+	const {currentUser} = useAuth();
 	const [students, setStudents] = useState();
-	const { getStudents } = useApi();
+	const { getStudentsFromClass } = useApi();
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
-			let data = await getStudents();
-			setStudents(data);
+			if (currentUser._classId) {
+				try {
+					let data = await getStudentsFromClass(currentUser._classId);
+					console.log('data', data);
+					setStudents(data);
+				} catch (error) {
+					console.error(error.message)
+				}
+			}
 		}
 		fetchdata();
 	},[]);
@@ -56,7 +64,7 @@ const ClassPage = () => {
 						<Button text='uitnodigen' type='invite' onClick={()=> {copyJoinLink()}}/>
 					</div>
 					{students && students.map((student, i) => {
-						return <StudentCard id={student.id} name={student.name} key={i}/>
+						return <StudentCard id={student.id} name={`${student.firstname} ${student.lastname}`} key={i}/>
 				})}
 			</div>
 		</div>

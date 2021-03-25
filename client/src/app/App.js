@@ -26,6 +26,7 @@ function App() {
           <Router basename='/'>
             <Switch>
               <RouteWithLayout exact path={Routes.LOGIN} layout={PageLayout} component={LoginPage} />
+              <Redirect exact to={Routes.LOGIN} from={Routes.HOME}/>
 
               <AuthRouteWithLayout exact path={Routes.CLASSGROUP} layout={PageLayout} component={ClassPage}/>
               <AuthRouteWithLayout exact path={Routes.JOIN_CLASSGROUP} layout={PageLayout} component={JoinClassGroupPage}/>
@@ -35,7 +36,7 @@ function App() {
               <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE} layout={PageLayout} component={CreateExercisePage}/>
               <AuthRouteWithLayout exact path={Routes.EXERCISE_DETAIL} layout={PageLayout} component={ExerciseDetailPage}/>
 
-              <RouteWithLayout exact path={'*'} layout={ErrorLayout} component={ErrorPage} />
+              <RouteWithLayout exact path={'/*'} layout={ErrorLayout} component={ErrorPage} />
             </Switch>
           </Router>
         </ApiProvider>

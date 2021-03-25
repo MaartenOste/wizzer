@@ -9,7 +9,8 @@ import {useSwipeable} from 'react-swipeable';
 
 const ExercisesPage = () => {
 	const history = useHistory();
-	const { getExercises } = useApi();
+	const {currentUser} = useAuth();
+	const { getExercisesFromClass } = useApi();
 
 	const [exercises, setExercises] = useState([]);
 	const [filteredExercises, setFilteredExercises] = useState();
@@ -17,8 +18,15 @@ const ExercisesPage = () => {
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
-			let data = await getExercises();
-			setExercises(data);
+			if (currentUser._classId) {
+				try {
+					let data = await getExercisesFromClass(currentUser._classId);
+					console.log('data', data);
+					setExercises(data);
+				} catch (error) {
+					console.error(error.message)
+				}
+			}
 		}
 		fetchdata();
 	},[]);
@@ -94,7 +102,7 @@ const ExercisesPage = () => {
 					filteredExercises.length >0?
 						<>
 							{filteredExercises.map((ex, i) => {
-								return <ExerciseCard key={i}  id={ex.id} name={ex.name} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+								return <ExerciseCard key={i}  id={ex.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 							})}
 						</>
 						:
@@ -104,7 +112,7 @@ const ExercisesPage = () => {
 				:
 				<>
 					{exercises && exercises.map((ex, i) => {
-						return <ExerciseCard key={i} id={ex.id} name={ex.name} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+						return <ExerciseCard key={i}  id={ex.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 					})}
 				</>
 				}

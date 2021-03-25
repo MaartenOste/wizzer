@@ -4,6 +4,8 @@ import { useAuth } from '../services';
 import { useHistory } from 'react-router';
 import { Button, Footer, Input } from '../components';
 
+import img from '../_static/icons/nobglogo.png'
+
 const LoginPage = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -26,6 +28,9 @@ const LoginPage = () => {
   return (
     <Fragment>
 		<div className='login-container'>
+			<div className='login-logo'>
+				<img src={img}></img>
+			</div>
 			<div className='login-form'>
 				<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>
 				<Input label={'Wachtwoord'} text={password} textChange={setPassword} type={'password'}/>

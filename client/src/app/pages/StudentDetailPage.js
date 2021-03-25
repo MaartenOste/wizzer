@@ -1,31 +1,37 @@
-import { default as React, Fragment, useCallback, useState} from 'react';
-import { Link } from 'react-router-dom';
-import * as Routes from '../routes';
-import { useAuth } from '../services';
+import { default as React, Fragment, useCallback, useState, useEffect} from 'react';
+import { useApi } from '../services';
 import { useHistory } from 'react-router';
-import { Button, Footer, Input } from '../components';
+import { NavBar, ScoreCard, Title } from '../components';
 
 const StudentDetailPage = () => {
-	const [username, setUsername] = useState('');
+	const [scores, setScores] = useState();
 	const [password, setPassword] = useState('');
-
 	const history = useHistory();
-	const { signIn, currentUser } = useAuth();
+	const { getScoresFromStudent } = useApi();
 
-	const handleLogin = async () =>{
-		console.log('log in');
-	}
+	const initFetch = useCallback(() => {
+		const fetchdata = async () => {
+			let data = await getScoresFromStudent();
+			setScores(data);
+		}
+		fetchdata();
+	},[]);
+
+	useEffect(() => {
+		initFetch();
+	}, [initFetch]);
 
   return (
     <Fragment>
       <div className='studentDetailPage-container'>
-		<div className='login-form'>
-			<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>
-			<Input label={'Wachtwoord'} text={password} textChange={setPassword}/>
-			<Button text={'Aanmelden'} type={'primary'} onClick={handleLogin}/>
-		</div>
+	  	{scores && 
+				<Title text={scores[0].studentName}/>
+			}
+		{scores && scores.map((score, i)=>{
+			return <ScoreCard name={score.exerciseName} score={score.score} key={i}/>
+		})}
 	</div>
-	<Footer/>
+	<NavBar active={'class'}/>
     </Fragment>
   );
 };

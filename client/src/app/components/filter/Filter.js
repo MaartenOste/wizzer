@@ -1,17 +1,14 @@
 import { default as React, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-import * as Routes from '../../routes';
 import {RiArrowDropDownFill, RiArrowDropUpFill} from 'react-icons/ri';
 import {SearchBar} from './';
 
 const Filter = ({data, setData}) => {
-	const history = useHistory();
 	const [open, setOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
 	const [filters, setFilters] = useState([{type: 'Getallenkennis', active:false},{type: 'Bewerkingen', active:false}, { type: 'Meetkunde', active:false}, {type: 'Toepassingen', active:false}, { type: 'Meten en metend rekenen', active:false}]);
 
 	const handleFilter =(i=-1) =>{
-		let result = data;
+		let result = data.map((x) => {return x.data});
 
 		if(searchText != ''){
 			result = result.filter(compareStrToSearch);
@@ -24,18 +21,19 @@ const Filter = ({data, setData}) => {
 		}
 
 		if (filters.map((x)=> x.active).includes(true)) {
-			result = result.filter((x)=>{return temp.map((x)=> x.active && x.type).includes(x.type)});
+			result = result.filter((x)=>{return temp.map((x)=> x.active && x.type.toLowerCase().split(' ').join('_')).includes(x.type)});
 		}
 
 		if (result.length === 0 && !filters.map((x)=> x.active).includes(true) && searchText == '') {
 			setData(null);
 		} else{
+			result = result.map((x, i)=>{ return {data: x, public: data[i].public}})
 			setData([...result]);
 		}
 	}
 
 	const compareStrToSearch = (value)=>{
-		return value.name.toLowerCase().includes(searchText.toLowerCase())
+		return value.title.toLowerCase().includes(searchText.toLowerCase())
 	}
 
 	useEffect(()=>{

@@ -57,10 +57,50 @@ const AuthProvider = ({ children }) => {
     let response;
 
     if (uname === 'senne' && password === 'azer') {
-      response = {id: '2051aze0r419azr1505a1zera05451041105160e', name: 'Senne Wancour', type: 'student'};
+      response = {
+        "_id": {
+            "$oid": "605ce75f19a35a0248e41968"
+        },
+        "_classId": null,
+        "_createdAt": 1616701276221,
+        "_modifiedAt": null,
+        "_deletedAt": null,
+        "firstname": "Ken",
+        "lastname": "Erdman",
+        "email": "Ken_Erdman88@smartschool.be",
+        "userType": "Student",
+        "localProvider": {
+            "password": "$2b$10$HzB33MQU9nESns6Sa/w4de1hRbUcxPMtaCKvChH4M46t66XssezQa"
+        },
+        "smartschoolProvider": {
+            "id": "7e141455-2f46-4f4a-9930-7340fe8bcd49",
+            "token": "3524a1b9-2b31-4a7b-8414-ed58edc69715"
+        },
+        "__v": 0
+    };
       setCurrentUser(response);
     } else if(uname === 'maarten' && password === 'azer'){
-      response = {id: '05451041105162051505a1zera01aze0r419azre', name: 'Maarten Oste', type: 'teacher'};
+      response = {
+        "_id": {
+            "$oid": "605ce75f19a35a0248e41968"
+        },
+        "_classId": '605ce76119a35a0248e419c7',
+        "_createdAt": 1616701276221,
+        "_modifiedAt": null,
+        "_deletedAt": null,
+        "firstname": "Ken",
+        "lastname": "Erdman",
+        "email": "Ken_Erdman88@smartschool.be",
+        "userType": "Teacher",
+        "localProvider": {
+            "password": "$2b$10$HzB33MQU9nESns6Sa/w4de1hRbUcxPMtaCKvChH4M46t66XssezQa"
+        },
+        "smartschoolProvider": {
+            "id": "7e141455-2f46-4f4a-9930-7340fe8bcd49",
+            "token": "3524a1b9-2b31-4a7b-8414-ed58edc69715"
+        },
+        "__v": 0
+    };
       setCurrentUser(response);
     } else {
       response = {error: 'Wrong credentials'};
