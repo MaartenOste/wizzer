@@ -13,7 +13,7 @@ interface IExercises {
 interface IClass extends Document {
   name: string;
   slug: string;
-  
+
   _exercises: Array<IExercises>;
   _studentIds: Array<IUser['_id']>;
   _teacherId: IUser['_id'];
@@ -38,20 +38,20 @@ const classSchema: Schema = new Schema(
       required: true,
       lowercase: true,
     },
-    _exercises: [{_exerciseGroupId:{
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: false,
-    },
-    public:{
-      type: Boolean
-    }
-    }],
+    _exercises: [
+      {
+        _exerciseGroupId: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+          required: false,
+        },
+        public: {
+          type: Boolean,
+        },
+      },
+    ],
     _studentIds: [
-      { type: Schema.Types.ObjectId,
-        ref: 'ExerciseGroup',
-        required: false,
-      }
+      { type: Schema.Types.ObjectId, ref: 'ExerciseGroup', required: false },
     ],
     _teacherId: {
       type: Schema.Types.ObjectId,

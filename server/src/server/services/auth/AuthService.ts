@@ -47,14 +47,16 @@ class AuthService {
             });
             if (!user) {
               return done(null, false, { message: 'No user by that email' });
-            }
-            else {
-              return user.comparePassword(password , (error: Error, isMatch: boolean) => {
-                if (!isMatch) {
-                  return done(null, false);
-                }
-                return done(null, user);
-              });
+            } else {
+              return user.comparePassword(
+                password,
+                (error: Error, isMatch: boolean) => {
+                  if (!isMatch) {
+                    return done(null, false);
+                  }
+                  return done(null, user);
+                },
+              );
             }
           } catch (error) {
             return done(error, false);
@@ -64,23 +66,25 @@ class AuthService {
     );
   }
 
-  private initializeSmartschoolStrategy () {
-    passport.use(new SmartschoolStrategy({
-      clientID: '42d03a7a0ac7',
-      clientSecret: 'ee9d1bbbad97',
-      callbackURL: "https://wizzer.be/api/auth/smartschool"
-    },
-    function(accessToken:any, refreshToken:any, profile:any, cb:any) {
-      console.log(accessToken, refreshToken, profile, cb);
-      
-      User.findOrCreate({ smartschoolId: profile.id }, function (err, user) {
-        return cb(err, user);
-      });
-    }
-  ));
+  private initializeSmartschoolStrategy() {
+    passport.use(
+      new SmartschoolStrategy(
+        {
+          clientID: '42d03a7a0ac7',
+          clientSecret: 'ee9d1bbbad97',
+          callbackURL: 'https://wizzer.be/api/auth/smartschool',
+        },
+        function(accessToken: any, refreshToken: any, profile: any, cb: any) {
+          console.log(accessToken, refreshToken, profile, cb);
+
+          User.findOrCreate({ smartschoolId: profile.id }, function(err, user) {
+            return cb(err, user);
+          });
+        },
+      ),
+    );
   }
 
- 
   public createToken(user: any): string {
     const payload = {
       id: user._id,

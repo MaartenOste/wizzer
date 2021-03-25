@@ -48,15 +48,15 @@ class ApiRouter {
     //this.router.post('/auth/smartschool', this.userController.signInWithSmartschool);
 
     /*
-    * Class routes
-    */
+     * Class routes
+     */
     this.router.get('/classes', this.classController.index);
     this.router.get('/classes/:id', this.classController.show);
     this.router.put('/classes/:id', this.classController.update);
 
     /*
-    * Exercises routes
-    */
+     * Exercises routes
+     */
     this.router.get('/exercises', this.exerciseGroupController.index);
     this.router.get('/exercises/:id', this.exerciseGroupController.show);
     this.router.put('/exercises/:id', this.exerciseGroupController.update);

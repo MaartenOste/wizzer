@@ -5,7 +5,7 @@ import { IUser } from './user.model';
 
 interface IExerciseGroup extends Document {
   title: string;
-  slug:string;
+  slug: string;
   description: string;
   instructionVideo: string;
   _createdBy: IUser['_id'];
@@ -39,9 +39,7 @@ const exerciseGroupSchema: Schema = new Schema(
       required: false,
     },
     _createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    exercises: [
-      { type: Object, required: true },
-    ],
+    exercises: [{ type: Object, required: true }],
     example: { type: Object, required: true },
     type: {
       type: String,
@@ -79,7 +77,6 @@ exerciseGroupSchema.pre<IExerciseGroup>('validate', function(next) {
   }
   return next();
 });
-
 
 exerciseGroupSchema.plugin(mongoosePaginate);
 const ExerciseGroup = mongoose.model<IExerciseGroup, IExerciseGroupModel>(

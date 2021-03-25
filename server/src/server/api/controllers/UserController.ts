@@ -29,24 +29,26 @@ class UserController {
     try {
       const { id } = req.params;
 
-      const member = await User.findById(id)
-      .exec();
+      const member = await User.findById(id).exec();
       return res.status(200).json(member);
     } catch (err) {
       next(err);
     }
   };
 
-  showUsersFromClass = async (req: Request, res: Response, next: NextFunction) => {
+  showUsersFromClass = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { classId } = req.params;
-      const students = await User.find()
-      .where('_classId', classId)
+      const students = await User.find().where('_classId', classId);
       return res.status(200).json(students);
     } catch (err) {
       next(err);
     }
-  }
+  };
 
   destroy = async (req: Request, res: Response, next: NextFunction) => {};
 
@@ -54,32 +56,36 @@ class UserController {
 
   store = async (req: Request, res: Response, next: NextFunction) => {};
 
-  update = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+  update = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
     const { id } = req.params;
 
-    try{
-    const userUpdate = {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      _classId: req.body._classId,
-      localProvider: req.body.localProvider,
-      smartschoolProvider: req.body.smartschoolProvider,
-      _modifiedAt: new Date().getTime()
-    }
+    try {
+      const userUpdate = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        _classId: req.body._classId,
+        localProvider: req.body.localProvider,
+        smartschoolProvider: req.body.smartschoolProvider,
+        _modifiedAt: new Date().getTime(),
+      };
 
-    const user = await User.findOneAndUpdate({_id: id}, userUpdate, {
-      new: true
-    }).exec();
-    if (!user) {
-      throw new NotFoundError();
+      const user = await User.findOneAndUpdate({ _id: id }, userUpdate, {
+        new: true,
+      }).exec();
+      if (!user) {
+        throw new NotFoundError();
+      }
+      return res.status(200).json(user);
+    } catch (err) {
+      next(err);
     }
-    return res.status(200).json(user);
-  } catch (err) {
-    next(err);
-  }
   };
-/*
+  /*
   signupLocal = async (
     req: Request,
     res: Response,
@@ -137,7 +143,7 @@ class UserController {
         if (!user) {
           return next(new NotFoundError());
         }
-        
+
         const token = this.authService.createToken(user);
         return res.status(200).json({
           email: user.email,
@@ -149,7 +155,6 @@ class UserController {
       },
     )(req, res, next);
   };
-
 
   /*signInWithSmartschool = async (
     req: Request,

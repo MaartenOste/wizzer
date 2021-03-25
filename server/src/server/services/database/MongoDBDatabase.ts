@@ -15,7 +15,6 @@ import {
 } from '../../models/mongoose';
 import { lang } from 'moment';
 
-
 interface ISmartschoolProvider {
   id: string;
   token: string;
@@ -35,7 +34,6 @@ class MongoDBDatabase {
   private users: Array<IUser>;
   private userTypes: Array<IUserType>;
   private exercises: Array<IExerciseGroup>;
-
 
   constructor(logger: ILogger, config: IConfig) {
     this.logger = logger;
@@ -84,9 +82,7 @@ class MongoDBDatabase {
     });
   }
 
-  private userTypeCreate = async (
-    name: string
-  )=>{
+  private userTypeCreate = async (name: string) => {
     const userTypeDetail = {
       name,
     };
@@ -98,26 +94,21 @@ class MongoDBDatabase {
 
       this.logger.info(`UserType created with id: ${createdUserType._id}`, {});
     } catch (err) {
-      this.logger.error(`An error occurred when creating a userType ${err}`, err);
+      this.logger.error(
+        `An error occurred when creating a userType ${err}`,
+        err,
+      );
     }
-  }
+  };
 
-  private createUserTypes = async () =>{
+  private createUserTypes = async () => {
     const promises = [];
 
-    promises.push(
-      this.userTypeCreate(
-        'Student',
-      ),
-    );
+    promises.push(this.userTypeCreate('Student'));
 
-    promises.push(
-      this.userTypeCreate(
-        'Teacher',
-      ),
-    );
+    promises.push(this.userTypeCreate('Teacher'));
     return await Promise.all(promises);
-  }
+  };
 
   private userCreate = async (
     firstname: string,
@@ -126,7 +117,7 @@ class MongoDBDatabase {
     userType: IUserType['name'],
     localProvider?: Object,
     smartschoolProvider?: ISmartschoolProvider,
-  )=>{
+  ) => {
     const userDetail = {
       firstname,
       lastname,
@@ -141,45 +132,48 @@ class MongoDBDatabase {
       const createdUser = await user.save();
       this.users.push(createdUser);
 
-      this.logger.info(`User (${createdUser.userType}) created with id: ${createdUser._id}`, {});
+      this.logger.info(
+        `User (${createdUser.userType}) created with id: ${createdUser._id}`,
+        {},
+      );
     } catch (err) {
       this.logger.error(`An error occurred when creating a user ${err}`, err);
     }
-  }
+  };
 
-  private createUsers = async () =>{
+  private createUsers = async () => {
     const promises = [];
 
     for (let i = 0; i < 50; i++) {
       let fname = faker.name.firstName();
-      let lname= faker.name.lastName();
+      let lname = faker.name.lastName();
       promises.push(
         this.userCreate(
           fname,
           lname,
           `${faker.internet.email(fname, lname, 'smartschool.be')}`,
           this.userTypes[0].name,
-          {password: 'lel'},
-          {id: faker.random.uuid(), token: faker.random.uuid()}
+          { password: 'lel' },
+          { id: faker.random.uuid(), token: faker.random.uuid() },
         ),
       );
     }
     for (let i = 0; i < 5; i++) {
       let fname = faker.name.firstName();
-      let lname= faker.name.lastName();
+      let lname = faker.name.lastName();
       promises.push(
         this.userCreate(
           fname,
           lname,
           `${faker.internet.email(fname, lname, 'smartschool.be')}`,
           this.userTypes[1].name,
-          {password: 'lel'},
-          {id: faker.random.uuid(), token: faker.random.uuid()}
+          { password: 'lel' },
+          { id: faker.random.uuid(), token: faker.random.uuid() },
         ),
       );
     }
     return await Promise.all(promises);
-  }
+  };
 
   private exerciseCreate = async (
     title: string,
@@ -188,8 +182,8 @@ class MongoDBDatabase {
     _createdBy: IUser['_id'],
     exercises: Array<Object>,
     example: Object,
-    type: string
-  )=>{
+    type: string,
+  ) => {
     const exerciseDetail = {
       title,
       description,
@@ -197,7 +191,7 @@ class MongoDBDatabase {
       _createdBy,
       exercises,
       example,
-      type
+      type,
     };
     const exerciseGroup: IExerciseGroup = new ExerciseGroup(exerciseDetail);
 
@@ -205,42 +199,60 @@ class MongoDBDatabase {
       const createdExerciseGroup = await exerciseGroup.save();
       this.exercises.push(createdExerciseGroup);
 
-      this.logger.info(`ExerciseGroup created with id: ${createdExerciseGroup._id}`, {});
+      this.logger.info(
+        `ExerciseGroup created with id: ${createdExerciseGroup._id}`,
+        {},
+      );
     } catch (err) {
-      this.logger.error(`An error occurred when creating a exerciseGroup ${err}`, err);
+      this.logger.error(
+        `An error occurred when creating a exerciseGroup ${err}`,
+        err,
+      );
     }
-  }
+  };
 
-  private createExercises = async () =>{
+  private createExercises = async () => {
     const promises = [];
-    const types = ['getallenkennis','bewerkingen','meetkunde', 'toepassingen', 'meten_en_metend_rekenen'];
+    const types = [
+      'getallenkennis',
+      'bewerkingen',
+      'meetkunde',
+      'toepassingen',
+      'meten_en_metend_rekenen',
+    ];
     for (let i = 0; i < 25; i++) {
       promises.push(
         this.exerciseCreate(
           faker.lorem.sentence(),
           faker.lorem.paragraph(5),
           faker.internet.url(),
-          this.users.filter((user)=>{return user.userType === "Teacher"})[Math.floor(Math.random() * 5)]._id,
-          [{randomdata: 'lel'}, {randomdata: 'yeet'}, {randomdata: 'skeet'}],
-          {example: `Voorbeeld ${i}`},
-          types[Math.floor(Math.random() * types.length)]
+          this.users.filter(user => {
+            return user.userType === 'Teacher';
+          })[Math.floor(Math.random() * 5)]._id,
+          [
+            { randomdata: 'lel' },
+            { randomdata: 'yeet' },
+            { randomdata: 'skeet' },
+          ],
+          { example: `Voorbeeld ${i}` },
+          types[Math.floor(Math.random() * types.length)],
         ),
       );
     }
     return await Promise.all(promises);
-  }
+  };
 
   private classCreate = async (
     name: string,
     _exercises: Array<IExercises>,
     _studentIds: Array<IUser['_id']>,
-    _teacherId: IUser['_id']
-  )=>{
+    _teacherId: IUser['_id'],
+  ) => {
     const classDetail = {
       name,
       _exercises,
       _studentIds,
-      _teacherId
+      _teacherId,
     };
     const classGroup: IClass = new Class(classDetail);
 
@@ -248,67 +260,85 @@ class MongoDBDatabase {
       const createdClassGroup = await classGroup.save();
       this.classGroups.push(createdClassGroup);
 
-      this.logger.info(`ClassGroups created with id: ${createdClassGroup._id}`, {});
+      this.logger.info(
+        `ClassGroups created with id: ${createdClassGroup._id}`,
+        {},
+      );
     } catch (err) {
-      this.logger.error(`An error occurred when creating a classGroups ${err}`, err);
+      this.logger.error(
+        `An error occurred when creating a classGroups ${err}`,
+        err,
+      );
     }
-  }
+  };
 
-  private createClasses = async () =>{
+  private createClasses = async () => {
     const promises = [];
-    let teachers = this.users.filter((user)=>{return user.userType === "Teacher"});
+    let teachers = this.users.filter(user => {
+      return user.userType === 'Teacher';
+    });
     for (let i = 0; i < teachers.length; i++) {
-      let localExercises = this.exercises.filter((ex)=>{return ex._createdBy.toString() === teachers[i]._id.toString()}).map((ex)=> {return {_exerciseGroupId: ex._id, public: faker.random.boolean()}});
-      
+      let localExercises = this.exercises
+        .filter(ex => {
+          return ex._createdBy.toString() === teachers[i]._id.toString();
+        })
+        .map(ex => {
+          return { _exerciseGroupId: ex._id, public: faker.random.boolean() };
+        });
+
       promises.push(
         this.classCreate(
           `${faker.random.number(6)}${faker.random.word()[0].toUpperCase()}`,
           localExercises,
-          this.users.filter((user)=>{return user.userType === "Student"}).slice(i*10, i*10 + 9),
-          teachers[i]
+          this.users
+            .filter(user => {
+              return user.userType === 'Student';
+            })
+            .slice(i * 10, i * 10 + 9),
+          teachers[i],
         ),
       );
     }
-    
+
     return await Promise.all(promises);
-  }
+  };
 
   public seed = async () => {
     this.userTypes = await UserType.estimatedDocumentCount()
-    .exec()
-    .then(async (count:Number) => {
-      if (count === 0) {
-        await this.createUserTypes();
-      }
-      return UserType.find().exec();
-    })
+      .exec()
+      .then(async (count: Number) => {
+        if (count === 0) {
+          await this.createUserTypes();
+        }
+        return UserType.find().exec();
+      });
 
     this.users = await User.estimatedDocumentCount()
-    .exec()
-    .then(async (count:Number) => {
-      if (count === 0) {
-        await this.createUsers();
-      }
-      return User.find().exec();
-    })
+      .exec()
+      .then(async (count: Number) => {
+        if (count === 0) {
+          await this.createUsers();
+        }
+        return User.find().exec();
+      });
 
     this.exercises = await ExerciseGroup.estimatedDocumentCount()
-    .exec()
-    .then(async (count:Number) => {
-      if (count === 0) {
-        await this.createExercises();
-      }
-      return ExerciseGroup.find().exec();
-    })
+      .exec()
+      .then(async (count: Number) => {
+        if (count === 0) {
+          await this.createExercises();
+        }
+        return ExerciseGroup.find().exec();
+      });
 
     this.classGroups = await Class.estimatedDocumentCount()
-    .exec()
-    .then(async (count:Number) => {
-      if (count === 0) {
-        await this.createClasses();
-      }
-      return Class.find().exec();
-    })
+      .exec()
+      .then(async (count: Number) => {
+        if (count === 0) {
+          await this.createClasses();
+        }
+        return Class.find().exec();
+      });
   };
 }
 
