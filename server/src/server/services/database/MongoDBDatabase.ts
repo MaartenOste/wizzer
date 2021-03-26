@@ -6,6 +6,8 @@ import { IConfig } from '../config';
 import {
   IClass,
   Class,
+  ICompletedExercise,
+  CompletedExercise,
   IUser,
   User,
   IExerciseGroup,
@@ -34,6 +36,7 @@ class MongoDBDatabase {
   private users: Array<IUser>;
   private userTypes: Array<IUserType>;
   private exercises: Array<IExerciseGroup>;
+  private completedExercises: Array<ICompletedExercise>;
 
   constructor(logger: ILogger, config: IConfig) {
     this.logger = logger;
@@ -43,6 +46,7 @@ class MongoDBDatabase {
     this.users = [];
     this.userTypes = [];
     this.exercises = [];
+    this.completedExercises = [];
   }
 
   public connect(): Promise<any> {
@@ -303,6 +307,72 @@ class MongoDBDatabase {
     return await Promise.all(promises);
   };
 
+
+  private completedExCreate = async (
+    score: string,
+    answers: Object,
+  
+    _completedBy: IUser['_id'],
+    _classId: IClass['_id'],
+    _exerciseId: IExerciseGroup['_id']
+  ) => {
+    const classDetail = {
+      score,
+      answers,
+      _completedBy,
+      _classId,
+      _exerciseId
+    };
+    const completedExercise: ICompletedExercise = new CompletedExercise(classDetail);
+
+    try {
+      const createdCompletedExercise = await completedExercise.save();
+      this.completedExercises.push(createdCompletedExercise);
+
+      this.logger.info(
+        `CompletedExercise created with id: ${createdCompletedExercise._id}`,
+        {},
+      );
+    } catch (err) {
+      this.logger.error(
+        `An error occurred when creating a completedExercise ${err}`,
+        err,
+      );
+    }
+  };
+
+  private createCompletedEx = async () => {
+    const promises = [];
+    for (let i = 0; i < this.classGroups.length; i++) {
+      for (let j = 0; j < this.classGroups[i]._exercises.length-1; j++) {
+        for (let k = 0; k < this.classGroups[i]._studentIds.length; k++) {
+          promises.push(
+            this.completedExCreate(
+              `${faker.random.number(5)}/5`,
+              [{
+                answerData:{data:'randomdata'},
+                correct: faker.random.boolean()
+              },{
+                answerData:{data:'randomdata'},
+                correct: faker.random.boolean()
+              },{
+                answerData:{data:'randomdata'},
+                correct: faker.random.boolean()
+              },{
+                answerData:{data:'randomdata'},
+                correct: faker.random.boolean()
+              }],
+              this.classGroups[i]._studentIds[k],
+              this.classGroups[i]._id,
+              this.classGroups[i]._exercises[j]._exerciseGroupId
+            ),
+          );
+        }
+      }
+    }
+    return await Promise.all(promises);
+  };
+
   public seed = async () => {
     this.userTypes = await UserType.estimatedDocumentCount()
       .exec()
@@ -339,6 +409,18 @@ class MongoDBDatabase {
         }
         return Class.find().exec();
       });
+
+
+      this.completedExercises = await CompletedExercise.estimatedDocumentCount()
+      .exec()
+      .then(async (count: Number) => {
+        if (count === 0) {
+          await this.createCompletedEx();
+        }
+        return CompletedExercise.find().exec();
+      });
+
+      
   };
 }
 

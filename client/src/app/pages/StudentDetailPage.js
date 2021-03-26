@@ -1,21 +1,22 @@
 import { default as React, Fragment, useCallback, useState, useEffect} from 'react';
 import { useApi } from '../services';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import { NavBar, ScoreCard, Title } from '../components';
 
 const StudentDetailPage = () => {
-	const [scores, setScores] = useState();
-	const [password, setPassword] = useState('');
-	const history = useHistory();
-	const { getScoresFromStudent } = useApi();
+	const [exercises, setExercises] = useState();
+	const { getFilledInExerciseFromStudent } = useApi();
+	const { id } = useParams();
+
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
-			let data = await getScoresFromStudent();
-			setScores(data);
+			let data = await getFilledInExerciseFromStudent(id);
+			console.log(data);
+			setExercises(data);
 		}
 		fetchdata();
-	},[]);
+	},[getFilledInExerciseFromStudent, id]);
 
 	useEffect(() => {
 		initFetch();
@@ -24,11 +25,11 @@ const StudentDetailPage = () => {
   return (
     <Fragment>
       <div className='studentDetailPage-container'>
-	  	{scores && 
-				<Title text={scores[0].studentName}/>
+	  	{exercises && 
+				<Title text={`${exercises[0].completedBy.firstname} ${exercises[0].completedBy.lastname}`}/>
 			}
-		{scores && scores.map((score, i)=>{
-			return <ScoreCard name={score.exerciseName} score={score.score} key={i}/>
+		{exercises && exercises.map((exercise, i)=>{
+			return <ScoreCard name={exercise.exercise.title} score={exercise.score} key={i}/>
 		})}
 	</div>
 	<NavBar active={'class'}/>

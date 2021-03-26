@@ -1,9 +1,8 @@
 import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
 import * as Routes from '../routes';
 import { useAuth, useApi } from '../services';
 import { useHistory } from 'react-router';
-import { AddButton, Button, ExerciseCard, Filter, NavBar, StudentCard, Title } from '../components';
+import { AddButton, ExerciseCard, Filter, NavBar, Title } from '../components';
 import {useSwipeable} from 'react-swipeable';
 
 
@@ -29,7 +28,7 @@ const ExercisesPage = () => {
 			}
 		}
 		fetchdata();
-	},[]);
+	},[currentUser._classId, getExercisesFromClass]);
 
 	useEffect(() => {
 		initFetch();
@@ -48,13 +47,13 @@ const ExercisesPage = () => {
 
 	const deleteExercise = (id)=>{
 		let temp = exercises;
-		let index = temp.indexOf(temp.find((x)=>{return x.id == id}));
+		let index = temp.indexOf(temp.find((x)=>{return x.id === id}));
 		temp.splice(index,1);
 		setExercises([...temp]);
 
 		let temp2 = filteredExercises;
 		if (Array.isArray(temp2)) {
-			let index2 = temp2.indexOf(temp2.find((x)=>{return x.id == id}));
+			let index2 = temp2.indexOf(temp2.find((x)=>{return x.id === id}));
 			if (index2>=0) {
 				temp2.splice(index2,1);
 				setFilteredExercises([...temp2]);
@@ -64,7 +63,7 @@ const ExercisesPage = () => {
 
 	const makeExercisePublic = (id)=>{
 		let temp = [...exercises];
-		let index = temp.indexOf(temp.find((x)=>{return x.id == id}));
+		let index = temp.indexOf(temp.find((x)=>{return x.id === id}));
 		console.log('van', temp[index].public);
 
 		let localEx = {...temp[index]};
@@ -78,7 +77,7 @@ const ExercisesPage = () => {
 
 		let temp2 = filteredExercises;
 		if (Array.isArray(temp2)) {
-			let index2 = temp2.indexOf(temp2.find((x)=>{return x.id == id}));
+			let index2 = temp2.indexOf(temp2.find((x)=>{return x.id === id}));
 			if (index2>=0) {
 				temp2[index].public = !temp2[index].public;
 				setFilteredExercises([...temp2]);
@@ -102,7 +101,8 @@ const ExercisesPage = () => {
 					filteredExercises.length >0?
 						<>
 							{filteredExercises.map((ex, i) => {
-								return <ExerciseCard key={i}  id={ex.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+								console.log(ex);
+								return <ExerciseCard key={i} id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 							})}
 						</>
 						:
@@ -112,7 +112,8 @@ const ExercisesPage = () => {
 				:
 				<>
 					{exercises && exercises.map((ex, i) => {
-						return <ExerciseCard key={i}  id={ex.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+						console.log(ex);
+						return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 					})}
 				</>
 				}

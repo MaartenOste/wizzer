@@ -2,7 +2,7 @@ import { default as React, Fragment, useState} from 'react';
 import * as Routes from '../routes';
 import { useAuth } from '../services';
 import { useHistory } from 'react-router';
-import { Button, Footer, Input } from '../components';
+import { Button, Input } from '../components';
 
 import img from '../_static/icons/nobglogo.png'
 
@@ -12,7 +12,7 @@ const LoginPage = () => {
 	const [errorPopup, setErrorPopup] = useState(false);
 
 	const history = useHistory();
-	const { signIn, currentUser } = useAuth();
+	const { signIn } = useAuth();
 
 	const handleLogin = async () =>{
 		const resp = await signIn(username, password);
@@ -29,7 +29,7 @@ const LoginPage = () => {
     <Fragment>
 		<div className='login-container'>
 			<div className='login-logo'>
-				<img src={img}></img>
+				<img src={img} alt='Wizzer'></img>
 			</div>
 			<div className='login-form'>
 				<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>

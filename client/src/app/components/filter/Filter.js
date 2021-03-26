@@ -10,7 +10,7 @@ const Filter = ({data, setData}) => {
 	const handleFilter =(i=-1) =>{
 		let result = data.map((x) => {return x.data});
 
-		if(searchText != ''){
+		if(searchText !== ''){
 			result = result.filter(compareStrToSearch);
 		}
 
@@ -24,7 +24,7 @@ const Filter = ({data, setData}) => {
 			result = result.filter((x)=>{return temp.map((x)=> x.active && x.type.toLowerCase().split(' ').join('_')).includes(x.type)});
 		}
 
-		if (result.length === 0 && !filters.map((x)=> x.active).includes(true) && searchText == '') {
+		if (result.length === 0 && !filters.map((x)=> x.active).includes(true) && searchText === '') {
 			setData(null);
 		} else{
 			result = result.map((x, i)=>{ return {data: x, public: data[i].public}})
@@ -41,6 +41,7 @@ const Filter = ({data, setData}) => {
 			handleFilter()
 		}, 750);
 		return () => clearTimeout(timeout);
+		// eslint-disable-next-line
 	}, [searchText])
 
   return (

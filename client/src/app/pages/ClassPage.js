@@ -1,5 +1,4 @@
 import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
 import * as Routes from '../routes';
 import { useApi, useAuth } from '../services';
 import { useHistory } from 'react-router';
@@ -25,7 +24,7 @@ const ClassPage = () => {
 			}
 		}
 		fetchdata();
-	},[]);
+	},[currentUser._classId, getStudentsFromClass]);
 
 	useEffect(() => {
 		initFetch();

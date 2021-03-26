@@ -1,4 +1,4 @@
-import { default as React, useContext, createContext, useState } from 'react';
+import { default as React, useContext, createContext } from 'react';
 import { apiConfig } from '../config';
 import {useAuth } from './auth.service';
 
@@ -6,11 +6,11 @@ const ApiContext = createContext();
 const useApi = () => useContext(ApiContext);
 
 const ApiProvider = ({children}) => {
-  const {currenUser} = useAuth();
+  const {currentUser} = useAuth();
   const BASE_URL = `${apiConfig.baseURL}`;
 
   const getStudentsFromClass = async (classId) => {
-    const url = `http://localhost:8080/api/classes/${classId}`;
+    const url = `${BASE_URL}/api/classes/${classId}`;
     try {
       const response = await fetch(url);
       let data = await response.json();
@@ -32,7 +32,7 @@ const ApiProvider = ({children}) => {
   }
 
   const getExercisesFromClass = async (classId) => {
-    const url = `http://localhost:8080/api/classes/${classId}`;
+    const url = `${BASE_URL}/api/classes/${classId}`;
     try {
       const response = await fetch(url);
       let data = await response.json();
@@ -44,27 +44,32 @@ const ApiProvider = ({children}) => {
     }
   }
 
-  const getFilledInExerciseById = async (id, classId=0) => {
-    let filledInExercises = [{studentName: 'Senne Wancour zijn ma is een x, laat dat', score:'3/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Laure De Norre', score:'5/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Arno Hernou', score:'5/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Jef Vermeire', score:'4/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Wouter Janssens', score:'4/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Maarten Oste', score:'Nog niet ingediend', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}]
-    return filledInExercises;
+  const getFilledInExerciseFromClass = async (exerciseId) => {
+    const url = `${BASE_URL}/api/completed_exercises/${currentUser._classId}/${exerciseId}`;
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      throw new Error('No completed exercises found for this user');
+    }
   }
 
-  const getScoresFromStudent = async (id, classId=0) => {
-    let filledInExercises = [{studentName: 'Senne Wancour zijn ma is een x, laat dat', score:'3/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef1'}, {studentName: 'Laure De Norre', score:'5/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef4'}, {studentName: 'Arno Hernou', score:'5/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef3'}, {studentName: 'Jef Vermeire', score:'4/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef2'}, {studentName: 'Wouter Janssens', score:'4/5', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef5'}, {studentName: 'Maarten Oste', score:'Nog niet ingediend', exerciseId: '2051aze0r4z19azr1505a1zera05451041105160e', exerciseName:'oef6'}]
-    filledInExercises.sort(function(a, b){
-      if(a.exerciseName < b.exerciseName) { return -1; }
-      if(a.exerciseName > b.exerciseName) { return 1; }
-      return 0;
-    })
-    return filledInExercises;
+  const getFilledInExerciseFromStudent = async (id) => {
+    const url = `${BASE_URL}/api/completed_exercises/user/${id}`;
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      throw new Error('No completed exercises found for this user');
+    }
   }
 
   return (
     <ApiContext.Provider value={{ 
         getExercises,
         getExercisesFromClass,
-        getFilledInExerciseById,
-        getScoresFromStudent,
+        getFilledInExerciseFromClass,
+        getFilledInExerciseFromStudent,
         getStudentsFromClass,
       }}>
       {children}
