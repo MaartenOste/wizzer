@@ -21,7 +21,6 @@ class ApiRouter {
   private classController: ClassController;
   private completedExerciseController: CompletedExerciseController;
 
-
   private config: IConfig;
   private authService: AuthService;
 
@@ -66,13 +65,28 @@ class ApiRouter {
     this.router.put('/exercises/:id', this.exerciseGroupController.update);
 
     /*
-    * CompletedExercises routes
-    */
-    this.router.get('/completed_exercises', this.completedExerciseController.index);
-    this.router.get('/completed_exercises/:id', this.completedExerciseController.show);
-    this.router.put('/completed_exercises/:id', this.completedExerciseController.update);
-    this.router.get('/completed_exercises/user/:userId', this.completedExerciseController.getCompletedExByUser);
-    this.router.get('/completed_exercises/:classId/:exId', this.completedExerciseController.getCompletedExByClassAndEx);
+     * CompletedExercises routes
+     */
+    this.router.get(
+      '/completed_exercises',
+      this.completedExerciseController.index,
+    );
+    this.router.get(
+      '/completed_exercises/:id',
+      this.completedExerciseController.show,
+    );
+    this.router.put(
+      '/completed_exercises/:id',
+      this.completedExerciseController.update,
+    );
+    this.router.get(
+      '/completed_exercises/user/:userId',
+      this.completedExerciseController.getCompletedExByUser,
+    );
+    this.router.get(
+      '/completed_exercises/:classId/:exId',
+      this.completedExerciseController.getCompletedExByClassAndEx,
+    );
   }
 }
 

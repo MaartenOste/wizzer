@@ -307,23 +307,24 @@ class MongoDBDatabase {
     return await Promise.all(promises);
   };
 
-
   private completedExCreate = async (
     score: string,
     answers: Object,
-  
+
     _completedBy: IUser['_id'],
     _classId: IClass['_id'],
-    _exerciseId: IExerciseGroup['_id']
+    _exerciseId: IExerciseGroup['_id'],
   ) => {
     const classDetail = {
       score,
       answers,
       _completedBy,
       _classId,
-      _exerciseId
+      _exerciseId,
     };
-    const completedExercise: ICompletedExercise = new CompletedExercise(classDetail);
+    const completedExercise: ICompletedExercise = new CompletedExercise(
+      classDetail,
+    );
 
     try {
       const createdCompletedExercise = await completedExercise.save();
@@ -344,27 +345,32 @@ class MongoDBDatabase {
   private createCompletedEx = async () => {
     const promises = [];
     for (let i = 0; i < this.classGroups.length; i++) {
-      for (let j = 0; j < this.classGroups[i]._exercises.length-1; j++) {
+      for (let j = 0; j < this.classGroups[i]._exercises.length - 1; j++) {
         for (let k = 0; k < this.classGroups[i]._studentIds.length; k++) {
           promises.push(
             this.completedExCreate(
               `${faker.random.number(5)}/5`,
-              [{
-                answerData:{data:'randomdata'},
-                correct: faker.random.boolean()
-              },{
-                answerData:{data:'randomdata'},
-                correct: faker.random.boolean()
-              },{
-                answerData:{data:'randomdata'},
-                correct: faker.random.boolean()
-              },{
-                answerData:{data:'randomdata'},
-                correct: faker.random.boolean()
-              }],
+              [
+                {
+                  answerData: { data: 'randomdata' },
+                  correct: faker.random.boolean(),
+                },
+                {
+                  answerData: { data: 'randomdata' },
+                  correct: faker.random.boolean(),
+                },
+                {
+                  answerData: { data: 'randomdata' },
+                  correct: faker.random.boolean(),
+                },
+                {
+                  answerData: { data: 'randomdata' },
+                  correct: faker.random.boolean(),
+                },
+              ],
               this.classGroups[i]._studentIds[k],
               this.classGroups[i]._id,
-              this.classGroups[i]._exercises[j]._exerciseGroupId
+              this.classGroups[i]._exercises[j]._exerciseGroupId,
             ),
           );
         }
@@ -410,8 +416,7 @@ class MongoDBDatabase {
         return Class.find().exec();
       });
 
-
-      this.completedExercises = await CompletedExercise.estimatedDocumentCount()
+    this.completedExercises = await CompletedExercise.estimatedDocumentCount()
       .exec()
       .then(async (count: Number) => {
         if (count === 0) {
@@ -419,8 +424,6 @@ class MongoDBDatabase {
         }
         return CompletedExercise.find().exec();
       });
-
-      
   };
 }
 

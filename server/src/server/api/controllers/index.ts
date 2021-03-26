@@ -4,4 +4,9 @@ import CompletedExerciseController from './CompletedExerciseController';
 import ExerciseGroupController from './ExerciseGroupController';
 import UserController from './UserController';
 
-export { ClassController, CompletedExerciseController, ExerciseGroupController, UserController };
+export {
+  ClassController,
+  CompletedExerciseController,
+  ExerciseGroupController,
+  UserController,
+};

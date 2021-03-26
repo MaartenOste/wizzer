@@ -22,10 +22,10 @@ class CompletedExerciseController {
       const { id } = req.params;
 
       const completedExercise = await CompletedExercise.findById(id)
-      .populate('completedBy')
-      .populate('class')
-      .populate('exercise')
-      .exec();
+        .populate('completedBy')
+        .populate('class')
+        .populate('exercise')
+        .exec();
       return res.status(200).json(completedExercise);
     } catch (err) {
       next(err);
@@ -75,13 +75,14 @@ class CompletedExerciseController {
     const { classId, exId } = req.params;
 
     try {
-      const completedExercises = await CompletedExercise.find(
-        { _classId:classId, _exerciseId:exId },
-      )
-      .populate('completedBy')
-      .populate('class')
-      .populate('exercise')
-      .exec();
+      const completedExercises = await CompletedExercise.find({
+        _classId: classId,
+        _exerciseId: exId,
+      })
+        .populate('completedBy')
+        .populate('class')
+        .populate('exercise')
+        .exec();
 
       if (!completedExercises) {
         throw new NotFoundError();
@@ -100,13 +101,13 @@ class CompletedExerciseController {
     const { userId } = req.params;
 
     try {
-      const completedExercises = await CompletedExercise.find(
-        { _completedBy: userId }
-      )
-      .populate('completedBy')
-      .populate('class')
-      .populate('exercise')
-      .exec();
+      const completedExercises = await CompletedExercise.find({
+        _completedBy: userId,
+      })
+        .populate('completedBy')
+        .populate('class')
+        .populate('exercise')
+        .exec();
 
       if (!completedExercises) {
         throw new NotFoundError();
