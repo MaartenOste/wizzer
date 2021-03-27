@@ -61,6 +61,10 @@ class ApiRouter {
       '/classes/join/:id/:userId',
       this.classController.joinClass,
     );
+    this.router.post(
+      '/classes/delete_exercise/:classId/:exerciseId',
+      this.classController.deleteExercise,
+    );
     /*
      * Exercises routes
      */

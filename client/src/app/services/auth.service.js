@@ -5,7 +5,7 @@ const AuthContext = createContext();
 const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser]= useState(JSON.parse(sessionStorage.getItem('currentUser')));
+  const [currentUser, setCurrentUser] = useState(/*JSON.parse(sessionStorage.getItem('currentUser'))*/);
   //const BASE_URL = `${apiConfig.baseURL}`;
 
   /*function setCookie(cname, cvalue, exdays) {
@@ -81,30 +81,30 @@ const AuthProvider = ({ children }) => {
     } else if(uname === 'maarten' && password === 'azer'){
       response = {
         "_id": {
-            "$oid": "605ce75f19a35a0248e4199b"
+            "$oid": "605ce75f19a35a0248e4199a"
         },
         "_classId": null,
         "_createdAt": 1616701276221,
         "_modifiedAt": null,
         "_deletedAt": null,
-        "firstname": "Abdul",
-        "lastname": "Kuhn",
-        "email": "Abdul_Kuhn78@smartschool.be",
+        "firstname": "Lera",
+        "lastname": "Hessel",
+        "email": "Lera10@smartschool.be",
         "userType": "Teacher",
         "localProvider": {
-            "password": "$2b$10$JjTgK3gWSmLmcoFe39iJzO1T/n4gBz7p.qM7jN5YdZi.QarwbaOmS"
+            "password": "$2b$10$3vTcRkAsl4cHhbwaBsfxvurUKRVJ8eNg6Bcy2dVrjfJpDSYCadFou"
         },
         "smartschoolProvider": {
-            "id": "e925d075-58fe-4ca5-bff2-d7e040a9ba09",
-            "token": "ead29c5f-817e-451e-914b-956e4a2e53dc"
+            "id": "8ad74f4b-c377-4c9a-a27f-4de140177fc8",
+            "token": "e58eef1a-ba5f-4b55-8674-d3dc6f99996f"
         },
         "__v": 0
-    };
+    }
 
     } else {
       response = {error: 'Wrong credentials'};
     }
-    sessionStorage.setItem('currentUser', JSON.stringify(response));
+    //sessionStorage.setItem('currentUser', JSON.stringify(response));
     setCurrentUser(response);
     return response;
   }
@@ -140,7 +140,7 @@ const AuthProvider = ({ children }) => {
 
 
   const logout = () =>{
-
+    setCurrentUser(null);
   }
 
   return (

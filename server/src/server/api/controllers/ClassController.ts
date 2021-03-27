@@ -1,7 +1,8 @@
 import { NextFunction, Response } from 'express';
-import { Class } from '../../models/mongoose';
+import { Class, CompletedExercise } from '../../models/mongoose';
 import { Request } from './CustomRequest';
 import { NotFoundError } from '../../utilities';
+import { assert } from 'console';
 
 class ClassController {
   index = async (req: Request, res: Response, next: NextFunction) => {
@@ -107,6 +108,7 @@ class ClassController {
       if (!classGroup) {
         throw new NotFoundError();
       }
+      
       if (!classGroup._studentIds.includes(userId)) {
         classGroup._studentIds.push(userId);
         classGroup.save();
@@ -114,6 +116,69 @@ class ClassController {
       } else {
         throw new Error('User already in class');
       }
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  deleteExercise = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    const { classId, exerciseId } = req.params;
+
+    try {
+    
+      const classUpdate = {
+        _id: classId,
+        name: req.body.name,
+        _exercises: req.body._exercises,
+        _modifiedAt: new Date().getTime(),
+        _studentIds: req.body._studentIds,
+        _teacherId: req.body._teacherId,
+        slug: req.body.slug,
+      };
+
+      const classSession = await Class.startSession();
+      const exerciseSession = await CompletedExercise.startSession();
+      classSession.startTransaction();
+      exerciseSession.startTransaction();
+
+      const classGroup = await Class.findOneAndUpdate(
+        { _id: classId },
+        classUpdate,
+        {
+          useFindAndModify: false,
+          new: true,
+          session: classSession
+        },
+      ).populate('teacher')
+      .populate('students')
+      .populate('exercises')
+
+      const deletetExercises = await CompletedExercise.deleteMany({
+        $and:[{_classId: classId},{_exerciseId: exerciseId}]
+      }).session(exerciseSession)
+      
+
+      if (!classGroup) {
+        await classSession.abortTransaction();
+        await exerciseSession.abortTransaction();
+        throw new NotFoundError();
+      }
+
+      if (!deletetExercises.ok) {
+        await classSession.abortTransaction();
+        await exerciseSession.abortTransaction();
+        throw new Error('Deleting completedExercises failed');
+      }
+      await classSession.commitTransaction();
+      await exerciseSession.commitTransaction();
+
+      classSession.endSession();
+      exerciseSession.endSession();
+      return res.status(200).json(classGroup);
     } catch (err) {
       next(err);
     }

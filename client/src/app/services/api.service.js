@@ -18,7 +18,7 @@ const ApiProvider = ({children}) => {
       setClassIdState(data.id);
       return data;
     } catch (error) {
-      throw new Error('No students found for this class ID');
+      throw new Error('No class found for this class ID');
     }
   }
 
@@ -44,34 +44,84 @@ const ApiProvider = ({children}) => {
 
   const joinClassRoom = async (classId) => {
     const classUrl = `${BASE_URL}/api/classes/join/${classId}/${currentUser._id.$oid}`;
-    const myHeaders = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-    const update = {...currentUser, _classId: classId}
+
     const options = {
-      method: 'PUT',
-      headers: myHeaders,
-      body: JSON.stringify(update),
+      method: 'POST',
       redirect: 'follow',
     };
     try {
-      let classUpdate = await fetch(classUrl, {...options, method:'POST', body:JSON.stringify({id:classId, userId:currentUser._id.$oid})});
+      let classUpdate = await fetch(classUrl, options);
       let data = await classUpdate.json();
       console.log(data);
       return data;
     } catch (error) {
-      throw new Error(`User Update failed, message:${error}`);
+      throw new Error(`Joining class failed, message:${error}`);
     }
   }
 
+  const deleteExerciseFromClass = async (classData, exerciseId) => {
+    const classUrl = `${BASE_URL}/api/classes/delete_exercise/${classData.id}/${exerciseId}`;
+    const myHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    let exercises = classData._exercises.filter((ex)=>{return ex._exerciseGroupId !== exerciseId});
+
+    const update = {...classData, _exercises: exercises}
+
+    const options = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(update),
+      redirect: 'follow',
+    };
+
+    try {
+      let classUpdate = await fetch(classUrl, options);
+      let data = await classUpdate.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      throw new Error(`Delete exercise from class failed, message:${error}`);
+    }
+  }
+
+  const updateClass = async (classData, exerciseId) => {
+    console.log(classData.id);
+    const classUrl = `${BASE_URL}/api/classes/${classData.id}`;
+    const myHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    let index = classData._exercises.indexOf(classData._exercises.find((ex)=>ex._exerciseGroupId === exerciseId));
+
+    classData._exercises[index].public = !classData._exercises[index].public;
+
+    const options = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: JSON.stringify(classData),
+      redirect: 'follow',
+    };
+
+    try {
+      let classUpdate = await fetch(classUrl, options);
+      let data = await classUpdate.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      throw new Error(`Class Update failed, message:${error}`);
+    }
+  }
 
   return (
-    <ApiContext.Provider value={{ 
+    <ApiContext.Provider value={{
+      deleteExerciseFromClass,
         getFilledInExerciseFromClass,
         getFilledInExerciseFromStudent,
         getClassFromUser,
-        joinClassRoom
+        joinClassRoom,
+        updateClass
       }}>
       {children}
     </ApiContext.Provider>

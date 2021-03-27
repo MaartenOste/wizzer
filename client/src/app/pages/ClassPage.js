@@ -12,7 +12,7 @@ const ClassPage = () => {
 	const [classId, setClassId] = useState();
 
 	const { getClassFromUser } = useApi();
-	const [hasClass, setHasClass] = useState();
+	const [hasClass, setHasClass] = useState(null);
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
@@ -23,7 +23,6 @@ const ClassPage = () => {
 					setHasClass(true);
 				} catch (error) {
 					setHasClass(false);
-					console.error(error.message)
 				}
 		}
 		fetchdata();
@@ -50,8 +49,7 @@ const ClassPage = () => {
 	}
 
 	const handlers = useSwipeable({
-		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX, 'exercises')},
-		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX, 'class')}
+		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
 	});
 
 	useEffect(()=>{
@@ -62,7 +60,7 @@ const ClassPage = () => {
     <Fragment>
 		<div className='homePage-container' {...handlers}>
 			<div className='class--container'>
-				{hasClass?
+				{hasClass !== null ?
 				<>
 					<div className='homePage--heading'>
 						<Title text='Klasgroep'/>
@@ -74,7 +72,9 @@ const ClassPage = () => {
 							return <StudentCard id={student.id} name={`${student.firstname} ${student.lastname}`} key={i}/>
 						})}
 						</>
-						:'Je ziet nog niet in een klas'
+						:<>
+							{currentUser.userType === 'Student' ? 'Je ziet nog niet in een klas, klik op de link die je leerkracht je stuurde om bij een klas aan te sluiten':'maak een klas'}
+						</>
 					}
 				</>
 				:'Laden'}
