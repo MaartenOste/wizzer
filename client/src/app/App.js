@@ -16,6 +16,7 @@ import { ApiProvider, AuthProvider } from './services';
 import { ErrorLayout, PageLayout } from './layouts';
 
 import './app.scss';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
 
@@ -29,7 +30,9 @@ function App() {
               <Redirect exact to={Routes.LOGIN} from={Routes.HOME}/>
 
               <AuthRouteWithLayout exact path={Routes.CLASSGROUP} layout={PageLayout} component={ClassPage}/>
-              <AuthRouteWithLayout exact path={Routes.JOIN_CLASSGROUP} layout={PageLayout} component={JoinClassGroupPage}/>
+              <AuthRouteWithLayout exact path={Routes.SETTINGS} layout={PageLayout} component={ProfilePage}/>
+
+              <RouteWithLayout exact path={Routes.JOIN_CLASSGROUP} layout={PageLayout} component={JoinClassGroupPage}/>
               <AuthRouteWithLayout exact path={Routes.STUDENT_DETAIL} layout={PageLayout} component={StudentDetailPage}/>
               
               <AuthRouteWithLayout exact path={Routes.EXERCISE} layout={PageLayout} component={ExercisesPage}/>

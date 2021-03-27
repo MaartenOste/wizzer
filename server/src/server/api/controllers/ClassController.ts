@@ -67,6 +67,60 @@ class ClassController {
       next(err);
     }
   };
+
+  getClassByUserId = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+
+    
+    try {
+      const classGroup = await Class.findOne(
+        {$or:[{_studentIds: id}, {_teacherId: id}]}
+      ).populate('teacher')
+      .populate('students')
+      .populate('exercises')
+      .exec();
+
+      if (!classGroup) {
+        throw new NotFoundError();
+      }
+
+      return res.status(200).json(classGroup);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+
+  joinClass = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    const { id, userId } = req.params;
+
+    try {
+      const classGroup = await Class.findOne(
+        { _id: id }
+      ).exec();
+
+      if (!classGroup) {
+        throw new NotFoundError();
+      }
+      if (!classGroup._studentIds.includes(userId)) {
+        classGroup._studentIds.push(userId);
+        classGroup.save();
+        return res.status(200).json(classGroup);
+      } else {
+        throw new Error('User already in class');
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default ClassController;

@@ -1,4 +1,4 @@
-import { default as React, useState} from 'react';
+import { default as React, useEffect, useState} from 'react';
 import { Button, ExersiseSubjectSelector, NavBar, NewExOptionCard, Title } from '../components';
 import {IoMdCreate} from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5';
@@ -7,6 +7,7 @@ import { IoSearch } from 'react-icons/io5';
 const CreateExercisePage = () => {
 	const [newExOption, setNewExOption] = useState(localStorage.getItem('newExOption') || '');
 	const [exersiseSubject, setExersiseSubject] = useState(localStorage.getItem('exersiseSubject') || '');
+	const [wasCreatingExercise, setWasCreatingExercise] = useState(false);
 
 	const exerciseTypes = {getallenkennis:['Getallen gebruiken om te zeggen hoeveel er zijn',
 		'Getallen gebruiken in een rangorde',
@@ -76,37 +77,77 @@ const CreateExercisePage = () => {
 		'Voorbeelden '
 	]};
 
+	useEffect(()=>{
+		if (newExOption !== '' || exersiseSubject !== '' ) {
+			setWasCreatingExercise(true);
+		}
+	// eslint-disable-next-line
+	}, [])
+
+	const handleWasCreatingAction = (action) =>{
+		if (action) {
+			setWasCreatingExercise(false)
+		} else{
+			localStorage.removeItem('newExOption');
+			setNewExOption('');
+			localStorage.removeItem('exersiseSubject');
+			setExersiseSubject('');
+			setWasCreatingExercise(false)
+		}
+	}
 
   return (
 	<>
 		<div className='createExPage-container'>
-			<div className='createExPage--heading'>
-				<Title text='Nieuwe oefening'/>
-			</div>
-			{newExOption === ''?
+			{wasCreatingExercise? 
 			<>
-				<div className='createExPage--options'>
-					<NewExOptionCard title={'Nieuwe oefening maken'} text={'Wanneer u voor deze optie kiest kan u zelf uw oefening samen-stellen op basis van parameters.'} icon={<IoMdCreate />} onClick={()=>{ localStorage.setItem('newExOption', 'create'); setNewExOption('create');}}/>
-					<NewExOptionCard title={'Oefening kiezen'} text={'Wanneer u voor deze optie kiest kan u kiezen uit een lange lijst oefeningen die reeds door andere leerkrachten gemaakt werden op wizzer.'} icon={<IoSearch />} onClick={()=>{localStorage.setItem('newExOption', 'choose');setNewExOption('choose')}}/>
+			<div className='createExPage--heading'>
+				<Title text='Verdergaan?'/>
+			</div>
+			<div className='createExPage--wasCreating'>
+				<div className='createExPage--wasCreating__heading'>
+					U was een {newExOption === 'create'?'nieuwe oefening aan het maken':'oefening aan het kiezen uit de database'}
+					{exersiseSubject!=='' ? <>met als onderwerp: <b>{exersiseSubject.split('_').join(' ')}</b>.</> : '.'}<br />
+					Wenst u verder te gaan met deze oefening?
 				</div>
+				<div className='createExPage--wasCreating__actions'>
+					<Button text='Ja' type='primary' onClick={()=>{handleWasCreatingAction(true)}}/>
+					<Button text='Nee' type='secondary' onClick={()=>{handleWasCreatingAction(false)}}/>
+				</div>
+			</div>
 			</>
 			:
-			newExOption === 'create'?
-			'Create'
-			:
 			<>
-				{exersiseSubject === ''?
-				<>{console.log(exersiseSubject)}
-					<ExersiseSubjectSelector onClick={setExersiseSubject} />
-					<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('newExOption'); setNewExOption('')}}/>
+				<div className='createExPage--heading'>
+					<Title text='Nieuwe oefening'/>
+				</div>
+				{
+				newExOption === ''?
+				<>
+					<div className='createExPage--options'>
+						<NewExOptionCard title={'Nieuwe oefening maken'} text={'Wanneer u voor deze optie kiest kan u zelf uw oefening samen-stellen op basis van parameters.'} icon={<IoMdCreate />} onClick={()=>{ localStorage.setItem('newExOption', 'create'); setNewExOption('create');}}/>
+						<NewExOptionCard title={'Oefening kiezen'} text={'Wanneer u voor deze optie kiest kan u kiezen uit een lange lijst oefeningen die reeds door andere leerkrachten gemaakt werden op wizzer.'} icon={<IoSearch />} onClick={()=>{localStorage.setItem('newExOption', 'choose');setNewExOption('choose')}}/>
+					</div>
 				</>
 				:
+				newExOption === 'create'?
+				'Create'
+				:
 				<>
-					Kies een type oefening.
-					{exerciseTypes[exersiseSubject].sort().map((type, i)=>{
-						return <div className='exerciseTypeCard' key={i}>{type}</div>;
-					})}
-					<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exersiseSubject'); setExersiseSubject('')}}/>
+					{exersiseSubject === ''?
+					<>{console.log(exersiseSubject)}
+						<ExersiseSubjectSelector onClick={setExersiseSubject} />
+						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('newExOption'); setNewExOption('')}}/>
+					</>
+					:
+					<>
+						Kies een type oefening.
+						{exerciseTypes[exersiseSubject].sort().map((type, i)=>{
+							return <div className='exerciseTypeCard' key={i}>{type}</div>;
+						})}
+						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exersiseSubject'); setExersiseSubject('')}}/>
+					</>
+					}
 				</>
 				}
 			</>

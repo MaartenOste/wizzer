@@ -2,6 +2,8 @@ export const HOME = '/';
 export const LOGIN = '/login';
 
 export const CLASSGROUP = '/klas';
+export const SETTINGS = '/instellingen';
+
 export const STUDENT_DETAIL = '/student/:id';
 export const JOIN_CLASSGROUP = '/join/:id';
 

@@ -16,11 +16,9 @@ const LoginPage = () => {
 
 	const handleLogin = async () =>{
 		const resp = await signIn(username, password);
-		console.log(resp);
 		if (resp.error) {
 			setErrorPopup(resp.error);
 		} else {
-			sessionStorage.setItem('user', JSON.stringify(resp));
 			history.push(Routes.CLASSGROUP);
 		}
 	}

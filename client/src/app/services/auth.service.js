@@ -5,7 +5,7 @@ const AuthContext = createContext();
 const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser]= useState();
+  const [currentUser, setCurrentUser]= useState(JSON.parse(sessionStorage.getItem('currentUser')));
   //const BASE_URL = `${apiConfig.baseURL}`;
 
   /*function setCookie(cname, cvalue, exdays) {
@@ -78,33 +78,34 @@ const AuthProvider = ({ children }) => {
         },
         "__v": 0
     };
-      setCurrentUser(response);
     } else if(uname === 'maarten' && password === 'azer'){
       response = {
         "_id": {
-            "$oid": "605ce75f19a35a0248e41968"
+            "$oid": "605ce75f19a35a0248e4199b"
         },
-        "_classId": '605ce76119a35a0248e419c7',
+        "_classId": null,
         "_createdAt": 1616701276221,
         "_modifiedAt": null,
         "_deletedAt": null,
-        "firstname": "Ken",
-        "lastname": "Erdman",
-        "email": "Ken_Erdman88@smartschool.be",
+        "firstname": "Abdul",
+        "lastname": "Kuhn",
+        "email": "Abdul_Kuhn78@smartschool.be",
         "userType": "Teacher",
         "localProvider": {
-            "password": "$2b$10$HzB33MQU9nESns6Sa/w4de1hRbUcxPMtaCKvChH4M46t66XssezQa"
+            "password": "$2b$10$JjTgK3gWSmLmcoFe39iJzO1T/n4gBz7p.qM7jN5YdZi.QarwbaOmS"
         },
         "smartschoolProvider": {
-            "id": "7e141455-2f46-4f4a-9930-7340fe8bcd49",
-            "token": "3524a1b9-2b31-4a7b-8414-ed58edc69715"
+            "id": "e925d075-58fe-4ca5-bff2-d7e040a9ba09",
+            "token": "ead29c5f-817e-451e-914b-956e4a2e53dc"
         },
         "__v": 0
     };
-      setCurrentUser(response);
+
     } else {
       response = {error: 'Wrong credentials'};
     }
+    sessionStorage.setItem('currentUser', JSON.stringify(response));
+    setCurrentUser(response);
     return response;
   }
 
@@ -143,7 +144,7 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, logout, registerUser, signIn }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, logout, registerUser, signIn }}>
       {children}
     </AuthContext.Provider>
   )

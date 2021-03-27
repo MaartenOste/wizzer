@@ -1,8 +1,8 @@
 import { default as React } from 'react';
 import { useHistory } from 'react-router';
 import * as Routes from '../../routes';
-import { ReactComponent as School }from '../../_static/icons/school-solid.svg';
-import { ReactComponent as Exercise }from '../../_static/icons/book-solid.svg';
+import {FaUser, FaSchool, FaBook} from 'react-icons/fa'
+
 
 const NavBar = ({ active }) => {
 	const history = useHistory();
@@ -15,6 +15,9 @@ const NavBar = ({ active }) => {
 			case 'exercises':
 				history.push(Routes.EXERCISE);
 				break;
+			case 'profile':
+				history.push(Routes.SETTINGS);
+				break;
 			default:
 				break;
 		}
@@ -22,8 +25,9 @@ const NavBar = ({ active }) => {
 
 	return (
 		<nav>
-			<div onClick={()=>{handleClick('class')}} className={active === 'class'? 'active':''}><School /></div>
-			<div onClick={()=>{handleClick('exercises')}} className={active === 'exercises'? 'active': ''}><Exercise /></div>
+			<div onClick={()=>{handleClick('class')}} className={active === 'class'? 'active':''}><FaSchool /></div>
+			<div onClick={()=>{handleClick('exercises')}} className={active === 'exercises'? 'active': ''}><FaBook /></div>
+			<div onClick={()=>{handleClick('profile')}} className={active === 'profile'? 'active': ''}><FaUser /></div>
 		</nav>
 	);
 };
