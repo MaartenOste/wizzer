@@ -108,7 +108,7 @@ class ClassController {
       if (!classGroup) {
         throw new NotFoundError();
       }
-      
+
       if (!classGroup._studentIds.includes(userId)) {
         classGroup._studentIds.push(userId);
         classGroup.save();
@@ -129,7 +129,6 @@ class ClassController {
     const { classId, exerciseId } = req.params;
 
     try {
-    
       const classUpdate = {
         _id: classId,
         name: req.body.name,
@@ -151,16 +150,16 @@ class ClassController {
         {
           useFindAndModify: false,
           new: true,
-          session: classSession
+          session: classSession,
         },
-      ).populate('teacher')
-      .populate('students')
-      .populate('exercises')
+      )
+        .populate('teacher')
+        .populate('students')
+        .populate('exercises');
 
       const deletetExercises = await CompletedExercise.deleteMany({
-        $and:[{_classId: classId},{_exerciseId: exerciseId}]
-      }).session(exerciseSession)
-      
+        $and: [{ _classId: classId }, { _exerciseId: exerciseId }],
+      }).session(exerciseSession);
 
       if (!classGroup) {
         await classSession.abortTransaction();
