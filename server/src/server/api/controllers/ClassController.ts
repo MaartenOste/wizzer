@@ -75,14 +75,14 @@ class ClassController {
   ): Promise<Response | void> => {
     const { id } = req.params;
 
-    
     try {
-      const classGroup = await Class.findOne(
-        {$or:[{_studentIds: id}, {_teacherId: id}]}
-      ).populate('teacher')
-      .populate('students')
-      .populate('exercises')
-      .exec();
+      const classGroup = await Class.findOne({
+        $or: [{ _studentIds: id }, { _teacherId: id }],
+      })
+        .populate('teacher')
+        .populate('students')
+        .populate('exercises')
+        .exec();
 
       if (!classGroup) {
         throw new NotFoundError();
@@ -92,8 +92,7 @@ class ClassController {
     } catch (err) {
       next(err);
     }
-  }
-
+  };
 
   joinClass = async (
     req: Request,
@@ -103,9 +102,7 @@ class ClassController {
     const { id, userId } = req.params;
 
     try {
-      const classGroup = await Class.findOne(
-        { _id: id }
-      ).exec();
+      const classGroup = await Class.findOne({ _id: id }).exec();
 
       if (!classGroup) {
         throw new NotFoundError();

@@ -57,7 +57,10 @@ class ApiRouter {
     this.router.get('/classes/:id', this.classController.show);
     this.router.get('/classes/user/:id', this.classController.getClassByUserId);
     this.router.put('/classes/:id', this.classController.update);
-    this.router.post('/classes/join/:id/:userId', this.classController.joinClass);
+    this.router.post(
+      '/classes/join/:id/:userId',
+      this.classController.joinClass,
+    );
     /*
      * Exercises routes
      */
