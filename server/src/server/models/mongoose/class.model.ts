@@ -48,7 +48,7 @@ const classSchema: Schema = new Schema(
         },
         public: {
           required: true,
-          type: Boolean
+          type: Boolean,
         },
         _addedAt: {
           required: false,

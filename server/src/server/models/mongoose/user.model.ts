@@ -83,7 +83,6 @@ userSchema.virtual('id').get(function(this: IUser) {
   return this._id;
 });
 
-
 userSchema.pre('save', function(next) {
   const member: IUser = this as IUser;
 

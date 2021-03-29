@@ -11,15 +11,15 @@ class ExerciseGroupController {
       if (filters) {
         let temp = filters.split('%22').join('"');
         temp = temp.split(';');
-        
-        let tempFilters:any = {};
-        temp.forEach((el:any) => {
+
+        let tempFilters: any = {};
+        temp.forEach((el: any) => {
           el = el.split(':');
-          tempFilters[el[0]] = el[1]
+          tempFilters[el[0]] = el[1];
         });
-        
-        filter = {$and: [tempFilters]}
-      } 
+
+        filter = { $and: [tempFilters] };
+      }
 
       let exerciseGroups = await ExerciseGroup.find(filter)
         .populate('createdBy')
