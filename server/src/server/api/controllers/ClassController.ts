@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express';
-import { Class, CompletedExercise } from '../../models/mongoose';
+import { Class, CompletedExercise, ICompletedExercise } from '../../models/mongoose';
 import { Request } from './CustomRequest';
 import { NotFoundError } from '../../utilities';
-import { assert } from 'console';
+import { default as mongoose} from 'mongoose';
 
 class ClassController {
   index = async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +58,10 @@ class ClassController {
         {
           new: true,
         },
-      ).exec();
+      ).populate('teacher')
+      .populate('students')
+      .populate('exercises')
+      .exec();
 
       if (!classGroup) {
         throw new NotFoundError();
@@ -126,59 +129,122 @@ class ClassController {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-    const { classId, exerciseId } = req.params;
+    const { exerciseId } = req.params;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    const initialClass = await Class.findOne({ _teacherId: req.body.userId })
+    .exec()
 
     try {
-      const classUpdate = {
-        _id: classId,
-        name: req.body.name,
-        _exercises: req.body._exercises,
-        _modifiedAt: new Date().getTime(),
-        _studentIds: req.body._studentIds,
-        _teacherId: req.body._teacherId,
-        slug: req.body.slug,
-      };
-
-      const classSession = await Class.startSession();
-      const exerciseSession = await CompletedExercise.startSession();
-      classSession.startTransaction();
-      exerciseSession.startTransaction();
-
-      const classGroup = await Class.findOneAndUpdate(
-        { _id: classId },
-        classUpdate,
-        {
-          useFindAndModify: false,
-          new: true,
-          session: classSession,
-        },
+      const classGroup = await Class.updateOne(
+        { _teacherId: req.body.userId },
+        { $pull: {_exercises: {_exerciseGroupId: exerciseId}}},
+        {session: session}
       )
-        .populate('teacher')
-        .populate('students')
-        .populate('exercises');
+      .populate('teacher')
+      .populate('students')
+      .populate('exercises')
 
-      const deletetExercises = await CompletedExercise.deleteMany({
-        $and: [{ _classId: classId }, { _exerciseId: exerciseId }],
-      }).session(exerciseSession);
-
-      if (!classGroup) {
-        await classSession.abortTransaction();
-        await exerciseSession.abortTransaction();
+      if (!classGroup.ok) {
         throw new NotFoundError();
       }
 
+      const deletetExercises = await CompletedExercise.deleteMany({
+        $and: [{ _classId:  initialClass._id }, { _exerciseId: exerciseId }],
+      }).session(session);
+
+
       if (!deletetExercises.ok) {
-        await classSession.abortTransaction();
-        await exerciseSession.abortTransaction();
         throw new Error('Deleting completedExercises failed');
       }
-      await classSession.commitTransaction();
-      await exerciseSession.commitTransaction();
+      await session.commitTransaction();
 
-      classSession.endSession();
-      exerciseSession.endSession();
-      return res.status(200).json(classGroup);
+
+      const response = await Class.findOne({ _teacherId: req.body.userId })
+      .populate('teacher')
+      .populate('students')
+      .populate('exercises')
+      .exec()
+
+      session.endSession();
+
+      return res.status(200).json(response);
     } catch (err) {
+      await session.abortTransaction();
+      next(err);
+    }
+  };
+
+  addExercise = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+
+    const { exerciseId } = req.params;
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    const data = {_exerciseGroupId: exerciseId, public: false, _addedAt: Date.now()};
+    const initialClass = await Class.findOne({ _teacherId: req.body.userId })
+    .exec()
+
+    try {
+      const classGroup = await Class.updateOne(
+        { _teacherId: req.body.userId },
+        { $push: {_exercises: data} },
+        { session: session, new: true }
+        )
+      .populate('teacher')
+      .populate('students')
+      .populate('exercises')
+      .exec()
+      
+
+      if (!classGroup.ok) {
+        throw new NotFoundError();
+      }
+      
+      let exercises:Array<ICompletedExercise> = []
+
+      initialClass._studentIds.forEach((student:any)=>{
+        const classDetail = {
+          score: 'Nog niet ingediend',
+          answers: [{
+            answerData: { data: '' },
+            correct: false,
+          }],
+          _completedBy: student,
+          _classId: initialClass._id,
+          _exerciseId: exerciseId,
+        };
+        const completedExercise: ICompletedExercise = new CompletedExercise(
+          classDetail,
+        );
+        exercises.push(completedExercise)
+      })
+
+      const addedExercises = await CompletedExercise.insertMany(
+        exercises
+      , { session: session })
+
+      if (!addedExercises) {
+        throw new Error('Adding completedExercises failed');
+      }
+
+      await session.commitTransaction();
+
+      const response = await Class.findOne({ _teacherId: req.body.userId })
+      .populate('teacher')
+      .populate('students')
+      .populate('exercises')
+      .exec()
+
+      session.endSession();
+      return res.status(200).json(response);
+    } catch (err) {
+      await session.abortTransaction();
       next(err);
     }
   };

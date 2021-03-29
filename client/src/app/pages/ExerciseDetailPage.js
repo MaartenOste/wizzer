@@ -13,7 +13,7 @@ const ExerciseDetailPage = () => {
 		const fetchdata = async () => {
 			let data = await getFilledInExerciseFromClass(id);
 			console.log(data);
-			setExercises(data);
+			setExercises(data.sort((a,b)=>{return (''+ a.completedBy.lastname).localeCompare(b.completedBy.lastname)}));
 		}
 		fetchdata();
 	},[getFilledInExerciseFromClass, id]);

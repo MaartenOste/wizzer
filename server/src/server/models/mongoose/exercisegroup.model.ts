@@ -12,6 +12,7 @@ interface IExerciseGroup extends Document {
   exercises: Array<Object>;
   example: Object;
   type: string;
+  subType: string;
 
   _createdAt: number;
   _modifiedAt: number;
@@ -45,6 +46,10 @@ const exerciseGroupSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    subType: {
+      type: String,
+      required: true,
+    },
 
     _createdAt: { type: Number, required: true, default: Date.now() },
     _modifiedAt: { type: Number, required: false, default: null },
@@ -69,6 +74,7 @@ exerciseGroupSchema.virtual('createdBy', {
 
 exerciseGroupSchema.methods.slugify = function() {
   this.slug = slug(this.title);
+  this.subType = slug(this.subType);
 };
 
 exerciseGroupSchema.pre<IExerciseGroup>('validate', function(next) {

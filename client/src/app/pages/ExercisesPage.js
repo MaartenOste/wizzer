@@ -37,7 +37,10 @@ const ExercisesPage = () => {
 	useEffect(()=>{
 		if (classData && classData._exercises) {
 			console.log('rearrangeing data');
-			setExercises(classData._exercises.map((ex) => {return {data: classData.exercises.find((x)=>x.id === ex._exerciseGroupId), public: ex.public}}));
+			let temp = classData._exercises.map((ex) => {
+				return { ...ex, data: classData.exercises.find((x)=>x.id === ex._exerciseGroupId)}
+			})
+			setExercises(temp.sort((a,b)=>{return b._addedAt - a._addedAt }));
 		}
 	},[classData])
 
@@ -67,9 +70,9 @@ const ExercisesPage = () => {
 				temp2.splice(index2,1);
 				setFilteredExercises([...temp2]);
 			}
-		}
-
-		const response = await deleteExerciseFromClass(classData, id);
+		}		
+		const response = await deleteExerciseFromClass(id);
+		console.log(response);
 		setClassData(response);
 	}
 

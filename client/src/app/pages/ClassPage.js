@@ -19,7 +19,7 @@ const ClassPage = () => {
 				try {
 					let data = await getClassFromUser();
 					setClassId(data.id);
-					setStudents(data.students);
+					setStudents(data.students.sort((a,b)=>{return (''+ a.lastname).localeCompare(b.lastname)}));
 					setHasClass(true);
 				} catch (error) {
 					setHasClass(false);

@@ -18,7 +18,6 @@ interface IUser extends Document {
   lastname: string;
   email: string;
   userType: IUserType['name'];
-  _classId: IClass['_id'];
 
   localProvider?: ILocalProvider;
   smartschoolProvider?: ISmartschoolProvider;
@@ -54,12 +53,6 @@ const userSchema: Schema = new Schema(
       required: true,
       max: 64,
     },
-    _classId: {
-      type: Schema.Types.ObjectId || null,
-      ref: 'Class',
-      default: null,
-      required: false,
-    },
     localProvider: {
       password: {
         type: String,
@@ -90,12 +83,6 @@ userSchema.virtual('id').get(function(this: IUser) {
   return this._id;
 });
 
-userSchema.virtual('class', {
-  ref: 'Class',
-  localField: '_classId',
-  foreignField: '_id',
-  justOne: true,
-});
 
 userSchema.pre('save', function(next) {
   const member: IUser = this as IUser;

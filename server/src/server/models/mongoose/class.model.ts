@@ -8,6 +8,7 @@ import { IExerciseGroup } from './exercisegroup.model';
 interface IExercises {
   _exerciseGroupId: IExerciseGroup;
   public: boolean;
+  _addedAt: Number;
 }
 
 interface IClass extends Document {
@@ -46,7 +47,12 @@ const classSchema: Schema = new Schema(
           required: false,
         },
         public: {
-          type: Boolean,
+          required: true,
+          type: Boolean
+        },
+        _addedAt: {
+          required: false,
+          type: Number,
         },
       },
     ],

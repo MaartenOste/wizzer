@@ -8,12 +8,10 @@ const StudentDetailPage = () => {
 	const { getFilledInExerciseFromStudent } = useApi();
 	const { id } = useParams();
 
-
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
 			let data = await getFilledInExerciseFromStudent(id);
-			console.log(data);
-			setExercises(data);
+			setExercises(data.sort((a,b)=>{return b.class._exercises.find((x)=> x._exerciseGroupId === b.exercise.id)._addedAt - a.class._exercises.find((x)=> x._exerciseGroupId === a.exercise.id)._addedAt }));
 		}
 		fetchdata();
 	},[getFilledInExerciseFromStudent, id]);

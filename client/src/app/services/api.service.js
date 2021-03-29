@@ -11,7 +11,7 @@ const ApiProvider = ({children}) => {
   const BASE_URL = `${apiConfig.baseURL}`;
 
   const getClassFromUser = async () => {
-    const url = `${BASE_URL}/api/classes/user/${currentUser._id.$oid}`;
+    const url = `${BASE_URL}/api/classes/user/${currentUser.id}`;
     try {
       const response = await fetch(url);
       let data = await response.json();
@@ -43,7 +43,7 @@ const ApiProvider = ({children}) => {
   }
 
   const joinClassRoom = async (classId) => {
-    const classUrl = `${BASE_URL}/api/classes/join/${classId}/${currentUser._id.$oid}`;
+    const classUrl = `${BASE_URL}/api/classes/join/${classId}/${currentUser.id}`;
 
     const options = {
       method: 'POST',
@@ -59,20 +59,41 @@ const ApiProvider = ({children}) => {
     }
   }
 
-  const deleteExerciseFromClass = async (classData, exerciseId) => {
-    const classUrl = `${BASE_URL}/api/classes/delete_exercise/${classData.id}/${exerciseId}`;
+  const deleteExerciseFromClass = async (exerciseId) => {
+    const classUrl = `${BASE_URL}/api/classes/delete_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-    let exercises = classData._exercises.filter((ex)=>{return ex._exerciseGroupId !== exerciseId});
-
-    const update = {...classData, _exercises: exercises}
 
     const options = {
       method: 'POST',
       headers: myHeaders,
-      body: JSON.stringify(update),
+      body: JSON.stringify({userId: currentUser.id}),
+      redirect: 'follow',
+    };
+
+    try {
+      let classUpdate = await fetch(classUrl, options);
+      let data = await classUpdate.json();
+      //console.log(data);
+      return data;
+    } catch (error) {
+      throw new Error(`Delete exercise from class failed, message:${error}`);
+    }
+  }
+
+  const addExerciseToClass = async (exerciseId) => {
+    const classUrl = `${BASE_URL}/api/classes/add_exercise/${exerciseId}`;
+    const myHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+
+    const options = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({userId: currentUser.id}),
       redirect: 'follow',
     };
 
@@ -114,12 +135,29 @@ const ApiProvider = ({children}) => {
     }
   }
 
+  const getExercises = async (filters= '') => {
+    console.log(filters);
+    let url = `${BASE_URL}/api/exercises`;
+    if (filters !== '') {
+      url = `${BASE_URL}/api/exercises?filters=${filters}`;
+    }
+
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      throw new Error('No exercises exercises found for these filters user');
+    }
+  }
+
   return (
     <ApiContext.Provider value={{
-      deleteExerciseFromClass,
+        addExerciseToClass,
+        deleteExerciseFromClass,
         getFilledInExerciseFromClass,
         getFilledInExerciseFromStudent,
         getClassFromUser,
+        getExercises,
         joinClassRoom,
         updateClass
       }}>

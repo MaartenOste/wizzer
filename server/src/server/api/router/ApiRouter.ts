@@ -62,8 +62,12 @@ class ApiRouter {
       this.classController.joinClass,
     );
     this.router.post(
-      '/classes/delete_exercise/:classId/:exerciseId',
+      '/classes/delete_exercise/:exerciseId',
       this.classController.deleteExercise,
+    );
+    this.router.post(
+      '/classes/add_exercise/:exerciseId',
+      this.classController.addExercise,
     );
     /*
      * Exercises routes

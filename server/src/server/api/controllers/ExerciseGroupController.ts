@@ -6,7 +6,22 @@ import { NotFoundError } from '../../utilities';
 class ExerciseGroupController {
   index = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let exerciseGroups = await ExerciseGroup.find()
+      const { filters } = req.query;
+      let filter;
+      if (filters) {
+        let temp = filters.split('%22').join('"');
+        temp = temp.split(';');
+        
+        let tempFilters:any = {};
+        temp.forEach((el:any) => {
+          el = el.split(':');
+          tempFilters[el[0]] = el[1]
+        });
+        
+        filter = {$and: [tempFilters]}
+      } 
+
+      let exerciseGroups = await ExerciseGroup.find(filter)
         .populate('createdBy')
         .sort({ name: -1 })
         .exec();

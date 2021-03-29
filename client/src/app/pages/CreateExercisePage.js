@@ -1,13 +1,41 @@
-import { default as React, useEffect, useState} from 'react';
+import { default as React, useEffect, useState, useCallback} from 'react';
 import { Button, ExersiseSubjectSelector, NavBar, NewExOptionCard, Title } from '../components';
 import {IoMdCreate} from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5';
+import { useApi } from '../services';
 
 
 const CreateExercisePage = () => {
+	const {addExerciseToClass, getExercises,} = useApi();
+
 	const [newExOption, setNewExOption] = useState(localStorage.getItem('newExOption') || '');
-	const [exersiseSubject, setExersiseSubject] = useState(localStorage.getItem('exersiseSubject') || '');
+	const [exerciseType, setExerciseType] = useState(localStorage.getItem('exerciseType') || '');
+	const [exersiseSubType, setExersiseSubType] = useState('');
+
+	const [dataForSubType, setDataForSubType] = useState();
+
 	const [wasCreatingExercise, setWasCreatingExercise] = useState(false);
+
+
+	const initFetch = useCallback(() => {
+		const fetchdata = async () => {
+			try {
+				let data = await getExercises(`subType:${exersiseSubType}`);
+				setDataForSubType(data);
+
+			} catch (error) {
+				console.error(error);
+			}
+		}
+		fetchdata();
+	},[getExercises, exersiseSubType]);
+
+	useEffect(()=>{
+		if (exersiseSubType !== '') {
+			initFetch();
+		}
+		// eslint-disable-next-line
+	}, [exersiseSubType])
 
 	const exerciseTypes = {getallenkennis:['Getallen gebruiken om te zeggen hoeveel er zijn',
 		'Getallen gebruiken in een rangorde',
@@ -51,7 +79,7 @@ const CreateExercisePage = () => {
 		'Meten met natuurlijke maateenheden',
 		'Lengte',
 		'Inhoud',
-		'Gewicht' ,
+		'Gewicht',
 		'Tijd',
 		'Geldwaarden',
 		'Temperatuur'
@@ -74,11 +102,11 @@ const CreateExercisePage = () => {
 	],
 	toepassingen:[
 		'Werkwijze (heuristiek)',
-		'Voorbeelden '
+		'Voorbeelden'
 	]};
 
 	useEffect(()=>{
-		if (newExOption !== '' || exersiseSubject !== '' ) {
+		if (newExOption !== '' || exerciseType !== '' ) {
 			setWasCreatingExercise(true);
 		}
 	// eslint-disable-next-line
@@ -86,14 +114,21 @@ const CreateExercisePage = () => {
 
 	const handleWasCreatingAction = (action) =>{
 		if (action) {
-			setWasCreatingExercise(false)
+			setWasCreatingExercise(false);
+			setExersiseSubType(localStorage.getItem('exerciseSubType'));
 		} else{
 			localStorage.removeItem('newExOption');
 			setNewExOption('');
-			localStorage.removeItem('exersiseSubject');
-			setExersiseSubject('');
-			setWasCreatingExercise(false)
+			localStorage.removeItem('exerciseType');
+			setExerciseType('');
+			localStorage.removeItem('exerciseSubType');
+			setExersiseSubType('');
+			setWasCreatingExercise(false);
 		}
+	}
+
+	const handleAddExercise = async (exId) =>{
+		await addExerciseToClass(exId)
 	}
 
   return (
@@ -106,8 +141,8 @@ const CreateExercisePage = () => {
 			</div>
 			<div className='createExPage--wasCreating'>
 				<div className='createExPage--wasCreating__heading'>
-					U was een {newExOption === 'create'?'nieuwe oefening aan het maken':'oefening aan het kiezen uit de database'}
-					{exersiseSubject!=='' ? <>met als onderwerp: <b>{exersiseSubject.split('_').join(' ')}</b>.</> : '.'}<br />
+					U was een {newExOption === 'create'?'nieuwe oefening aan het maken':'oefening aan het kiezen uit de database '}
+					{exerciseType!=='' ? <>met als onderwerp: <b>{exerciseType.split('_').join(' ')}</b>.</> : '.'}<br />
 					Wenst u verder te gaan met deze oefening?
 				</div>
 				<div className='createExPage--wasCreating__actions'>
@@ -134,18 +169,31 @@ const CreateExercisePage = () => {
 				'Create'
 				:
 				<>
-					{exersiseSubject === ''?
-					<>{console.log(exersiseSubject)}
-						<ExersiseSubjectSelector onClick={setExersiseSubject} />
+					{exerciseType === ''?
+					<>
+						<ExersiseSubjectSelector onClick={setExerciseType} />
 						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('newExOption'); setNewExOption('')}}/>
 					</>
 					:
 					<>
+					{exersiseSubType === ''?
+					<>
 						Kies een type oefening.
-						{exerciseTypes[exersiseSubject].sort().map((type, i)=>{
-							return <div className='exerciseTypeCard' key={i}>{type}</div>;
+						{exerciseType && exerciseTypes[exerciseType].map((type, i)=>{
+							return <div className='exerciseTypeCard' key={i} onClick={()=>{localStorage.setItem('exerciseSubType', type.toLowerCase().split(' ').join('-')); setExersiseSubType(type.toLowerCase().split(' ').join('-'))}}>{type}</div>;
 						})}
-						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exersiseSubject'); setExersiseSubject('')}}/>
+						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exerciseType'); setExerciseType('')}}/>
+					</>
+					:
+					<>
+						{dataForSubType && dataForSubType.length>0 ? dataForSubType.map((ex, i)=>{
+							return <div className='exerciseTypeCard' key={i} onClick={()=>{handleAddExercise(ex.id)}}>{ex.title}</div>
+						}):
+						'Er zijn geen oefeningen terug te vinden in de database voor deze soort oefening.'
+						}
+						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exerciseSubType'); setExersiseSubType('')}}/>
+					</>
+					}
 					</>
 					}
 				</>

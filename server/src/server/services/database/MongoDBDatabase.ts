@@ -15,7 +15,6 @@ import {
   IUserType,
   UserType,
 } from '../../models/mongoose';
-import { lang } from 'moment';
 
 interface ISmartschoolProvider {
   id: string;
@@ -187,6 +186,7 @@ class MongoDBDatabase {
     exercises: Array<Object>,
     example: Object,
     type: string,
+    subType: string,
   ) => {
     const exerciseDetail = {
       title,
@@ -196,6 +196,7 @@ class MongoDBDatabase {
       exercises,
       example,
       type,
+      subType
     };
     const exerciseGroup: IExerciseGroup = new ExerciseGroup(exerciseDetail);
 
@@ -217,14 +218,83 @@ class MongoDBDatabase {
 
   private createExercises = async () => {
     const promises = [];
-    const types = [
+    const types:Array<String> = [
       'getallenkennis',
       'bewerkingen',
       'meetkunde',
       'toepassingen',
       'meten_en_metend_rekenen',
     ];
+    const subTypes:any = {
+      getallenkennis:['getallen gebruiken om te zeggen hoeveel er zijn',
+		'getallen gebruiken in een rangorde',
+		'getallen gebruiken bij een maateenheid',
+		'getallen gebruiken in een bewerking',
+		'getallen gebruiken als code',
+		'we geven de natuurlijke getallen tot 1000 een plaats op honderdvelden',
+		'we geven de natuurlijke getallen tot 1000 een plaats op getallenassen',
+		'we vergelijken en ordenen natuurlijke getallen',
+		'duizendtal, honderdtal, tiental en eenheid',
+		'we structureren getallen',
+		'tellen, terugtellen en doortellen per 1, per 2, per 5, per 10, per 50 of per 100',
+		'patronen',
+		'schatten',
+		'afronden',
+		'even getallen',
+		'oneven getallen',
+		'ik deel 18',
+		'gemeenschappelijke delers',
+		'kenmerken van deelbaarheid',
+		'veelvouden',
+		'breuken',
+		'de breukenladder',
+		'stambreuken',
+	],
+	bewerkingen:[
+		'ik ken rekentaal',
+		'eigenschappen van en relaties tussen bewerkingen',
+		'ik controleer met de omgekeerde bewerking',
+		'hoofdrekenen (optellen, aftrekken, vermenigvuldigen en delen)',
+		'maaltafels en de deeltafels/delingstafels',
+		'hoofdrekenen met breuken',
+		'schatten',
+		'cijferen - Optellen',
+		'cijferen - Aftrekken',
+		'cijferen - Vermenigvuldigen',
+		'cijferen - Delen',
+	],
+	meetkunde:[
+		'meten door te vergelijken',
+		'meten met natuurlijke maateenheden',
+		'lengte',
+		'inhoud',
+		'gewicht' ,
+		'tijd',
+		'geldwaarden',
+		'temperatuur'
+	],
+	meten_en_metend_rekenen:[
+		'we oriënteren ons ruimtelijk',
+		'rechte lijnen',
+		'oppervlakken',
+		'vlakke figuren',
+		'hoeken',
+		'veelhoeken',
+		'vierhoeken (vierkant, rechthoek, ruit, parallellogram en trapezium)',
+		'diagonalen',
+		'driehoeken',
+		'symmetrie',
+		'gelijkheid van vorm én van grootte',
+		'schaduwbeelden',
+		'kijklijnen of viseerlijnen',
+		'patronen'
+	],
+	toepassingen:[
+		'werkwijze (heuristiek)',
+		'voorbeelden'
+	]};
     for (let i = 0; i < 25; i++) {
+      let type = types[Math.floor(Math.random() * types.length)].toString();
       promises.push(
         this.exerciseCreate(
           faker.lorem.sentence(),
@@ -239,7 +309,8 @@ class MongoDBDatabase {
             { randomdata: 'skeet' },
           ],
           { example: `Voorbeeld ${i}` },
-          types[Math.floor(Math.random() * types.length)],
+          type,
+          subTypes[type][Math.floor(Math.random() * subTypes[type].length)]
         ),
       );
     }
@@ -287,7 +358,7 @@ class MongoDBDatabase {
           return ex._createdBy.toString() === teachers[i]._id.toString();
         })
         .map(ex => {
-          return { _exerciseGroupId: ex._id, public: faker.random.boolean() };
+          return { _exerciseGroupId: ex._id, public: faker.random.boolean(), _addedAt: Date.now() };
         });
 
       promises.push(
