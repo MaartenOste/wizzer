@@ -6,7 +6,7 @@ import {
   Request,
   Response,
 } from 'express';
-const session = require('express-session')
+const session = require('express-session');
 import { default as Router } from './router';
 import {
   GlobalMiddleware,
@@ -42,14 +42,17 @@ class App {
       MorganMiddleware.load(this.app);
     }
     SwaggerMiddleware.load(this.rootPath, this.app, this.config);
-    this.app.use(session({
-      secret: 'MU0q8GTY*FcVfrWrES',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        expires: new Date(Date.now() + 3600000),
-        httpOnly: true}
-    }))
+    this.app.use(
+      session({
+        secret: 'MU0q8GTY*FcVfrWrES',
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          expires: new Date(Date.now() + 3600000),
+          httpOnly: true,
+        },
+      }),
+    );
     this.createPassport();
     this.app.use(passport.initialize());
     this.app.use(passport.session());

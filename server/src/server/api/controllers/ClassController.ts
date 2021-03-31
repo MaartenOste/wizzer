@@ -85,7 +85,7 @@ class ClassController {
     const { id } = req.params;
 
     try {
-      if (id === 'undefined' || id === undefined ) {
+      if (id === 'undefined' || id === undefined) {
         throw new Error('id is undefined');
       }
       const classGroup = await Class.findOne({

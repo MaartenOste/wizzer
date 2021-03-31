@@ -8,8 +8,7 @@ import { Environment, IConfig } from '../config';
 import { User } from '../../models/mongoose';
 import { Role } from './auth.types';
 import { UnauthorizedError, ForbiddenError } from '../../utilities';
-import { default as axios} from 'axios';
-
+import { default as axios } from 'axios';
 
 class AuthService {
   private config: IConfig;
@@ -31,7 +30,7 @@ class AuthService {
     });
     passport.deserializeUser((user, done) => {
       //console.log('deserialize: ', user);
-      
+
       done(null, user);
     });
 
@@ -72,43 +71,58 @@ class AuthService {
 
   private initializeSmartschoolStrategy() {
     passport.use(
-      new this.LocalSmartschoolStrategy (
+      new this.LocalSmartschoolStrategy(
         {
           clientID: '42d03a7a0ac7',
           clientSecret: 'ee9d1bbbad97',
           callbackURL: 'http://localhost:8080/api/auth/smartschool',
-          scope: 'userinfo fulluserinfo'
+          scope: 'userinfo fulluserinfo',
         },
         function(accessToken: any, refreshToken: any, profile: any, cb: any) {
-          
           console.log(profile._json.isCoAccount);
 
           if (profile._json.isCoAccount === 1) {
-            return cb(null,false)
+            return cb(null, false);
           }
 
-          axios.get(`https://sintjozefsinstituutbao.smartschool.be/Api/V1/fulluserinfo?access_token=${accessToken}`)
-          .then((response) => {
-            const data = response.data;
-            console.log(data);
-            console.log(data.userID);
-            
-            
-            //const user = { userId: tempuser.id, username: `${tempuser.firstname} ${tempuser.lastname}`}
-            User.find({ 'smartschoolProvider.id': data.userID }, async function(err:any, user:any) {
-              if (!user || user.length === 0) {
-                let userType;
-                data.basisrol === 'Leerkracht'? userType = 'Teacher': userType = 'Student';
-                let tempuser = new User({firstname: data.name, lastname: data.surname, email: data.email, userType, smartschoolProvider:{id: data.userID, token:'azerazer'}});
-                console.log('saving new user');
-                
-                await tempuser.save();
-                return cb(false, tempuser);
-              }
-              console.log('user found');
-              return cb(false, user);
+          axios
+            .get(
+              `https://sintjozefsinstituutbao.smartschool.be/Api/V1/fulluserinfo?access_token=${accessToken}`,
+            )
+            .then(response => {
+              const data = response.data;
+              console.log(data);
+              console.log(data.userID);
+
+              //const user = { userId: tempuser.id, username: `${tempuser.firstname} ${tempuser.lastname}`}
+              User.find(
+                { 'smartschoolProvider.id': data.userID },
+                async function(err: any, user: any) {
+                  if (!user || user.length === 0) {
+                    let userType;
+                    data.basisrol === 'Leerkracht'
+                      ? (userType = 'Teacher')
+                      : (userType = 'Student');
+                    let tempuser = new User({
+                      firstname: data.name,
+                      lastname: data.surname,
+                      email: data.email,
+                      userType,
+                      smartschoolProvider: {
+                        id: data.userID,
+                        token: 'azerazer',
+                      },
+                    });
+                    console.log('saving new user');
+
+                    await tempuser.save();
+                    return cb(false, tempuser);
+                  }
+                  console.log('user found');
+                  return cb(false, user);
+                },
+              );
             });
-          });
         },
       ),
     );

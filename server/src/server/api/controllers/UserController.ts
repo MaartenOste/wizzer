@@ -130,7 +130,7 @@ class UserController {
   };
   */
 
-/*  signInLocal = async (
+  /*  signInLocal = async (
     req: Request,
     res: Response,
     next: NextFunction,
@@ -158,29 +158,30 @@ class UserController {
     )(req, res, next);
   };
 */
-  signInWithSmartschool = passport.authenticate('smartschool', {session: true});
-  
-  smartschoolCallback = passport.authenticate('smartschool', { session:true, failureRedirect: 'http://localhost:3000/login?failed=true' });
+  signInWithSmartschool = passport.authenticate('smartschool', {
+    session: true,
+  });
 
-  smartschoolRedirect = async (
-    req: Request,
-    res: Response,
-  ) => {
-      console.log('smartschoolRedirect');
-      // Successful authentication, redirect home.
-      //console.log('res.session: ', req.session);
-      res.redirect('http://localhost:3000/klas');
+  smartschoolCallback = passport.authenticate('smartschool', {
+    session: true,
+    failureRedirect: 'http://localhost:3000/login?failed=true',
+  });
+
+  smartschoolRedirect = async (req: Request, res: Response) => {
+    console.log('smartschoolRedirect');
+    // Successful authentication, redirect home.
+    //console.log('res.session: ', req.session);
+    res.redirect('http://localhost:3000/klas');
   };
 
-  logout = async (req: Request, res: Response) =>{
-    req.session.destroy(function(err:any) {
+  logout = async (req: Request, res: Response) => {
+    req.session.destroy(function(err: any) {
       // cannot access session here
-    })
-  }
+    });
+  };
 }
 
-
-  /*smartschoolCallback = async (
+/*smartschoolCallback = async (
     req: Request,
     res: Response,
     next: NextFunction,
