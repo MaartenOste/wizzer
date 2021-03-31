@@ -25,7 +25,7 @@ import MongoDBDatabase from './server/services/database';
     }
 
     const rootPath: string = __dirname;
-    console.log(rootPath);
+    console.log('rootPath: ', rootPath);
 
     // Create the Express application
     const app: App = new App(rootPath, logger, config);

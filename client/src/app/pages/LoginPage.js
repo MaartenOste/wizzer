@@ -16,11 +16,11 @@ const LoginPage = () => {
 
 	const handleLogin = async () =>{
 		const resp = await signIn(username, password);
-		if (resp.error) {
+		/*if (resp.error) {
 			setErrorPopup(resp.error);
 		} else {
 			history.push(Routes.CLASSGROUP);
-		}
+		}*/
 	}
 
   return (

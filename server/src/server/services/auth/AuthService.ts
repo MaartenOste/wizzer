@@ -1,33 +1,37 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, response } from 'express';
 import { default as passport, PassportStatic } from 'passport';
 import { default as passportLocal } from 'passport-local';
 import { default as passportJwt } from 'passport-jwt';
 import { default as jwt } from 'jsonwebtoken';
-//import { default as SmartschoolStrategy } from '@diekeure/passport-smartschool';
-let SmartschoolStrategy = require('@diekeure/passport-smartschool').Strategy;
-
+const SmartschoolStrategy = require('@diekeure/passport-smartschool');
 import { Environment, IConfig } from '../config';
 import { User } from '../../models/mongoose';
 import { Role } from './auth.types';
 import { UnauthorizedError, ForbiddenError } from '../../utilities';
+import { default as axios} from 'axios';
+
 
 class AuthService {
   private config: IConfig;
   public passport: PassportStatic;
   private LocalStrategy = passportLocal.Strategy;
+  private LocalSmartschoolStrategy = SmartschoolStrategy;
   private ExtractJwt = passportJwt.ExtractJwt;
   private JwtStrategy = passportJwt.Strategy;
 
   constructor(config: IConfig) {
     this.config = config;
-
-    this.initializeLocalStrategy();
+    //this.initializeLocalStrategy();
     this.initializeSmartschoolStrategy();
     //this.initializeJwtStrategy();
     passport.serializeUser((user, done) => {
+      //console.log('serialize: ', user);
+
       done(null, user);
     });
     passport.deserializeUser((user, done) => {
+      //console.log('deserialize: ', user);
+      
       done(null, user);
     });
 
@@ -68,17 +72,42 @@ class AuthService {
 
   private initializeSmartschoolStrategy() {
     passport.use(
-      new SmartschoolStrategy(
+      new this.LocalSmartschoolStrategy (
         {
           clientID: '42d03a7a0ac7',
           clientSecret: 'ee9d1bbbad97',
-          callbackURL: 'https://wizzer.be/api/auth/smartschool',
+          callbackURL: 'http://localhost:8080/api/auth/smartschool',
+          scope: 'userinfo fulluserinfo'
         },
         function(accessToken: any, refreshToken: any, profile: any, cb: any) {
-          console.log(accessToken, refreshToken, profile, cb);
+          
+          console.log(profile._json.isCoAccount);
 
-          User.findOrCreate({ smartschoolId: profile.id }, function(err, user) {
-            return cb(err, user);
+          if (profile._json.isCoAccount === 1) {
+            return cb(null,false)
+          }
+
+          axios.get(`https://sintjozefsinstituutbao.smartschool.be/Api/V1/fulluserinfo?access_token=${accessToken}`)
+          .then((response) => {
+            const data = response.data;
+            console.log(data);
+            console.log(data.userID);
+            
+            
+            //const user = { userId: tempuser.id, username: `${tempuser.firstname} ${tempuser.lastname}`}
+            User.find({ 'smartschoolProvider.id': data.userID }, async function(err:any, user:any) {
+              if (!user || user.length === 0) {
+                let userType;
+                data.basisrol === 'Leerkracht'? userType = 'Teacher': userType = 'Student';
+                let tempuser = new User({firstname: data.name, lastname: data.surname, email: data.email, userType, smartschoolProvider:{id: data.userID, token:'azerazer'}});
+                console.log('saving new user');
+                
+                await tempuser.save();
+                return cb(false, tempuser);
+              }
+              console.log('user found');
+              return cb(false, user);
+            });
           });
         },
       ),

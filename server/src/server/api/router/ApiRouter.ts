@@ -48,8 +48,9 @@ class ApiRouter {
     this.router.get('/users', this.userController.index);
     this.router.get('/users/:id', this.userController.show);
     this.router.put('/users/:id', this.userController.update);
-    //this.router.post('/auth/smartschool', this.userController.signInWithSmartschool);
-
+    this.router.get('/login/smartschool', this.userController.signInWithSmartschool);
+    this.router.get('/auth/smartschool', this.userController.smartschoolCallback, this.userController.smartschoolRedirect);
+    
     /*
      * Class routes
      */

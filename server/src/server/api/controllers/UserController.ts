@@ -3,6 +3,7 @@ import { User } from '../../models/mongoose';
 import { Request } from './CustomRequest';
 import { AuthService, IConfig } from '../../services';
 import { NotFoundError } from '../../utilities';
+import passport = require('passport');
 
 class UserController {
   private authService: AuthService;
@@ -15,6 +16,7 @@ class UserController {
 
   index = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log(req.session);
       let users = await User.find()
         .sort({ _createdAt: -1 })
         .exec();
@@ -128,7 +130,7 @@ class UserController {
   };
   */
 
-  signInLocal = async (
+/*  signInLocal = async (
     req: Request,
     res: Response,
     next: NextFunction,
@@ -155,34 +157,42 @@ class UserController {
       },
     )(req, res, next);
   };
+*/
+  signInWithSmartschool = passport.authenticate('smartschool', {session: true});
+  
+  smartschoolCallback = passport.authenticate('smartschool', { session:true, failureRedirect: 'http://localhost:3000/login?failed=true' });
 
-  /*signInWithSmartschool = async (
+  smartschoolRedirect = async (
+    req: Request,
+    res: Response,
+  ) => {
+      console.log('smartschoolRedirect');
+      // Successful authentication, redirect home.
+      //console.log('res.session: ', req.session);
+      res.redirect('http://localhost:3000/klas');
+  };
+
+  logout = async (req: Request, res: Response) =>{
+    req.session.destroy(function(err:any) {
+      // cannot access session here
+    })
+  }
+}
+
+
+  /*smartschoolCallback = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    this.authService.passport.authenticate(
-      'smartschool',
-      { session: this.config.auth.jwt.session },
-      (err, user, info) => {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          return next(new NotFoundError());
-        }
-        
-        const token = this.authService.smartschoolLogin();
-        
-        return res.status(200).json({
-          email: user.email,
-          id: user._id,
-          token: `${token}`,
-          strategy: 'smartschool',
-        });
-      },
-    )(req, res, next);
-  };*/
-}
+    passport.authenticate('smartschool', { failureRedirect: 'http://localhost:3000/login' }),
+    function(req:any, res:any) {
+      console.log('smartschoolCallback');
+
+      // Successful authentication, redirect home.
+      res.redirect('http://localhost:3000/klas');
+    };
+  };
+}*/
 
 export default UserController;

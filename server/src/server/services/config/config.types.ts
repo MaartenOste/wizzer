@@ -36,7 +36,6 @@ export interface IFacebookConfig {
 export interface ISmartschoolConfig {
   clientId: string;
   clientSecret: string;
-  session: boolean;
 }
 
 export interface IConfig {

@@ -85,6 +85,9 @@ class ClassController {
     const { id } = req.params;
 
     try {
+      if (id === 'undefined' || id === undefined ) {
+        throw new Error('id is undefined');
+      }
       const classGroup = await Class.findOne({
         $or: [{ _studentIds: id }, { _teacherId: id }],
       })
@@ -99,7 +102,7 @@ class ClassController {
 
       return res.status(200).json(classGroup);
     } catch (err) {
-      next(err);
+      return res.status(404).json(err);
     }
   };
 

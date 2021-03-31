@@ -6,7 +6,7 @@ import {
   Request,
   Response,
 } from 'express';
-
+const session = require('express-session')
 import { default as Router } from './router';
 import {
   GlobalMiddleware,
@@ -15,6 +15,7 @@ import {
 } from './middleware';
 import { IAppError } from './utilities';
 import { Environment, ILogger, IConfig, AuthService } from './services';
+import { default as passport } from 'passport';
 
 class App {
   public app: Application;
@@ -41,18 +42,27 @@ class App {
       MorganMiddleware.load(this.app);
     }
     SwaggerMiddleware.load(this.rootPath, this.app, this.config);
+    this.app.use(session({
+      secret: 'MU0q8GTY*FcVfrWrES',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        expires: new Date(Date.now() + 3600000),
+        httpOnly: true}
+    }))
     this.createPassport();
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
     this.createRouter();
-    this.app.use(this.errorHandler);
   }
 
-  private errorHandler(
+  /*private errorHandler(
     error: IAppError,
     req: Request,
     res: Response,
     next: NextFunction,
   ): void {
-    res.status(error.status ? error.status : 500);
+    /*res.status(error.status ? error.status : 500);
 
     if (req.accepts('html')) {
       res.render('pages/404', { url: req.url });
@@ -65,7 +75,7 @@ class App {
     }
 
     res.type('txt').send('Not found');
-  }
+  }*/
 
   private createServer(): void {
     this.server = createServer(this.app);

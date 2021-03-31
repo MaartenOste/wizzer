@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
-//import { apiConfig } from '../config';
+import { apiConfig } from '../config';
 
 const AuthContext = createContext();
 const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(/*JSON.parse(sessionStorage.getItem('currentUser'))*/);
-  //const BASE_URL = `${apiConfig.baseURL}`;
+  const [currentUser, setCurrentUser] = useState();
+  const BASE_URL = `${apiConfig.baseURL}`;
 
   /*function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -32,30 +32,27 @@ const AuthProvider = ({ children }) => {
   }*/
 
   const signIn = async (uname, password) => {
-    /*const url = `/api/auth/login`;
-
-    const body = {
-      "email": email,
-      "password": password
-    };
-
-    const myHeaders = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+    const classUrl = `http://localhost:8080/api/login/smartschool`;
 
     const options = {
-      method: 'POST',
-      headers: myHeaders,
-      body: JSON.stringify(body),
+      method: 'GET',
       redirect: 'follow',
-      //credentials: 'include'
     };
 
-    const response = await fetch(`${url}`, options);
-    setCurrentUser(email);*/
-    let response;
+    try {
+      window.location.href = classUrl;
+      //let classUpdate = await fetch(classUrl, options);
+      //console.log(classUpdate);
+      //let data = await classUpdate.json();
+      //console.log(data);
+      //console.log(data);
+      //return data;
+    } catch (error) {
+      throw new Error(`Login failed: ${error}`);
+    }
 
+/*
+    let response;
     if (uname === 'senne' && password === 'azer') {
       response = {
         "localProvider": {
@@ -101,10 +98,10 @@ const AuthProvider = ({ children }) => {
     }
     //sessionStorage.setItem('currentUser', JSON.stringify(response));
     setCurrentUser(response);
-    return response;
+    return response;*/
   }
 
-  const registerUser = async (email, password, confirmPassword) => {
+  /*const registerUser = async (email, password, confirmPassword) => {
     const url = `/api/auth/register`;
 
     const body = {
@@ -131,7 +128,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       throw new Error('Register failed');
     }
-  }
+  }*/
 
 
   const logout = () =>{
@@ -139,7 +136,7 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser, logout, registerUser, signIn }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, logout, /*registerUser,*/ signIn }}>
       {children}
     </AuthContext.Provider>
   )

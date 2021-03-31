@@ -11,7 +11,7 @@ const ApiProvider = ({children}) => {
   const BASE_URL = `${apiConfig.baseURL}`;
 
   const getClassFromUser = async () => {
-    const url = `${BASE_URL}/api/classes/user/${currentUser.id}`;
+    const url = `api/classes/user/${currentUser.id}`;
     try {
       const response = await fetch(url);
       let data = await response.json();
@@ -23,7 +23,7 @@ const ApiProvider = ({children}) => {
   }
 
   const getFilledInExerciseFromClass = async (exerciseId) => {
-    const url = `${BASE_URL}/api/completed_exercises/${classIdState}/${exerciseId}`;
+    const url = `api/completed_exercises/${classIdState}/${exerciseId}`;
     try {
       const response = await fetch(url);
       return await response.json();
@@ -33,7 +33,7 @@ const ApiProvider = ({children}) => {
   }
 
   const getFilledInExerciseFromStudent = async (id) => {
-    const url = `${BASE_URL}/api/completed_exercises/user/${id}`;
+    const url = `api/completed_exercises/user/${id}`;
     try {
       const response = await fetch(url);
       return await response.json();
@@ -43,7 +43,7 @@ const ApiProvider = ({children}) => {
   }
 
   const joinClassRoom = async (classId) => {
-    const classUrl = `${BASE_URL}/api/classes/join/${classId}/${currentUser.id}`;
+    const classUrl = `api/classes/join/${classId}/${currentUser.id}`;
 
     const options = {
       method: 'POST',
@@ -60,7 +60,7 @@ const ApiProvider = ({children}) => {
   }
 
   const deleteExerciseFromClass = async (exerciseId) => {
-    const classUrl = `${BASE_URL}/api/classes/delete_exercise/${exerciseId}`;
+    const classUrl = `api/classes/delete_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ const ApiProvider = ({children}) => {
   }
 
   const addExerciseToClass = async (exerciseId) => {
-    const classUrl = `${BASE_URL}/api/classes/add_exercise/${exerciseId}`;
+    const classUrl = `api/classes/add_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ const ApiProvider = ({children}) => {
 
   const updateClass = async (classData, exerciseId) => {
     console.log(classData.id);
-    const classUrl = `${BASE_URL}/api/classes/${classData.id}`;
+    const classUrl = `api/classes/${classData.id}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -137,9 +137,9 @@ const ApiProvider = ({children}) => {
 
   const getExercises = async (filters= '') => {
     console.log(filters);
-    let url = `${BASE_URL}/api/exercises`;
+    let url = `api/exercises`;
     if (filters !== '') {
-      url = `${BASE_URL}/api/exercises?filters=${filters}`;
+      url = `api/exercises?filters=${filters}`;
     }
 
     try {
