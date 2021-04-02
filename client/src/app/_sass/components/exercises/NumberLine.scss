@@ -1,0 +1,59 @@
+.NumberLine{
+	width: 100%;
+	position: relative;
+	margin: 10vh 0;
+
+	&--numbersContainer{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 100%;
+		box-sizing: border-box;
+		//justify-content: center;
+
+
+			.NumberLine--number{
+				position: relative;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				flex-wrap: nowrap;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: solid 2px $color-black;
+				padding: 20px 10px 0 10px;
+
+				input{
+					width: 0px;
+					text-align: center;
+				}
+		
+				&__verticalLine{
+					width: 2px;
+					height: 10px;
+					background-color: $color-black;
+				}
+
+				&:last-child{
+					padding-right: 10px;
+					&::after{
+						content: '';
+						bottom: -9.5px;
+						right: 0;
+						position: absolute;
+						border: solid black;
+						border-width: 0 3px 3px 0;
+						display: inline-block;
+						padding: 7px;
+						transform: rotate(-45deg);
+						-webkit-transform: rotate(-45deg);
+						margin-right: 2px;
+					}
+				}
+				
+			}
+		
+	}
+
+
+}

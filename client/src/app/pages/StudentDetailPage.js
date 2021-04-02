@@ -1,20 +1,32 @@
 import { default as React, Fragment, useCallback, useState, useEffect} from 'react';
-import { useApi } from '../services';
+import { useApi, useAuth } from '../services';
 import { useParams } from 'react-router';
 import { NavBar, ScoreCard, Title } from '../components';
 
 const StudentDetailPage = () => {
 	const [exercises, setExercises] = useState();
-	const { getFilledInExerciseFromStudent } = useApi();
+	const { getFilledInExercisesFromStudent } = useApi();
+	const {currentUser} = useAuth();
 	const { id } = useParams();
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
-			let data = await getFilledInExerciseFromStudent(id);
-			setExercises(data.sort((a,b)=>{return b.class._exercises.find((x)=> x._exerciseGroupId === b.exercise.id)._addedAt - a.class._exercises.find((x)=> x._exerciseGroupId === a.exercise.id)._addedAt }));
+			let data = await getFilledInExercisesFromStudent(id);
+			data = data.map((ex)=> {
+				return {
+				public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 
+				_addedAt: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId)._addedAt, 
+				score: ex.score,
+				completedBy: `${ex.completedBy.firstname} ${ex.completedBy.lastname}`,
+				title: ex.exercise.title
+			}})
+			if (currentUser.userType === 'Student') {
+				data = data.filter((ex) => {return ex.public});
+			}
+			setExercises(data.sort((a,b)=>{return b._addedAt - a._addedAt }));
 		}
 		fetchdata();
-	},[getFilledInExerciseFromStudent, id]);
+	},[getFilledInExercisesFromStudent, id, currentUser]);
 
 	useEffect(() => {
 		initFetch();
@@ -23,11 +35,9 @@ const StudentDetailPage = () => {
   return (
     <Fragment>
       <div className='studentDetailPage-container'>
-	  	{exercises && 
-				<Title text={`${exercises[0].completedBy.firstname} ${exercises[0].completedBy.lastname}`}/>
-			}
+	  	{exercises && <Title text={exercises[0].completedBy}/>}
 		{exercises && exercises.map((exercise, i)=>{
-			return <ScoreCard name={exercise.exercise.title} score={exercise.score} key={i}/>
+			return <ScoreCard name={exercise.title} score={exercise.score} key={i} extraClasses={!exercise.public?'PrivateExercise':''}/>
 		})}
 	</div>
 	<NavBar active={'class'}/>

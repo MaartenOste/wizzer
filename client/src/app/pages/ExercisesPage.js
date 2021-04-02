@@ -40,9 +40,13 @@ const ExercisesPage = () => {
 			let temp = classData._exercises.map((ex) => {
 				return { ...ex, data: classData.exercises.find((x)=>x.id === ex._exerciseGroupId)}
 			})
+			console.log(currentUser.userType);
+			if (currentUser.userType === 'Student') {
+				temp = temp.filter((ex) => {return ex.public})
+			}
 			setExercises(temp.sort((a,b)=>{return b._addedAt - a._addedAt }));
 		}
-	},[classData])
+	},[classData, currentUser])
 
 	const handleSwipeMenu = (deltaX) =>{
 		if (deltaX >= 50) {
@@ -110,38 +114,38 @@ const ExercisesPage = () => {
 					<Title text='Oefeningen'/>
 				</div>
 				{hasClass?
-				<>
-				{currentUser.userType === 'Teacher' && 
-				<>
-					{exercises && 
 					<>
-						<Filter data={exercises} setData={setFilteredExercises}/>
-						<AddButton onClick={()=>{history.push(Routes.CREATE_EXERCISE)}}/>
+					{currentUser.userType === 'Teacher' && 
+					<>
+						{exercises && 
+						<>
+							<Filter data={exercises} setData={setFilteredExercises}/>
+							<AddButton onClick={()=>{history.push(Routes.CREATE_EXERCISE)}}/>
+						</>
+						}
 					</>
 					}
-				</>
-				}
-				{Array.isArray(filteredExercises) ?
-					filteredExercises.length >0?
-						<>
-							{filteredExercises.map((ex, i) => {
-								return <ExerciseCard key={i} id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
-							})}
-						</>
-						:
-						<>
-							{exercises.length>0 ?'Geen oefenignen gevonden voor de geselecteerde filters.':'Er zijn nog geen oefeningen aan deze klas toegevoegd'}
-						</>
-				:
-				<>
-					{exercises.length>0 ? exercises.map((ex, i) => {
-						return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
-					}):
-					'Er zijn nog geen oefeningen aan deze klas toegevoegd'
+					{Array.isArray(filteredExercises) ?
+						filteredExercises.length >0?
+							<>
+								{filteredExercises.map((ex, i) => {
+									return <ExerciseCard key={i} id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+								})}
+							</>
+							:
+							<>
+								{exercises.length>0 ?'Geen oefenignen gevonden voor de geselecteerde filters.':'Er zijn nog geen oefeningen aan deze klas toegevoegd'}
+							</>
+					:
+					<>
+						{exercises.length>0 ? exercises.map((ex, i) => {
+							return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+						}):
+						'Er zijn nog geen oefeningen aan deze klas toegevoegd'
+						}
+					</>
 					}
-				</>
-				}
-				</>
+					</>
 				:
 					<>
 						{currentUser.userType === 'Student' ? 'Je ziet nog niet in een klas, klik op de link die je leerkracht je stuurde om bij een klas aan te sluiten':'maak een klas'}

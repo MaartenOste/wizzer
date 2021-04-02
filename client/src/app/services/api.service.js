@@ -1,66 +1,113 @@
 import { default as React, useContext, createContext, useState } from 'react';
-import { apiConfig } from '../config';
+//import { apiConfig } from '../config';
 import {useAuth } from './auth.service';
 
 const ApiContext = createContext();
 const useApi = () => useContext(ApiContext);
 
 const ApiProvider = ({children}) => {
-  const {currentUser} = useAuth();
+  const {currentUser, logout} = useAuth();
   const [classIdState, setClassIdState] = useState();
-  const BASE_URL = `${apiConfig.baseURL}`;
+  //const BASE_URL = `${apiConfig.baseURL}`;
+
 
   const getClassFromUser = async () => {
-    const url = `api/classes/user/${currentUser.id}`;
+    const url = `/api/classes/user/${currentUser.id}`;
+    let response;
     try {
-      const response = await fetch(url);
+      response = await fetch(url);
       let data = await response.json();
+
       setClassIdState(data.id);
       return data;
     } catch (error) {
-      throw new Error('No class found for this class ID');
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
+
+  const getUserById = async (id) =>{
+    const url = `/api/users/${id}`;
+    let response;
+
+    try {
+      response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const getFilledInExerciseFromClass = async (exerciseId) => {
-    const url = `api/completed_exercises/${classIdState}/${exerciseId}`;
+    const url = `/api/completed_exercises/${classIdState}/${exerciseId}`;
+    let response;
+
     try {
-      const response = await fetch(url);
+      response = await fetch(url);
       return await response.json();
     } catch (error) {
-      throw new Error('No completed exercises found for this user');
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
-  const getFilledInExerciseFromStudent = async (id) => {
-    const url = `api/completed_exercises/user/${id}`;
+  const getFilledInExercisesFromStudent = async (id) => {
+    const url = `/api/completed_exercises/user/${id}`;
+    let response;
+
     try {
-      const response = await fetch(url);
+      response = await fetch(url);
       return await response.json();
     } catch (error) {
-      throw new Error('No students found for this exercise');
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const joinClassRoom = async (classId) => {
-    const classUrl = `api/classes/join/${classId}/${currentUser.id}`;
+    console.log('in join');
+    const classUrl = `/api/classes/join/${classId}/${currentUser.id}`;
 
     const options = {
       method: 'POST',
       redirect: 'follow',
     };
+    let response;
+
     try {
-      let classUpdate = await fetch(classUrl, options);
-      let data = await classUpdate.json();
+      response = await fetch(classUrl, options);
+      let data = await response.json();
       console.log(data);
       return data;
     } catch (error) {
-      throw new Error(`Joining class failed, message:${error}`);
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const deleteExerciseFromClass = async (exerciseId) => {
-    const classUrl = `api/classes/delete_exercise/${exerciseId}`;
+    const classUrl = `/api/classes/delete_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -72,19 +119,24 @@ const ApiProvider = ({children}) => {
       body: JSON.stringify({userId: currentUser.id}),
       redirect: 'follow',
     };
+    let response;
 
     try {
-      let classUpdate = await fetch(classUrl, options);
-      let data = await classUpdate.json();
-      //console.log(data);
+      response = await fetch(classUrl, options);
+      let data = await response.json();
       return data;
     } catch (error) {
-      throw new Error(`Delete exercise from class failed, message:${error}`);
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const addExerciseToClass = async (exerciseId) => {
-    const classUrl = `api/classes/add_exercise/${exerciseId}`;
+    const classUrl = `/api/classes/add_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -96,20 +148,25 @@ const ApiProvider = ({children}) => {
       body: JSON.stringify({userId: currentUser.id}),
       redirect: 'follow',
     };
+    let response;
 
     try {
-      let classUpdate = await fetch(classUrl, options);
-      let data = await classUpdate.json();
-      console.log(data);
+      response = await fetch(classUrl, options);
+      let data = await response.json();
       return data;
     } catch (error) {
-      throw new Error(`Delete exercise from class failed, message:${error}`);
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const updateClass = async (classData, exerciseId) => {
     console.log(classData.id);
-    const classUrl = `api/classes/${classData.id}`;
+    const classUrl = `/api/classes/${classData.id}`;
     const myHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -125,28 +182,42 @@ const ApiProvider = ({children}) => {
       redirect: 'follow',
     };
 
+    let response;
+
+
     try {
-      let classUpdate = await fetch(classUrl, options);
-      let data = await classUpdate.json();
+      response = await fetch(classUrl, options);
+      let data = await response.json();
       console.log(data);
       return data;
     } catch (error) {
-      throw new Error(`Class Update failed, message:${error}`);
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
   const getExercises = async (filters= '') => {
     console.log(filters);
-    let url = `api/exercises`;
+    let url = `/api/exercises`;
     if (filters !== '') {
-      url = `api/exercises?filters=${filters}`;
+      url = `/api/exercises?filters=${filters}`;
     }
+    let response;
 
     try {
-      const response = await fetch(url);
+      response = await fetch(url);
       return await response.json();
     } catch (error) {
-      throw new Error('No exercises exercises found for these filters user');
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
     }
   }
 
@@ -155,9 +226,10 @@ const ApiProvider = ({children}) => {
         addExerciseToClass,
         deleteExerciseFromClass,
         getFilledInExerciseFromClass,
-        getFilledInExerciseFromStudent,
+        getFilledInExercisesFromStudent,
         getClassFromUser,
         getExercises,
+        getUserById,
         joinClassRoom,
         updateClass
       }}>

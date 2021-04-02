@@ -22,7 +22,7 @@ const ExerciseCard = ({id, name, isPublic = true, deleteExercise=()=>{}, makeExe
 	}, [id])
 
 	return (
-	<div className='ExerciseCard--container'>
+	<div className={`ExerciseCard--container ${!isPublic?'PrivateExercise':''}`}>
 		<div className={`ExerciseCard--container__heading ${open && 'openedCard'}`} onClick={()=>{setOpen(!open)}}>
 			<div className='ExerciseCard--name'>{name}</div>
 			{open ? <RiArrowDropUpFill className='ExerciseCard--arrow'/> :<RiArrowDropDownFill  className='ExerciseCard--arrow'/>}

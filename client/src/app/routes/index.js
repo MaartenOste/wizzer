@@ -1,5 +1,6 @@
 export const HOME = '/';
 export const LOGIN = '/login';
+export const LOGIN_REDIRECT = '/login/redirect/:id';
 
 export const CLASSGROUP = '/klas';
 export const SETTINGS = '/instellingen';

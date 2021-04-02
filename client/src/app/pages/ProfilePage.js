@@ -1,5 +1,5 @@
 import { default as React, Fragment } from 'react';
-import { NavBar, Button, Title } from '../components';
+import { NavBar, Button, Title, NumberLine } from '../components';
 import { useHistory } from 'react-router-dom'
 import * as Routes from '../routes';
 import {useSwipeable} from 'react-swipeable';
@@ -25,8 +25,11 @@ const ProfilePage = () => {
     <Fragment>
 		<div className='homePage-container' {...handlers}>
 			<Title text='instellingen'/>
+			<NumberLine min={500} max={14000} interval={1000}/>
+
 			<Button text='afmelden' type='primary' onClick={()=>{logout()}}/>
 		</div>
+		
 		<NavBar active={'profile'}/>
     </Fragment>
   );

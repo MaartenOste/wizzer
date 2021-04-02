@@ -47,17 +47,17 @@ const classSchema: Schema = new Schema(
           required: false,
         },
         public: {
-          required: true,
+          required: false,
           type: Boolean,
         },
         _addedAt: {
           required: false,
           type: Number,
         },
-      },
-    ],
+      } || null,
+    ], 
     _studentIds: [
-      { type: Schema.Types.ObjectId, ref: 'ExerciseGroup', required: false },
+      { type: Schema.Types.ObjectId, ref: 'ExerciseGroup', required: false } || null,
     ],
     _teacherId: {
       type: Schema.Types.ObjectId,

@@ -3,9 +3,11 @@ import { Button, ExersiseSubjectSelector, NavBar, NewExOptionCard, Title } from 
 import {IoMdCreate} from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5';
 import { useApi } from '../services';
-
+import { useHistory } from 'react-router-dom'
+import * as Routes from '../routes';
 
 const CreateExercisePage = () => {
+	const history = useHistory();
 	const {addExerciseToClass, getExercises,} = useApi();
 
 	const [newExOption, setNewExOption] = useState(localStorage.getItem('newExOption') || '');
@@ -128,7 +130,11 @@ const CreateExercisePage = () => {
 	}
 
 	const handleAddExercise = async (exId) =>{
-		await addExerciseToClass(exId)
+		await addExerciseToClass(exId);
+		localStorage.removeItem('newExOption');
+		localStorage.removeItem('exerciseType');
+		localStorage.removeItem('exerciseSubType');
+		history.push(Routes.EXERCISE);
 	}
 
   return (

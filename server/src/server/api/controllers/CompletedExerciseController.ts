@@ -112,6 +112,7 @@ class CompletedExerciseController {
       if (!completedExercises) {
         throw new NotFoundError();
       }
+      
       return res.status(200).json(completedExercises);
     } catch (err) {
       next(err);

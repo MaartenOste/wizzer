@@ -3,9 +3,10 @@ import {
   default as express,
   Application,
   NextFunction,
-  Request,
   Response,
 } from 'express';
+import { Request } from './api/controllers/CustomRequest';
+
 const session = require('express-session');
 import { default as Router } from './router';
 import {
@@ -65,7 +66,7 @@ class App {
     res: Response,
     next: NextFunction,
   ): void {
-    /*res.status(error.status ? error.status : 500);
+    res.status(error.status ? error.status : 500);
 
     if (req.accepts('html')) {
       res.render('pages/404', { url: req.url });

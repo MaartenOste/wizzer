@@ -53,6 +53,9 @@ const ClassPage = () => {
 	});
 
 	useEffect(()=>{
+		if (sessionStorage.getItem('joinClassId')) {
+			sessionStorage.removeItem('joinClassId')
+		}
 		setStudents()
 	}, [])
 

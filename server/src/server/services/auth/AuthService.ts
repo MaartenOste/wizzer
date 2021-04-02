@@ -24,13 +24,9 @@ class AuthService {
     this.initializeSmartschoolStrategy();
     //this.initializeJwtStrategy();
     passport.serializeUser((user, done) => {
-      //console.log('serialize: ', user);
-
       done(null, user);
     });
     passport.deserializeUser((user, done) => {
-      //console.log('deserialize: ', user);
-
       done(null, user);
     });
 
@@ -79,8 +75,6 @@ class AuthService {
           scope: 'userinfo fulluserinfo',
         },
         function(accessToken: any, refreshToken: any, profile: any, cb: any) {
-          console.log(profile._json.isCoAccount);
-
           if (profile._json.isCoAccount === 1) {
             return cb(null, false);
           }
@@ -91,11 +85,7 @@ class AuthService {
             )
             .then(response => {
               const data = response.data;
-              console.log(data);
-              console.log(data.userID);
-
-              //const user = { userId: tempuser.id, username: `${tempuser.firstname} ${tempuser.lastname}`}
-              User.find(
+              User.findOne(
                 { 'smartschoolProvider.id': data.userID },
                 async function(err: any, user: any) {
                   if (!user || user.length === 0) {

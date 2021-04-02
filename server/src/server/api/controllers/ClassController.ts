@@ -77,6 +77,38 @@ class ClassController {
     }
   };
 
+  create = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+
+      /*const classGroup = await Class.create(
+        name: req.body.name,
+        _exercises: null,
+        _studentIds: req.body._studentIds,
+        _teacherId: req.body._teacherId,
+      )
+*/
+    const classGroup = new Class({
+      name: req.body.name,
+      _exercises: [],
+      _studentIds: [],
+      _teacherId: req.body._teacherId
+    })
+    
+    classGroup.save((err)=>{
+      throw new Error("Class creation failed");
+      
+    })
+
+      return res.status(200).json(classGroup);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   getClassByUserId = async (
     req: Request,
     res: Response,
@@ -102,7 +134,7 @@ class ClassController {
 
       return res.status(200).json(classGroup);
     } catch (err) {
-      return res.status(404).json(err);
+      next(err)
     }
   };
 
@@ -123,6 +155,31 @@ class ClassController {
       if (!classGroup._studentIds.includes(userId)) {
         classGroup._studentIds.push(userId);
         classGroup.save();
+
+        let exercises: Array<ICompletedExercise> = [];
+
+        classGroup._exercises.forEach((exercise: any) => {
+          const exerciseDetail = {
+            score: 'Nog niet ingediend',
+            answers: [
+              {
+                answerData: { data: '' },
+                correct: false,
+              },
+            ],
+            _completedBy: userId,
+            _classId: classGroup._id,
+            _exerciseId: exercise._exerciseGroupId,
+          };
+          
+          const completedExercise: ICompletedExercise = new CompletedExercise(
+            exerciseDetail,
+          );
+          exercises.push(completedExercise);
+        });
+  
+        await CompletedExercise.insertMany(exercises);
+
         return res.status(200).json(classGroup);
       } else {
         throw new Error('User already in class');

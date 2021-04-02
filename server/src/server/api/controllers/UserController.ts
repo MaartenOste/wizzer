@@ -16,7 +16,6 @@ class UserController {
 
   index = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.session);
       let users = await User.find()
         .sort({ _createdAt: -1 })
         .exec();
@@ -168,10 +167,7 @@ class UserController {
   });
 
   smartschoolRedirect = async (req: Request, res: Response) => {
-    console.log('smartschoolRedirect');
-    // Successful authentication, redirect home.
-    //console.log('res.session: ', req.session);
-    res.redirect('http://localhost:3000/klas');
+    res.redirect(`http://localhost:3000/login/redirect/${req.session.passport.user.id}`);
   };
 
   logout = async (req: Request, res: Response) => {

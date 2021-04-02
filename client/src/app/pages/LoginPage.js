@@ -1,27 +1,35 @@
-import { default as React, Fragment, useState} from 'react';
-import * as Routes from '../routes';
+import { default as React, Fragment, useEffect, useState} from 'react';
+//import * as Routes from '../routes';
 import { useAuth } from '../services';
-import { useHistory } from 'react-router';
-import { Button, Input } from '../components';
-
+import { Button } from '../components';
+import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import * as Routes from '../routes';
 import img from '../_static/icons/nobglogo.png'
 
+function useQuery() {
+	return new URLSearchParams(useLocation().search);
+}
+
 const LoginPage = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	let query = useQuery();
+	const history = useHistory();
 	const [errorPopup, setErrorPopup] = useState(false);
 
-	const history = useHistory();
-	const { signIn } = useAuth();
+	const { signIn, currentUser } = useAuth();
 
 	const handleLogin = async () =>{
-		const resp = await signIn(username, password);
-		/*if (resp.error) {
-			setErrorPopup(resp.error);
-		} else {
-			history.push(Routes.CLASSGROUP);
-		}*/
+		await signIn();
 	}
+
+	useEffect(()=>{
+		if (currentUser) {
+			history.push(Routes.CLASSGROUP);
+		}
+		if (query.get('failed') === 'true') {
+			setErrorPopup('Inloggen mislukt, probeer opnieuw');
+		}
+	},[query, currentUser, history])
 
   return (
     <Fragment>
@@ -30,10 +38,8 @@ const LoginPage = () => {
 				<img src={img} alt='Wizzer'></img>
 			</div>
 			<div className='login-form'>
-				<Input label={'Gebruikersnaam'} text={username} textChange={setUsername}/>
-				<Input label={'Wachtwoord'} text={password} textChange={setPassword} type={'password'}/>
 				{errorPopup && <div className='errorpopup'>{errorPopup}</div>}
-				<Button text={'Aanmelden'} type={'primary'} onClick={handleLogin}/>
+				<Button text={'Aanmelden met smartschool'} type={'primary'} onClick={handleLogin}/>
 			</div>
 		</div>
     </Fragment>

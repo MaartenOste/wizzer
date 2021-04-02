@@ -17,6 +17,7 @@ import { ErrorLayout, PageLayout } from './layouts';
 
 import './app.scss';
 import ProfilePage from './pages/ProfilePage';
+import LoginRedirectPage from './pages/LoginRedirectPage';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
             <Switch>
               <RouteWithLayout exact path={Routes.LOGIN} layout={PageLayout} component={LoginPage} />
               <Redirect exact to={Routes.LOGIN} from={Routes.HOME}/>
+              <RouteWithLayout exact path={Routes.LOGIN_REDIRECT} layout={PageLayout} component={LoginRedirectPage} />
 
               <AuthRouteWithLayout exact path={Routes.CLASSGROUP} layout={PageLayout} component={ClassPage}/>
               <AuthRouteWithLayout exact path={Routes.SETTINGS} layout={PageLayout} component={ProfilePage}/>
