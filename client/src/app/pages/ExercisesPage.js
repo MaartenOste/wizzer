@@ -2,14 +2,14 @@ import { default as React, Fragment, useCallback, useEffect, useState} from 'rea
 import * as Routes from '../routes';
 import { useAuth, useApi } from '../services';
 import { useHistory } from 'react-router';
-import { AddButton, ExerciseCard, Filter, NavBar, Title } from '../components';
+import { AddButton, ExerciseCard, Filter, NavBar, ToDoExerciseCard, Title } from '../components';
 import {useSwipeable} from 'react-swipeable';
 
 
 const ExercisesPage = () => {
 	const history = useHistory();
 	const {currentUser} = useAuth();
-	const { deleteExerciseFromClass, getClassFromUser, updateClass } = useApi();
+	const { deleteExerciseFromClass, getClassFromUser, getFilledInExercisesFromStudent, updateClass } = useApi();
 
 	const [classData, setClassData] = useState();
 	const [exercises, setExercises] = useState([]);
@@ -19,28 +19,41 @@ const ExercisesPage = () => {
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
 			try {
-				let data = await getClassFromUser();
-				console.log('initialFetch', data);
-				setClassData(data);
+				let data;
+				if (currentUser.userType === 'teacher') {
+					data = await getClassFromUser();
+					setClassData(data);
+				} else {
+					data = await getFilledInExercisesFromStudent(currentUser.id);
+					data = data.map((ex)=> {
+						return {
+						public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 
+						_addedAt: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId)._addedAt, 
+						score: ex.score,
+						completedBy: `${ex.completedBy.firstname} ${ex.completedBy.lastname}`,
+						title: ex.exercise.title,
+						id: ex._id
+					}}).filter((ex) => {return ex.public}).sort((a,b)=>{return b._addedAt - a._addedAt });
+					console.log(data);
+					setExercises(data);
+				}
 				setHasClass(true);
 			} catch (error) {
 				setHasClass(false);
 			}
 		}
 		fetchdata();
-	},[getClassFromUser]);
+	},[getClassFromUser, currentUser, getFilledInExercisesFromStudent]);
 
 	useEffect(() => {
 		initFetch();
 	}, [initFetch]);
 	
 	useEffect(()=>{
-		if (classData && classData._exercises) {
-			console.log('rearrangeing data');
+		if (classData && classData._exercises && currentUser.userType === 'teacher') {
 			let temp = classData._exercises.map((ex) => {
 				return { ...ex, data: classData.exercises.find((x)=>x.id === ex._exerciseGroupId)}
 			})
-			console.log(currentUser.userType);
 			if (currentUser.userType === 'Student') {
 				temp = temp.filter((ex) => {return ex.public})
 			}
@@ -139,7 +152,11 @@ const ExercisesPage = () => {
 					:
 					<>
 						{exercises.length>0 ? exercises.map((ex, i) => {
-							return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
+							if(currentUser.userType === 'Teacher'){
+								return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>}
+							else {
+								return <ToDoExerciseCard id={ex.id} name={ex.title} score={ex.score} key={i}/>
+							}
 						}):
 						'Er zijn nog geen oefeningen aan deze klas toegevoegd'
 						}

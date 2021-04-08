@@ -1,5 +1,5 @@
-import {default as ExersiseSubjectSelector} from './ExersiseSubjectSelector';
+import {default as ExerciseSubjectSelector} from './ExerciseSubjectSelector';
 
 export {
-	ExersiseSubjectSelector
+	ExerciseSubjectSelector
 }

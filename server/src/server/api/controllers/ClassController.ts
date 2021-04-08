@@ -83,25 +83,16 @@ class ClassController {
     next: NextFunction,
   ): Promise<Response | void> => {
     try {
-
-      /*const classGroup = await Class.create(
+      const classGroup = new Class({
         name: req.body.name,
-        _exercises: null,
-        _studentIds: req.body._studentIds,
+        _exercises: [],
+        _studentIds: [],
         _teacherId: req.body._teacherId,
-      )
-*/
-    const classGroup = new Class({
-      name: req.body.name,
-      _exercises: [],
-      _studentIds: [],
-      _teacherId: req.body._teacherId
-    })
-    
-    classGroup.save((err)=>{
-      throw new Error("Class creation failed");
-      
-    })
+      });
+
+      classGroup.save(err => {
+        throw new Error('Class creation failed');
+      });
 
       return res.status(200).json(classGroup);
     } catch (err) {
@@ -134,7 +125,7 @@ class ClassController {
 
       return res.status(200).json(classGroup);
     } catch (err) {
-      next(err)
+      next(err);
     }
   };
 
@@ -171,13 +162,13 @@ class ClassController {
             _classId: classGroup._id,
             _exerciseId: exercise._exerciseGroupId,
           };
-          
+
           const completedExercise: ICompletedExercise = new CompletedExercise(
             exerciseDetail,
           );
           exercises.push(completedExercise);
         });
-  
+
         await CompletedExercise.insertMany(exercises);
 
         return res.status(200).json(classGroup);
@@ -255,12 +246,12 @@ class ClassController {
       _addedAt: Date.now(),
     };
     const initialClass = await Class.findOne({
-      _teacherId: req.body.userId,
+      _teacherId: req.session.passport.user.id,
     }).exec();
 
     try {
       const classGroup = await Class.updateOne(
-        { _teacherId: req.body.userId },
+        { _teacherId:  req.session.passport.user.id },
         { $push: { _exercises: data } },
         { session: session, new: true },
       )

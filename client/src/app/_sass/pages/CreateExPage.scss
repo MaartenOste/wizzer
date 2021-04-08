@@ -45,4 +45,88 @@
 			}
 		}
 	}
+
+	.CreateExercise--card{
+		background-color: $color-white;
+		border-radius: 15px;
+		margin: 10px 0;
+		box-shadow: -2px 3px 3px #00000070;
+		cursor: pointer;
+		font-size: $font-size-medium;
+		padding: 15px;
+
+
+		&__title{
+			text-decoration: underline;
+			font-size: 20px;
+			font-weight: bold;
+		}
+
+		&__input{
+			
+			background-color: $color-grey-light;
+			span{
+				color: $color-black;
+			}
+		}
+
+		&__difsetting{
+			margin: 15px 0;
+			font-size: $font-size-small;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: space-between;
+
+			input{
+				padding: 10px 5px;
+				border: none;
+				background-color: $color-grey-light;
+				outline: none;
+				z-index: 2;
+				width: 10vw;
+				margin-left: 15px;
+				border-radius: 5px;
+				text-align: center;
+
+				&::placeholder{
+					color: rgb(201, 201, 201);
+				}
+			}
+		}
+
+		&__gensetting{
+			margin: 15px 0;
+			font-size: $font-size-small;
+
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+
+			input{
+				padding: 10px 5px;
+				border: none;
+				background-color: $color-grey-light;
+				outline: none;
+				z-index: 2;
+				margin-top: 5px;
+			}
+		}
+	}
+
+	.CreateExercise--actions{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		margin-top: auto;
+
+
+
+		button{
+			min-width: 45%;
+		}
+	}
 }

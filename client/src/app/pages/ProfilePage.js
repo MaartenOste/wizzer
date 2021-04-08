@@ -1,10 +1,9 @@
 import { default as React, Fragment } from 'react';
-import { NavBar, Button, Title, NumberLine } from '../components';
+import { NavBar, Button, Title } from '../components';
 import { useHistory } from 'react-router-dom'
 import * as Routes from '../routes';
 import {useSwipeable} from 'react-swipeable';
 import { useAuth } from '../services';
-
 
 const ProfilePage = () => {
 	const history = useHistory();
@@ -20,18 +19,14 @@ const ProfilePage = () => {
 		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)},
 	});
 
-
   return (
-    <Fragment>
+	<Fragment>
 		<div className='homePage-container' {...handlers}>
 			<Title text='instellingen'/>
-			<NumberLine min={500} max={14000} interval={1000}/>
-
 			<Button text='afmelden' type='primary' onClick={()=>{logout()}}/>
 		</div>
-		
 		<NavBar active={'profile'}/>
-    </Fragment>
+	</Fragment>
   );
 };
 

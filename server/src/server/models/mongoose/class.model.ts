@@ -55,9 +55,10 @@ const classSchema: Schema = new Schema(
           type: Number,
         },
       } || null,
-    ], 
+    ],
     _studentIds: [
-      { type: Schema.Types.ObjectId, ref: 'ExerciseGroup', required: false } || null,
+      { type: Schema.Types.ObjectId, ref: 'ExerciseGroup', required: false } ||
+        null,
     ],
     _teacherId: {
       type: Schema.Types.ObjectId,

@@ -1,10 +1,5 @@
-import {
-  default as express,
-  Application,
-  Response,
-  Router,
-} from 'express';
-import {Request} from '../controllers/CustomRequest'
+import { default as express, Application, Response, Router } from 'express';
+import { Request } from '../controllers/CustomRequest';
 import { IConfig, AuthService, Role } from '../../services';
 import {
   ClassController,
@@ -41,7 +36,7 @@ class ApiRouter {
     this.completedExerciseController = new CompletedExerciseController();
   }
 
-  private checkUser (req:Request, res:Response, next:any) {
+  private checkUser(req: Request, res: Response, next: any) {
     if (req.session.passport) {
       next();
     } else {
@@ -49,7 +44,7 @@ class ApiRouter {
     }
   }
 
-  private checkUserAndTeacher (req:Request, res:Response, next:any) {
+  private checkUserAndTeacher(req: Request, res: Response, next: any) {
     if (req.session.passport.user.userType === 'Teacher') {
       next();
     } else {
@@ -73,10 +68,7 @@ class ApiRouter {
       this.userController.smartschoolCallback,
       this.userController.smartschoolRedirect,
     );
-    this.router.get(
-      '/logout',
-      this.userController.logout,
-    );
+    this.router.get('/logout', this.userController.logout);
 
     /*
      * Class routes
@@ -84,8 +76,16 @@ class ApiRouter {
     this.router.get('/classes', this.checkUser, this.classController.index);
     this.router.post('/classes', this.classController.create);
     this.router.get('/classes/:id', this.checkUser, this.classController.show);
-    this.router.get('/classes/user/:id', this.checkUser, this.classController.getClassByUserId);
-    this.router.put('/classes/:id', this.checkUserAndTeacher, this.classController.update);
+    this.router.get(
+      '/classes/user/:id',
+      this.checkUser,
+      this.classController.getClassByUserId,
+    );
+    this.router.put(
+      '/classes/:id',
+      this.checkUserAndTeacher,
+      this.classController.update,
+    );
     this.router.post(
       '/classes/join/:id/:userId',
       this.checkUser,
@@ -104,9 +104,26 @@ class ApiRouter {
     /*
      * Exercises routes
      */
-    this.router.get('/exercises', this.checkUser, this.exerciseGroupController.index);
-    this.router.get('/exercises/:id', this.checkUser, this.exerciseGroupController.show);
-    this.router.put('/exercises/:id', this.checkUserAndTeacher, this.exerciseGroupController.update);
+    this.router.get(
+      '/exercises',
+      this.checkUser,
+      this.exerciseGroupController.index,
+    );
+    this.router.get(
+      '/exercises/:id',
+      this.checkUser,
+      this.exerciseGroupController.show,
+    );
+    this.router.put(
+      '/exercises/:id',
+      this.checkUserAndTeacher,
+      this.exerciseGroupController.update,
+    );
+    this.router.post(
+      '/exercises',
+      this.checkUserAndTeacher,
+      this.exerciseGroupController.create,
+    );
 
     /*
      * CompletedExercises routes

@@ -1,0 +1,78 @@
+.createExDetailPage{
+	&--container{
+		box-sizing: border-box;
+		min-height: 100vh;
+		padding-bottom: 15vh;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		.title{
+			margin: 7vw 0 0 9vw;
+		}
+
+		&__actions{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			margin-top: auto;
+			padding: 0 7vw;
+
+			button{
+				min-width: 45%;
+			}
+		}
+
+		.slide{
+			height: 60vh;
+			overflow-y: scroll;
+			box-sizing: border-box;
+			padding: 0 7vw;
+			margin-top: 3vh;
+
+			.createExDetailPage--settings__container{
+				box-sizing: border-box;
+			}
+		}
+	}
+
+	&--settings{
+		&__container{
+			background-color: $color-white;
+			border-radius: 15px;
+			margin: 10px 0;
+			box-shadow: -2px 3px 3px #00000070;
+			cursor: pointer;
+			font-size: $font-size-medium;
+			padding: 15px;
+		}
+
+		&__setting{
+			margin-top: 15px;
+			font-size: $font-size-small;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: space-between;
+
+			&:nth-of-type(1){
+				margin-top: 0;
+			}
+
+			input{
+				max-width: 15%;
+				padding: 10px 0;
+				border: none;
+				background-color: $color-grey-light;
+				outline: none;
+				z-index: 2;
+				margin-top: 5px;
+				text-align: center;
+			}
+		}
+	}
+}

@@ -32,7 +32,7 @@ const exerciseGroupSchema: Schema = new Schema(
     },
     slug: {
       type: String,
-      required: true,
+      required: false,
       lowercase: true,
     },
     instructionVideo: {

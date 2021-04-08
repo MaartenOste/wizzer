@@ -1,7 +1,6 @@
 .NumberLine{
 	width: 100%;
 	position: relative;
-	margin: 10vh 0;
 
 	&--numbersContainer{
 		display: flex;
@@ -9,6 +8,8 @@
 		flex-wrap: wrap;
 		width: 100%;
 		box-sizing: border-box;
+		margin-bottom: 15px;
+
 		//justify-content: center;
 
 

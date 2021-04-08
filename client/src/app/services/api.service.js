@@ -135,6 +135,35 @@ const ApiProvider = ({children}) => {
     }
   }
 
+  const createExercise = async (body) => {
+    const classUrl = `/api/exercises`;
+    const myHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+
+    const options = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(body),
+      redirect: 'follow',
+    };
+    let response;
+
+    try {
+      response = await fetch(classUrl, options);
+      let data = await response.json();
+      return data;
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
+
   const addExerciseToClass = async (exerciseId) => {
     const classUrl = `/api/classes/add_exercise/${exerciseId}`;
     const myHeaders = {
@@ -184,7 +213,6 @@ const ApiProvider = ({children}) => {
 
     let response;
 
-
     try {
       response = await fetch(classUrl, options);
       let data = await response.json();
@@ -221,10 +249,29 @@ const ApiProvider = ({children}) => {
     }
   }
 
+  const getCompletedExerciseById = async (id) => {
+    let url = `/api/completed_exercises/${id}`;
+    let response;
+
+    try {
+      response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
+
   return (
     <ApiContext.Provider value={{
         addExerciseToClass,
+        createExercise,
         deleteExerciseFromClass,
+        getCompletedExerciseById,
         getFilledInExerciseFromClass,
         getFilledInExercisesFromStudent,
         getClassFromUser,

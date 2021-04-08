@@ -180,3 +180,62 @@
 	opacity: 0.75;
 	border: 1px dashed $color-grey-dark;
 }
+
+
+.ToDoExerciseCard--container{
+	background-color: $color-white;
+	border-radius: 15px;
+	margin: 15px 0;
+	box-shadow: -2px 3px 3px #00000070;
+	text-transform: capitalize;
+	cursor: pointer;
+
+	&__heading{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		font-size: $font-size-medium;
+		padding: 15px;
+
+		.ToDoExerciseCard--score{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			width: 15%;
+			justify-content: space-between;
+		}
+
+		.ToDoExerciseCard--name{
+			max-width: 85%;
+		}
+
+		&.openedCard{
+			border-bottom: 1px solid #aeaeae88;
+		}
+
+		.ToDoExerciseCard--arrow{
+			font-size: $font-size-large;
+		}
+	}
+
+	&__body{
+		padding: 0 15px 15px;
+		display: flex;
+		flex-direction: column;
+		font-size: $font-size-medium;
+
+		&-row{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			margin-top: 15px;
+
+			svg{
+				margin-right: 7px;
+			}
+		}
+	}
+}

@@ -167,7 +167,9 @@ class UserController {
   });
 
   smartschoolRedirect = async (req: Request, res: Response) => {
-    res.redirect(`http://localhost:3000/login/redirect/${req.session.passport.user.id}`);
+    res.redirect(
+      `http://localhost:3000/login/redirect/${req.session.passport.user.id}`,
+    );
   };
 
   logout = async (req: Request, res: Response) => {

@@ -8,9 +8,11 @@ import {
 	ExerciseDetailPage,
 	ExercisesPage,
   ErrorPage,
+  FillInExercisePage,
 	JoinClassGroupPage,
 	LoginPage,
-	StudentDetailPage } from './pages';
+	StudentDetailPage, 
+  CreateExerciseDetailPage} from './pages';
 import { AuthRouteWithLayout, RouteWithLayout } from './utilities';
 import { ApiProvider, AuthProvider } from './services';
 import { ErrorLayout, PageLayout } from './layouts';
@@ -39,6 +41,9 @@ function App() {
               
               <AuthRouteWithLayout exact path={Routes.EXERCISE} layout={PageLayout} component={ExercisesPage}/>
               <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE} layout={PageLayout} component={CreateExercisePage}/>
+              <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE_DETAIL} layout={PageLayout} component={CreateExerciseDetailPage}/>
+              <AuthRouteWithLayout exact path={Routes.EXERCISE_COMPLETE} layout={PageLayout} component={FillInExercisePage}/>
+
               <AuthRouteWithLayout exact path={Routes.EXERCISE_DETAIL} layout={PageLayout} component={ExerciseDetailPage}/>
 
               <RouteWithLayout exact path={'/*'} layout={ErrorLayout} component={ErrorPage} />

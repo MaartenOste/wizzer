@@ -1,6 +1,6 @@
 import { default as React, useState } from 'react';
 
-const ExersiseSubjectSelector = ({onClick=()=>{}}) => {
+const ExerciseSubjectSelector = ({onClick=()=>{}}) => {
 	const [types] = useState(['Getallenkennis', 'Bewerkingen','Meetkunde', 'Meten en metend rekenen', 'Toepassingen']);
 
 
@@ -14,4 +14,4 @@ const ExersiseSubjectSelector = ({onClick=()=>{}}) => {
   );
 };
 
-export default ExersiseSubjectSelector;
+export default ExerciseSubjectSelector;
