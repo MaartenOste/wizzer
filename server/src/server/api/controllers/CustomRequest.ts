@@ -6,4 +6,5 @@ export interface Request extends Express.Request<any> {
   query: any;
   user?: any;
   session?: any;
+  logout:any;
 }

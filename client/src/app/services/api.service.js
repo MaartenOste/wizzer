@@ -266,6 +266,40 @@ const ApiProvider = ({children}) => {
     }
   }
 
+  const updateCompletedExercise = async (id, score, answers) => {
+    const classUrl = `/api/completed_exercises/${id}`;
+    const myHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    const update = {
+      score,
+      answers,
+    }
+
+    console.log(update);
+    const options = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: JSON.stringify(update),
+      redirect: 'follow',
+    };
+    let response;
+
+    try {
+      response = await fetch(classUrl, options);
+      let data = await response.json();
+      return data;
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
+
   return (
     <ApiContext.Provider value={{
         addExerciseToClass,
@@ -278,7 +312,8 @@ const ApiProvider = ({children}) => {
         getExercises,
         getUserById,
         joinClassRoom,
-        updateClass
+        updateClass,
+        updateCompletedExercise
       }}>
       {children}
     </ApiContext.Provider>

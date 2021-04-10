@@ -1,5 +1,10 @@
 import { NextFunction, Response } from 'express';
-import { ExerciseGroup, Class, CompletedExercise, ICompletedExercise } from '../../models/mongoose';
+import {
+  ExerciseGroup,
+  Class,
+  CompletedExercise,
+  ICompletedExercise,
+} from '../../models/mongoose';
 import { Request } from './CustomRequest';
 import { NotFoundError } from '../../utilities';
 import { default as mongoose } from 'mongoose';
@@ -90,7 +95,6 @@ class ExerciseGroupController {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-
     try {
       const initialClass = await Class.findOne({
         _teacherId: req.session.passport.user.id,
@@ -104,16 +108,14 @@ class ExerciseGroupController {
         exercises: req.body.exercises,
         example: req.body.example,
         type: req.body.type,
-        subType: req.body.subType
+        subType: req.body.subType,
       };
 
       const session = await mongoose.startSession();
       session.startTransaction();
 
-      const exerciseGroup = new ExerciseGroup(
-        exerciseGroupUpdate
-      )
-      exerciseGroup.save({session:session});
+      const exerciseGroup = new ExerciseGroup(exerciseGroupUpdate);
+      exerciseGroup.save({ session: session });
 
       if (!exerciseGroup) {
         throw new NotFoundError();
@@ -126,7 +128,7 @@ class ExerciseGroupController {
       };
 
       const classGroup = await Class.updateOne(
-        { _teacherId:  req.session.passport.user.id },
+        { _teacherId: req.session.passport.user.id },
         { $push: { _exercises: data } },
         { session: session, new: true },
       )

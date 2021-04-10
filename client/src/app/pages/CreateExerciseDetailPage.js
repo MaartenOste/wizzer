@@ -51,11 +51,20 @@ const CreateExerciseDetailPage = () => {
 			title: localStorage.getItem('newExerciseTitle'),
 			description: localStorage.getItem('newExerciseDescription'),
 			instructionVideo: '',
+			exercises:{
+				first: exercisesDataBeforeDiff, 
+				easy: easyExercisesDataAfterDiff, 
+				medium:exercisesDataAfterDiff, 
+				hard:hardExercisesDataAfterDiff, 
+				goEasy: parseInt(localStorage.getItem('maxScore'))/parseInt(localStorage.getItem('amountBefore')),
+				goHard: parseInt(localStorage.getItem('minScore'))/parseInt(localStorage.getItem('amountBefore'))
+			},
 			example: KeysToComponentMap[type].states,
 			type: localStorage.getItem('exerciseType'),
 			subType: localStorage.getItem('exerciseSubType'),
 		}
 		await createExercise(data);
+		history.push(Routes.EXERCISE);
 	}
 
 	return (

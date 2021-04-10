@@ -1,14 +1,16 @@
 .NumberLine{
-	width: 100%;
+	//width: 100%;
 	position: relative;
 
 	&--numbersContainer{
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		width: 100%;
+		//width: 100%;
 		box-sizing: border-box;
 		margin-bottom: 15px;
+		//width: fit-content;
+
 
 		//justify-content: center;
 
@@ -27,6 +29,7 @@
 				input{
 					width: 0px;
 					text-align: center;
+					border: 1px solid $color-black;
 				}
 		
 				&__verticalLine{

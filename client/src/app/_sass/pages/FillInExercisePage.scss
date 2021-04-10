@@ -1,0 +1,49 @@
+.FillInExercisePage{
+	&--container{
+		box-sizing: border-box;
+		padding: 7vw;
+		min-height: 90vh;
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+
+
+		.slider{
+			margin-top: 20px;
+			box-sizing: border-box;
+			padding: 0 5px;
+			.slide{
+				background-color: $color-white;
+				border-radius: 15px;
+				margin: 10px 5px;
+				box-shadow: -2px 3px 3px #00000070;
+				cursor: pointer;
+				font-size: $font-size-medium;
+				padding: 15px;
+				text-align: left;
+
+				p{
+					margin: 0;
+					margin-bottom: 10px ;
+				}
+			}
+		}
+		
+
+		&__actions{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			margin-top: auto;
+			padding: 0 7vw;
+
+			button{
+				min-width: 45%;
+			}
+		}
+
+	}
+
+}

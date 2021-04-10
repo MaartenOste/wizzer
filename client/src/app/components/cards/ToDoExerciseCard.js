@@ -1,4 +1,4 @@
-import { default as React, useEffect, useState } from 'react';
+import { default as React, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../../routes';
 import {RiArrowDropDownFill, RiArrowDropUpFill} from 'react-icons/ri';

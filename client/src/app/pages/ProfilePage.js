@@ -19,11 +19,16 @@ const ProfilePage = () => {
 		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)},
 	});
 
+	const handleLogout = async () =>{
+		await logout();
+		history.push(Routes.LOGIN)
+	}
+
   return (
 	<Fragment>
 		<div className='homePage-container' {...handlers}>
 			<Title text='instellingen'/>
-			<Button text='afmelden' type='primary' onClick={()=>{logout()}}/>
+			<Button text='afmelden' type='primary' onClick={()=>{handleLogout()}}/>
 		</div>
 		<NavBar active={'profile'}/>
 	</Fragment>

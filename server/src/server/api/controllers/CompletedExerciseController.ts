@@ -41,12 +41,8 @@ class CompletedExerciseController {
 
     try {
       const completedExerciseUpdate = {
-        _id: id,
         score: req.body.score,
         answers: req.body.answers,
-        _completedBy: req.body._completedBy,
-        _classId: req.body._classId,
-        _exerciseId: req.body._exerciseId,
         _modifiedAt: new Date().getTime(),
       };
 

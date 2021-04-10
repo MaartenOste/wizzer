@@ -173,25 +173,9 @@ class UserController {
   };
 
   logout = async (req: Request, res: Response) => {
-    req.session.destroy(function(err: any) {
-      // cannot access session here
-    });
+    req.logout();
+    res.sendStatus(200);
   };
 }
-
-/*smartschoolCallback = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    passport.authenticate('smartschool', { failureRedirect: 'http://localhost:3000/login' }),
-    function(req:any, res:any) {
-      console.log('smartschoolCallback');
-
-      // Successful authentication, redirect home.
-      res.redirect('http://localhost:3000/klas');
-    };
-  };
-}*/
 
 export default UserController;

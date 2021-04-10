@@ -251,7 +251,7 @@ class ClassController {
 
     try {
       const classGroup = await Class.updateOne(
-        { _teacherId:  req.session.passport.user.id },
+        { _teacherId: req.session.passport.user.id },
         { $push: { _exercises: data } },
         { session: session, new: true },
       )

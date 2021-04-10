@@ -40,7 +40,7 @@ const exerciseGroupSchema: Schema = new Schema(
       required: false,
     },
     _createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    exercises: [{ type: Object, required: true }],
+    exercises: { type: Object, required: true },
     example: { type: Object, required: true },
     type: {
       type: String,

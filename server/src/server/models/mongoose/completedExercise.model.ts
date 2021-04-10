@@ -6,13 +6,16 @@ import { IExerciseGroup } from './exercisegroup.model';
 import { IUser } from './user.model';
 
 interface IAnswer {
-  answerData: Object;
-  correct: boolean;
+  after: Array<Array<String>>;
+  difficulty: String;
+  first: Array<Array<String>>;
+  scorePostDiff: String;
+  scorePreDiff: String;
 }
 
 interface ICompletedExercise extends Document {
   score: string;
-  answers: Array<IAnswer>;
+  answers: IAnswer;
 
   _completedBy: IUser['_id'];
   _classId: IClass['_id'];
@@ -32,20 +35,10 @@ const completedExerciseSchema: Schema = new Schema(
       required: true,
       default: null,
     },
-    answers: [
-      {
-        answerData: {
-          type: Object,
-          required: true,
-          default: null,
-        },
-        correct: {
-          type: Boolean,
-          required: true,
-          default: false,
-        },
-      },
-    ],
+    answers: {
+      type: Object,
+      required: true,
+    },
     _completedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',

@@ -1,26 +1,23 @@
 import { default as React, useEffect, useState } from 'react';
 
-const NumberLine = ({min, max, interval, inputFieldsPositions}) => {
+const NumberLine = ({min, max, interval, inputFieldsPositions, setFillInValues=()=>{}, addCorrectValue=()=>{}, onTabPress= ()=>{}}) => {
 	const [data, setData] = useState()
 
 	useEffect(()=>{
 		let result = [];
-		/*console.log(min);
-		console.log(max);
-		console.log(interval);
-		console.log(inputFieldsPositions);*/
 		if (min && max && interval && inputFieldsPositions) {
 			for (let i = min; i <= max; i+=interval) {
 				if (!inputFieldsPositions.split(",").map(Number).includes(((i-min)/interval)+1)) {
 					result.push(<div className='NumberLine--number' key={i}><div>{i}</div><div className='NumberLine--number__verticalLine'></div></div>)
 				} else{
-					result.push(<div className='NumberLine--number' key={i}><input className='NumberLine--input' type='number' /><div className='NumberLine--number__verticalLine'></div></div>)
+					addCorrectValue((i-min)/interval, i.toString());
+					result.push(<div className='NumberLine--number' key={i}><input className='NumberLine--input' defaultValue={''} type='number' onKeyDown={onTabPress} onChange={(ev)=>{setFillInValues((i-min)/interval, ev.target.value)}}/><div className='NumberLine--number__verticalLine'></div></div>)
 				}
 			}
 			setData([...result]);
 		}
 		// eslint-disable-next-line
-	}, [min, interval, max, inputFieldsPositions])
+	}, [min, interval, max, inputFieldsPositions]);
 
 	useEffect(()=>{
 		if (data) {
@@ -39,7 +36,7 @@ const NumberLine = ({min, max, interval, inputFieldsPositions}) => {
 				inputs[i].style.width = `${biggestDiv*0.8}px`
 			}
 		}
-	}, [data])
+	}, [data]);
 	
 	return (
 	<div className='NumberLine'>

@@ -20,7 +20,8 @@ const ExercisesPage = () => {
 		const fetchdata = async () => {
 			try {
 				let data;
-				if (currentUser.userType === 'teacher') {
+				console.log(currentUser.userType);
+				if (currentUser.userType === 'Teacher') {
 					data = await getClassFromUser();
 					setClassData(data);
 				} else {
@@ -39,6 +40,7 @@ const ExercisesPage = () => {
 				}
 				setHasClass(true);
 			} catch (error) {
+				console.error('Completed exercises not found');
 				setHasClass(false);
 			}
 		}
@@ -50,7 +52,7 @@ const ExercisesPage = () => {
 	}, [initFetch]);
 	
 	useEffect(()=>{
-		if (classData && classData._exercises && currentUser.userType === 'teacher') {
+		if (classData && classData._exercises && currentUser.userType === 'Teacher') {
 			let temp = classData._exercises.map((ex) => {
 				return { ...ex, data: classData.exercises.find((x)=>x.id === ex._exerciseGroupId)}
 			})
