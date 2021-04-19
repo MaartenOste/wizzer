@@ -1,4 +1,4 @@
-nav{
+nav.mobilenav{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
@@ -32,6 +32,100 @@ nav{
 				border-bottom: $color-blue solid 2px;
 			}
 		}
+
+		&:nth-child(2)::before{
+			content : "";
+			position: absolute;
+			left: -1px;
+			top: 25%;
+			height: 50%;
+			width:  2px;
+			border-left: $color-blue solid 2px;
+			opacity: 0.5;
+		}
+		&:nth-child(2)::after{
+			content : "";
+			position: absolute;
+			right: -1px;
+			top: 25%;
+			height: 50%;
+			width:  2px;
+			border-right: $color-blue solid 2px;
+			opacity: 0.5;
+		}
+	}
+}
+
+nav.webnav{
+	display: none;
+	background-color: $color-black;
+	color: $color-white;
+	height: 5vw;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+
+	.webnav--container{
+		max-width: 2000px;
+		width: 100%;
+		margin: 0 auto;
+		height: 100%;
+		box-sizing: border-box;
+		padding: 0 7vw;
+
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: nowrap;
+		flex: 1 1 0;
+		box-sizing: border-box;
+
+		.webnav{
+			cursor: pointer;
+			text-align: center;
+			margin-left: 5%;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-items: center;
+			box-sizing: border-box;
+			border-bottom: 2px solid $color-black;
+			padding: 5px 0;
+			-webkit-transition: all 0.25s ease-in-out;
+			-moz-transition: all 0.25s ease-in-out;
+			-ms-transition: all 0.25s ease-in-out;
+			-o-transition: all 0.25s ease-in-out;
+			transition: all 0.25s ease-in-out;
+
+			&:hover{
+				border-bottom: 2px solid $color-white;
+			}
+
+			svg{
+				margin-right: 10px;
+			}
+
+			&.active{
+				border-bottom: 2px solid $color-white;
+			}
+		}
+
+		img{
+			height: 100%;
+			margin-right: auto;
+		}
+	}
+
+	.navitem{
+		width: 50%;
+		height: inherit;
+		text-align: center;
+		display: flex;
+		position: relative;
+		color: white;
+		font-size: 30px;
 
 		&:nth-child(2)::before{
 			content : "";

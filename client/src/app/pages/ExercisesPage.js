@@ -4,7 +4,7 @@ import { useAuth, useApi } from '../services';
 import { useHistory } from 'react-router';
 import { AddButton, ExerciseCard, Filter, NavBar, ToDoExerciseCard, Title } from '../components';
 import {useSwipeable} from 'react-swipeable';
-
+import { cloneDeep } from 'lodash';
 
 const ExercisesPage = () => {
 	const history = useHistory();
@@ -38,6 +38,7 @@ const ExercisesPage = () => {
 					console.log(data);
 					setExercises(data);
 				}
+				console.log(data);
 				setHasClass(true);
 			} catch (error) {
 				console.error('Completed exercises not found');
@@ -77,12 +78,13 @@ const ExercisesPage = () => {
 	});
 
 	const deleteExercise = async (id)=>{
-		let temp = exercises;
+
+		let temp = cloneDeep(exercises);
 		let index = temp.indexOf(temp.find((x)=>{return x.data.id === id}));
 		temp.splice(index,1);
-		setExercises([...temp]);
+		setExercises(temp);
 
-		let temp2 = filteredExercises;
+		let temp2 = cloneDeep(filteredExercises);
 		if (Array.isArray(temp2)) {
 			let index2 = temp2.indexOf(temp2.find((x)=>{return x.data.id === id}));
 			if (index2>=0) {
@@ -122,38 +124,39 @@ const ExercisesPage = () => {
   return (
 	<Fragment>
 		<div className='homePage-container' {...handlers}>
+			<div className='homePage--heading'>
+					<Title text='Oefeningen'/>
+				</div>
 			<div className='exercises--container'>
 				{hasClass !== null ?
 				<>
-				<div className='homePage--heading'>
-					<Title text='Oefeningen'/>
-				</div>
+
 				{hasClass?
 					<>
 					{currentUser.userType === 'Teacher' && 
 					<>
 						{exercises && 
-						<>
+						<div className='webFilters'>
 							<Filter data={exercises} setData={setFilteredExercises}/>
 							<AddButton onClick={()=>{history.push(Routes.CREATE_EXERCISE)}}/>
-						</>
+						</div>
 						}
 					</>
 					}
 					{Array.isArray(filteredExercises) ?
 						filteredExercises.length >0?
-							<>
+							<div className="exercises--mapped__container">
 								{filteredExercises.map((ex, i) => {
 									return <ExerciseCard key={i} id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 								})}
-							</>
+							</div>
 							:
 							<>
 								{exercises.length>0 ?'Geen oefenignen gevonden voor de geselecteerde filters.':'Er zijn nog geen oefeningen aan deze klas toegevoegd'}
 							</>
 					:
-					<>
-						{exercises.length>0 ? exercises.map((ex, i) => {
+					<div className="exercises--mapped__container">
+					{exercises.length>0 ? exercises.map((ex, i) => {
 							if(currentUser.userType === 'Teacher'){
 								return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>}
 							else {
@@ -162,7 +165,7 @@ const ExercisesPage = () => {
 						}):
 						'Er zijn nog geen oefeningen aan deze klas toegevoegd'
 						}
-					</>
+					</div>
 					}
 					</>
 				:

@@ -5,6 +5,10 @@
 	padding-bottom: 15vh;
 	position: relative;
 
+	.exercises--mapped__container{
+		width: 100%;
+	}
+
 	.homePage--heading{
 		display: flex;
 		flex-direction: row;
@@ -12,5 +16,54 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 25px;
+	}
+}
+
+@media screen and (min-width: 1025px) {
+    .exercises--container{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		flex-direction: row-reverse;
+
+		.webFilters{
+			display: flex;
+			flex-direction: column;
+			width: 60%;
+			margin-left: 5%;
+			height: fit-content;
+
+			.button--add{
+				position: relative;
+				border-radius: 15px;
+				left: 0;
+				top: 0;
+				width: 100%;
+				padding: 0 15px;
+				box-sizing: border-box;
+				cursor: pointer;
+				border: 1px solid $color-black;
+
+				*{
+					-webkit-transition: none !important;
+					-moz-transition: none !important;
+					-o-transition: none !important;
+					transition: none !important;
+				}
+
+				&::before{
+					content: 'Nieuwe oefening';
+					font-size: $font-size-large;
+					margin-right: auto;
+				}
+
+				&:hover{
+					background-color: $color-white;
+					border: 1px solid $color-black;
+					color: $color-black;
+				}
+			}
+		
+		}
 	}
 }

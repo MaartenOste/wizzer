@@ -4,6 +4,7 @@ import { default as CreateExerciseDetailPage } from './CreateExerciseDetailPage'
 import { default as ExerciseDetailPage } from './ExerciseDetailPage';
 import { default as ExercisesPage } from './ExercisesPage';
 import { default as FillInExercisePage } from './FillInExercisePage';
+import { default as FilledInExercisePage } from './FilledInExercisePage';
 import { default as ErrorPage } from './ErrorPage';
 import { default as JoinClassGroupPage } from './JoinClassGroupPage';
 import { default as LoginPage } from './LoginPage';
@@ -18,6 +19,7 @@ export {
 	ExercisesPage,
 	ErrorPage,
 	FillInExercisePage,
+	FilledInExercisePage,
 	JoinClassGroupPage,
 	LoginPage,
 	StudentDetailPage

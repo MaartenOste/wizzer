@@ -11,6 +11,7 @@ export const JOIN_CLASSGROUP = '/join/:id';
 export const EXERCISE = '/oefeningen';
 export const EXERCISE_DETAIL = '/oefeningen/punten/:id';
 export const EXERCISE_COMPLETE = '/oefeningen/maken/:id';
+export const COMPLETED_EXERCISE = '/oefeningen/gemaakt/:id';
 
 export const CREATE_EXERCISE = '/oefeningen/nieuw';
 export const CREATE_EXERCISE_DETAIL = '/oefeningen/nieuw/:type';

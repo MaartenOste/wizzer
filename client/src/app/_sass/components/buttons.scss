@@ -21,7 +21,7 @@
 
 	&--invite{
 		background-color: $color-black;
-		border: none;
+		border: 1px solid $color-black!important;
 		color: $color-white;
 		border-radius: 50px;
 		height: fit-content;
@@ -50,3 +50,24 @@
 		z-index: 9999;
 	}
 }
+
+@media screen and (min-width: 1025px) {
+    button {
+		cursor: pointer;
+
+    }
+
+	.button--invite{
+		-webkit-transition: all 0.25s ease-in-out;
+		-moz-transition: all 0.25s ease-in-out;
+		-ms-transition: all 0.25s ease-in-out;
+		-o-transition: all 0.25s ease-in-out;
+		transition: all 0.25s ease-in-out;
+	}
+
+	.button--invite:hover{
+		color: $color-black;
+		background-color: $color-white!important;
+		border: 1px solid $color-black!important;
+	}
+  }

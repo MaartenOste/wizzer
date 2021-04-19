@@ -9,6 +9,7 @@ import {
 	ExercisesPage,
   ErrorPage,
   FillInExercisePage,
+  FilledInExercisePage,
 	JoinClassGroupPage,
 	LoginPage,
 	StudentDetailPage, 
@@ -43,6 +44,7 @@ function App() {
               <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE} layout={PageLayout} component={CreateExercisePage}/>
               <AuthRouteWithLayout exact path={Routes.CREATE_EXERCISE_DETAIL} layout={PageLayout} component={CreateExerciseDetailPage}/>
               <AuthRouteWithLayout exact path={Routes.EXERCISE_COMPLETE} layout={PageLayout} component={FillInExercisePage}/>
+              <AuthRouteWithLayout exact path={Routes.COMPLETED_EXERCISE} layout={PageLayout} component={FilledInExercisePage}/>
 
               <AuthRouteWithLayout exact path={Routes.EXERCISE_DETAIL} layout={PageLayout} component={ExerciseDetailPage}/>
 

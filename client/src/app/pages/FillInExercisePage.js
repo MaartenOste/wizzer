@@ -5,6 +5,7 @@ import {  useParams, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import * as Routes from '../routes';
 import { cloneDeep, isEqual } from 'lodash';
+import {AiFillInfoCircle} from 'react-icons/ai';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -58,8 +59,17 @@ const FillInExercisePage = () => {
 		}
 	}
 
+	const handleExample = (id) =>{
+		let el = document.getElementById(`example-${id}`);
+		if (!el.style.display || el.style.display === 'none') {
+			document.getElementById(`example-${id}`).style.display = 'flex'
+		} else {
+			document.getElementById(`example-${id}`).style.display = 'none'
+		}
+	}
+
 	useEffect(()=>{
-		if (data){
+		if (data && example){
 			let totalExerciseData = exercise?cloneDeep(exercise):{};
 			let answers = totalAnswers?cloneDeep(totalAnswers):{};
 			let correctValues = totalCorrectValues?cloneDeep(totalCorrectValues):{};
@@ -88,7 +98,6 @@ const FillInExercisePage = () => {
 						x.forEach((state) => {
 							props[state.name] = state.value;
 						})
-
 						props.addCorrectValue = (pos, value) => {
 							correctValues[el][i][pos] = value;
 							setTotalCorrectValues(cloneDeep(correctValues));
@@ -99,11 +108,23 @@ const FillInExercisePage = () => {
 							setTotalAnswers(cloneDeep(answers));
 						}
 						props.onTabPress = onTabPress;
-						return <div key={i}>
-							{React.createElement(KeysToComponentMap[data.exercise.subType].component, props)}
+						return <div className='slide--content' key={i}>
+							<div className="slide--content__header">
+								<div className='slide--content__header-instruction'>{KeysToComponentMap[data.exercise.subType].instruction}</div>
+									<div className='slide--content__example'>
+										<div className='slide--content__example-icon' onClick={()=>{handleExample(i)}}><AiFillInfoCircle /></div>
+										<div className='slide--content__example-ex' id={`example-${i}`}>
+											<>Voorbeeld: </>
+											{example}
+											<Button type='primary' text='terug'  onClick={()=>{handleExample(i)}}/>
+										</div>
+									</div>
+							</div>
+							<div className="slide--content__exercise">
+								{React.createElement(KeysToComponentMap[data.exercise.subType].component, props)}
+							</div>
 						</div>
 					})
-
 					totalExerciseData[el] = temp
 				}
 			})
@@ -111,7 +132,7 @@ const FillInExercisePage = () => {
 			setExercise(totalExerciseData)
 		}
 		// eslint-disable-next-line
-	}, [data]);
+	}, [data, example]);
 
 	const handlePreDiff = () =>{
 		if(KeysToComponentMap[data.exercise.subType].autoCorrect) {
@@ -186,7 +207,7 @@ const FillInExercisePage = () => {
 				>
 					<div>
 						<p>{data.exercise.description}</p>
-						Je gaat zo meteen een oefening over {data.exercise.subType.replace('-', ' ')} maken. Hier is nog even een voorbeeld:
+							Je gaat zo meteen een oefening over {data.exercise.subType.replace('-', ' ')} maken. Hier is nog even een voorbeeld:
 						{example}
 					</div>
 					{exercise && exercise.first}

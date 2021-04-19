@@ -64,6 +64,19 @@ const CreateExerciseDetailPage = () => {
 			subType: localStorage.getItem('exerciseSubType'),
 		}
 		await createExercise(data);
+
+		localStorage.removeItem('newExerciseTitle');
+		localStorage.removeItem('newExerciseDescription');
+		localStorage.removeItem('maxScore');
+		localStorage.removeItem('minScore');
+		localStorage.removeItem('amountBefore');
+		localStorage.removeItem('exerciseType');
+		localStorage.removeItem('exerciseSubType');
+
+		localStorage.removeItem('newExOption');
+		localStorage.removeItem('completedExerciseGeneral');
+		localStorage.removeItem('amountAfter');
+		localStorage.removeItem('completedExerciseDif');
 		history.push(Routes.EXERCISE);
 	}
 

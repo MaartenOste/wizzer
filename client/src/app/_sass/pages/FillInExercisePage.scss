@@ -14,6 +14,7 @@
 			box-sizing: border-box;
 			padding: 0 5px;
 			.slide{
+				position: relative;
 				background-color: $color-white;
 				border-radius: 15px;
 				margin: 10px 5px;
@@ -22,6 +23,45 @@
 				font-size: $font-size-medium;
 				padding: 15px;
 				text-align: left;
+				overflow: hidden;
+
+				.slide--content{
+					&__header{
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+
+						&-instruction{
+							font-weight: bold;
+						}
+
+						.slide--content__example{
+							&-icon{
+								width: 20%;
+							}
+							&-ex{
+								flex-direction: column;
+								padding: 15px;
+								background-color: $color-white;
+								z-index: 100;
+								display: none;
+								position: absolute;
+								width: 100%;
+								height: 100%;
+								top: 0;
+								left: 0;
+
+								button{
+									margin: 25px auto;
+								}
+							}
+						}
+					}
+
+					&__exercise{
+						margin-top: 5vh;
+					}
+				}
 
 				p{
 					margin: 0;

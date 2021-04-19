@@ -27,8 +27,11 @@
 				padding: 20px 10px 0 10px;
 
 				input{
+					font-size: 1rem;
+					padding: 5px 0;
 					width: 0px;
 					text-align: center;
+					color: $color-black;
 					border: 1px solid $color-black;
 				}
 		
@@ -59,5 +62,10 @@
 		
 	}
 
-
+	&--solution{
+		width: 100%;
+		padding-top: 15px;
+		margin-top: 30px;
+		border-top: solid 2px $color-grey-middle;
+	}
 }

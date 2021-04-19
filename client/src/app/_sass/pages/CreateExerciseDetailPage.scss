@@ -76,3 +76,15 @@
 		}
 	}
 }
+
+
+@media screen and (min-width: 1025px) {
+    .createExPage--options{
+		flex-direction: row!important;
+		justify-content: space-between!important;
+
+		.NewExOptionCard--container{
+			width: 45%;
+		}
+	}
+}
