@@ -1,7 +1,7 @@
 .filter-container{
 	background-color: $color-white;
 	border-radius: 15px;
-	margin: 15px 0;
+	margin-bottom: 30px;
 	box-shadow: -2px 3px 3px #00000070;
 	text-transform: capitalize;
 	cursor: pointer;
@@ -52,14 +52,14 @@
 				display: flex;
 				flex-direction: row;
 				flex-wrap: wrap;
-				justify-content: space-around;
+				//justify-content: space-around;
 				margin-top: 5px;
 				padding: 0 15px;
 				
 
 				.filterItem{
 					font-size: 13px;
-					margin: 5px 0;
+					margin: 5px auto;
 					text-align: center;
 
 					&.Getallenkennis{
@@ -149,5 +149,20 @@
 				
 			}
 		}
+	}
+}
+
+@media screen and (min-width: 1550px) {
+	.filterItem{
+		margin: 5px 10px!important;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.filter-container__body-row__filters{
+		justify-content: space-between;
+	}
+	.filterItem{
+		margin: 5px 15px!important;
 	}
 }

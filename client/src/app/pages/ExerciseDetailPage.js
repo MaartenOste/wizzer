@@ -26,7 +26,7 @@ const ExerciseDetailPage = () => {
 
 	return (
 		<Fragment>
-		<div className='exerciseDetail-container'>
+		<div className='exerciseDetail-container page--content'>
 			{exercises && 
 				<Title text={exercises[0].exercise.title}/>
 			}

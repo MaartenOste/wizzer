@@ -10,7 +10,7 @@ nav.mobilenav{
 	border-top-right-radius: 5px;
 	position: fixed;
 	bottom: 0;
-	width: 100%;
+	width: 100vw;
 
 	div{
 		width: 50%;
@@ -64,7 +64,7 @@ nav.webnav{
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100%;
+	width: 100vw;
 	box-sizing: border-box;
 
 	.webnav--container{
@@ -73,7 +73,7 @@ nav.webnav{
 		margin: 0 auto;
 		height: 100%;
 		box-sizing: border-box;
-		padding: 0 7vw;
+		padding: 0 15%;
 
 		display: flex;
 		flex-direction: row;

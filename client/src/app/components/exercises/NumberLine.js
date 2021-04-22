@@ -7,12 +7,14 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 
 	useEffect(()=>{
 		let result = [];
+		let tempCorrectAnswers = [];
 		if (min && max && interval && inputFieldsPositions) {
 			for (let i = min; i <= max; i+=interval) {
 				if (!inputFieldsPositions.split(",").map(Number).includes(((i-min)/interval)+1)) {
 					result.push(<div className='NumberLine--number' key={i}><div>{i}</div><div className='NumberLine--number__verticalLine'></div></div>)
 				} else if (filledInValues) {
-					setCorrectAnswers([...correctAnswers, i])
+					tempCorrectAnswers = [...tempCorrectAnswers, i]
+					console.log('settnig correct answer: ', i);
 					if(i !== parseInt(filledInValues[((i-min)/interval)])){
 						setWrongAnswer(true);
 					}
@@ -34,6 +36,7 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 			}
 			setData([...result]);
 		}
+		setCorrectAnswers(tempCorrectAnswers);
 		// eslint-disable-next-line
 	}, [min, interval, max, inputFieldsPositions]);
 

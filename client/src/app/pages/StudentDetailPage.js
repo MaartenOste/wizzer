@@ -40,7 +40,7 @@ const StudentDetailPage = () => {
 
   return (
     <Fragment>
-      <div className='studentDetailPage-container'>
+      <div className='studentDetailPage-container page--content'>
 	  	{exercises && <Title text={exercises[0].completedBy}/>}
 		{exercises && exercises.map((exercise, i)=>{
 			return <ScoreCard onClick={()=>{exercise.score !== 'Nog niet ingediend' && history.push(Routes.COMPLETED_EXERCISE.replace(':id', exercise.id))}} name={exercise.title} score={exercise.score} key={i} extraClasses={!exercise.public?'PrivateExercise':''}/>

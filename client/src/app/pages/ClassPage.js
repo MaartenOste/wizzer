@@ -61,7 +61,7 @@ const ClassPage = () => {
 
   return (
     <Fragment>
-		<div className='homePage-container' {...handlers}>
+		<div className='homePage-container page--content' {...handlers}>
 			<div className='class--container'>
 				{hasClass !== null ?
 				<>

@@ -106,7 +106,7 @@ const FilledInExercisePage = () => {
 
 	return (
 		<Fragment>
-			<div className='homePage-container' {...handlers}>
+			<div className='page--content' {...handlers}>
 				{data && exercise && currentUser &&
 				<>
 					<Title text={data.exercise.title}/>

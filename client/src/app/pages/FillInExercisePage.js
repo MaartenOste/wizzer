@@ -195,7 +195,7 @@ const FillInExercisePage = () => {
 	return (
 		<Fragment>
 			{
-				data && example && <div className='FillInExercisePage--container'>
+				data && example && <div className='FillInExercisePage--container page--content'>
 				<Title text={data.exercise.title}/>
 				<Carousel 
 					swipeable={false}
