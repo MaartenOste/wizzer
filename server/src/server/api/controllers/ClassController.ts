@@ -46,30 +46,38 @@ class ClassController {
       let temp = await CompletedExercise.find({
         _classId: classId,
       })
-      .populate('exercise')
-      .populate('completedBy')
-      .exec();
+        .populate('exercise')
+        .populate('completedBy')
+        .exec();
       console.log(temp);
-      
-      let result:any={};
-      temp.forEach((el)=>{
-        if (el.score !== 'Nog niet ingediend') {
-          if (result[`${el.completedBy.firstname} ${el.completedBy.lastname}`]) {
-            result[`${el.completedBy.firstname} ${el.completedBy.lastname}`] += parseInt(el.score.split('/')[0]);
-          } else {
-            result[`${el.completedBy.firstname} ${el.completedBy.lastname}`] = parseInt(el.score.split('/')[0]);
-          }
-        } 
-      })
 
-      let sortable:any = [];
+      let result: any = {};
+      temp.forEach(el => {
+        if (el.score !== 'Nog niet ingediend') {
+          if (
+            result[`${el.completedBy.firstname} ${el.completedBy.lastname}`]
+          ) {
+            result[
+              `${el.completedBy.firstname} ${el.completedBy.lastname}`
+            ] += parseInt(el.score.split('/')[0]);
+          } else {
+            result[
+              `${el.completedBy.firstname} ${el.completedBy.lastname}`
+            ] = parseInt(el.score.split('/')[0]);
+          }
+        }
+      });
+
+      let sortable: any = [];
       for (let el in result) {
         sortable.push([el, result[el]]);
       }
 
-      sortable.sort((a:any,b:any)=>{return b[1]-a[1]})
-      
-      return res.status(200).json(sortable.slice(0,3));
+      sortable.sort((a: any, b: any) => {
+        return b[1] - a[1];
+      });
+
+      return res.status(200).json(sortable.slice(0, 3));
     } catch (err) {
       next(err);
     }
@@ -281,7 +289,7 @@ class ClassController {
       _exerciseGroupId: exerciseId,
       public: false,
       _addedAt: Date.now(),
-      dueDate: req.body.dueDate || new Date().toISOString().slice(0,10),
+      dueDate: req.body.dueDate || new Date().toISOString().slice(0, 10),
     };
     const initialClass = await Class.findOne({
       _teacherId: req.session.passport.user.id,

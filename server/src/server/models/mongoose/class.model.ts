@@ -55,10 +55,10 @@ const classSchema: Schema = new Schema(
           required: false,
           type: Number,
         },
-        dueDate:{
+        dueDate: {
           type: String,
-          required: true
-        }
+          required: true,
+        },
       } || null,
     ],
     _studentIds: [

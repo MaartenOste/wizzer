@@ -122,17 +122,15 @@ class ExerciseGroupController {
       }
 
       console.log(req.body.dueDate);
-      
 
       const data = {
         _exerciseGroupId: exerciseGroup._id,
         public: false,
         _addedAt: Date.now(),
-        dueDate: req.body.dueDate
+        dueDate: req.body.dueDate,
       };
 
       console.log(data);
-      
 
       const classGroup = await Class.updateOne(
         { _teacherId: req.session.passport.user.id },
