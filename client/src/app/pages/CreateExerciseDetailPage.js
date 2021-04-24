@@ -1,23 +1,21 @@
 import { default as React, Fragment, useEffect, useState} from 'react';
 import {  useParams, useHistory } from 'react-router-dom';
-import { NumberLine, NavBar, Title } from '../components';
+import { NavBar, Title } from '../components';
 import * as Routes from '../routes';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {Button} from '../components/buttons';
 import { cloneDeep } from 'lodash';
 import {useApi} from '../services';
+import { default as KeysToComponentMap} from '../components/exercises/KeysToComponentMap';
+import {useSwipeable} from 'react-swipeable';
 
-const KeysToComponentMap = {
-	"getallenassen": {componentName: NumberLine, states: [{name:'min', displayName:'Minimum waarde', value:5, type:'number'},{name:'max', displayName:'Maximum waarde', value:50, type:'number'},{name:'interval', displayName:'Interval', value:5, type:'number'},{name:'inputFieldsPositions', displayName:'Plaats van invulvelden', value:'3, 5', type:'text'}]}
-};
 
 const CreateExerciseDetailPage = () => {
 	const history = useHistory();
 	const {type} = useParams();
 	const [slide, setSlide] = useState(0);
 	const {createExercise} = useApi();
-
 
 	const [amountBefore] = useState(localStorage.getItem('amountBefore') || 0);
 	const [amountAfter] = useState(localStorage.getItem('amountAfter') || 0);
@@ -50,6 +48,7 @@ const CreateExerciseDetailPage = () => {
 		let data = {
 			title: localStorage.getItem('newExerciseTitle'),
 			description: localStorage.getItem('newExerciseDescription'),
+			dueDate: localStorage.getItem('newExerciseDueDate'),
 			instructionVideo: '',
 			exercises:{
 				first: exercisesDataBeforeDiff, 
@@ -67,6 +66,7 @@ const CreateExerciseDetailPage = () => {
 
 		localStorage.removeItem('newExerciseTitle');
 		localStorage.removeItem('newExerciseDescription');
+		localStorage.removeItem('newExerciseDueDate');
 		localStorage.removeItem('maxScore');
 		localStorage.removeItem('minScore');
 		localStorage.removeItem('amountBefore');
@@ -80,10 +80,27 @@ const CreateExerciseDetailPage = () => {
 		history.push(Routes.EXERCISE);
 	}
 
+	
+	const handleSwipeMenu = (deltaX) =>{
+		if (deltaX >= 50) {
+			history.push(Routes.CLASSGROUP);
+		} else if(deltaX <= -50){
+			history.push(Routes.SETTINGS);
+		}
+	}
+
+	const handlers = useSwipeable({
+		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
+		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)}
+	});
+
 	return (
 		<Fragment>
-			<div className='createExDetailPage--container'>
-				<Title text={type}/>
+			<div className='createExDetailPage--container page--content' {...handlers}>
+				<div className='page--heading'>
+					<Title text={type}/>
+					<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+				</div>
 				<Carousel 
 					swipeable={false}
 					showArrows={false}
@@ -93,7 +110,7 @@ const CreateExerciseDetailPage = () => {
 					selectedItem={slide}
 				>
 					<div>
-						Eerst de oefeningen voor differentiëren
+						De oefeningen die u op volgende pagina's zal maken tellen als basisoefeningen.
 					</div>
 					{exercisesDataBeforeDiff && exercisesDataBeforeDiff.map((x, i)=>{
 						let props = {};
@@ -113,7 +130,7 @@ const CreateExerciseDetailPage = () => {
 						</div>
 					})}
 					<div>
-						Nu de oefeningen voor een lager niveau.
+						Vanaf nu maakt u de oefeningen voor een lager niveau.
 					</div>
 
 					{easyExercisesDataAfterDiff && easyExercisesDataAfterDiff.map((x, i)=>{
@@ -135,7 +152,7 @@ const CreateExerciseDetailPage = () => {
 					})}
 
 					<div>
-						Nu de oefeningen voor een gemiddeld niveau.
+						Vanaf nu maakt u de oefeningen voor een gemiddeld niveau.
 					</div>
 					{exercisesDataAfterDiff && exercisesDataAfterDiff.map((x, i)=>{
 						let props = {};
@@ -155,7 +172,7 @@ const CreateExerciseDetailPage = () => {
 						</div>
 					})}
 					<div>
-						Nu de oefeningen voor een hoger niveau.
+						Vanaf nu maakt u de oefeningen voor een hoger niveau.
 					</div>
 					{hardExercisesDataAfterDiff && hardExercisesDataAfterDiff.map((x, i)=>{
 						let props = {};

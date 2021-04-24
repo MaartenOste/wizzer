@@ -1,9 +1,10 @@
 import { default as React, Fragment, useCallback, useState, useEffect} from 'react';
 import { useApi, useAuth } from '../services';
 import { useParams } from 'react-router';
-import { NavBar, ScoreCard, Title } from '../components';
+import { Button, NavBar, ScoreCard, Title } from '../components';
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../routes';
+import {useSwipeable} from 'react-swipeable';
 
 const StudentDetailPage = () => {
 	const history = useHistory();
@@ -23,6 +24,7 @@ const StudentDetailPage = () => {
 				_addedAt: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId)._addedAt, 
 				score: ex.score,
 				completedBy: `${ex.completedBy.firstname} ${ex.completedBy.lastname}`,
+				dueDate: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).dueDate?.split('-').reverse().join('/') || new Date().toJSON().slice(0,10).replace(/-/g,'/').split('/').reverse().join('/'),
 				title: ex.exercise.title
 			}})
 			if (currentUser.userType === 'Student') {
@@ -38,12 +40,30 @@ const StudentDetailPage = () => {
 		initFetch();
 	}, [initFetch]);
 
+	const handleSwipeMenu = (deltaX) =>{
+		if (deltaX <= -50) {
+			history.push(Routes.EXERCISE);
+		}
+	}
+
+	const handlers = useSwipeable({
+		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
+	});
+
+
   return (
     <Fragment>
-      <div className='studentDetailPage-container page--content'>
-	  	{exercises && <Title text={exercises[0].completedBy}/>}
+      <div className='studentDetailPage-container page--content' {...handlers}>
+	  	{exercises && 
+			<div className='page--heading'>
+				<Title text={exercises[0].completedBy}/>
+				<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+			</div>
+		}
+
+		  
 		{exercises && exercises.map((exercise, i)=>{
-			return <ScoreCard onClick={()=>{exercise.score !== 'Nog niet ingediend' && history.push(Routes.COMPLETED_EXERCISE.replace(':id', exercise.id))}} name={exercise.title} score={exercise.score} key={i} extraClasses={!exercise.public?'PrivateExercise':''}/>
+			return <ScoreCard onClick={()=>{exercise.score !== 'Nog niet ingediend' && history.push(Routes.COMPLETED_EXERCISE.replace(':id', exercise.id))}} name={exercise.title} score={exercise.score === 'Nog niet ingediend' && new Date(exercise.dueDate.split('/').reverse().join('-'))- new Date()<0 ? 'Te laat...': exercise.score} key={i} extraClasses={!exercise.public?'PrivateExercise':''}/>
 		})}
 	</div>
 	<NavBar active={'class'}/>

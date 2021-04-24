@@ -10,18 +10,31 @@
 
 .page--content{
 	box-sizing: border-box;
-	padding: 8% 15%;
-	min-height: 90vh;
-	padding-bottom: 15vh;
+	padding: 8% 15% 15vh 15%;
+	min-height: 100vh;
 	position: relative;
+}
+
+.page--heading{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+    .title{
+        word-break: break-word;
+        margin-right: 10px;
+    }
+
+    .button--container{
+        margin-left: auto;
+    }
 }
 
 @media only screen and (max-width: 600px) {
     .page--content{
-        box-sizing: border-box;
-        padding: 8%;
-        min-height: 90vh;
-        padding-bottom: 15vh;
-        position: relative;
+        padding: 8% 8% 15vh 8%;
     }
   }

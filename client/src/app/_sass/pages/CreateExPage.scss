@@ -1,11 +1,8 @@
 .createExPage-container{
-	box-sizing: border-box;
-	padding: 7vw;
-	min-height: 90vh;
 	padding-bottom: 15vh;
-	position: relative;
 	display: flex;
 	flex-direction: column;
+
 
 	.createExPage--heading{
 		display: flex;
@@ -127,6 +124,23 @@
 
 		button{
 			min-width: 45%;
+		}
+	}
+}
+
+.createExercise--lastStep{
+	&__content{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+
+		.exerciseTypeCard{
+			width: 60%;
+		}
+
+		.CreateExercise--card{
+			width: 35%;
+			margin-left: 5%;
 		}
 	}
 }

@@ -75,6 +75,7 @@ class ApiRouter {
      */
     this.router.get('/classes', this.checkUser, this.classController.index);
     this.router.post('/classes', this.classController.create);
+    this.router.get('/classes/topthree/:classId', this.checkUser, this.classController.getTopThree);
     this.router.get('/classes/:id', this.checkUser, this.classController.show);
     this.router.get(
       '/classes/user/:id',

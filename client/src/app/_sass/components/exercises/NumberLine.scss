@@ -1,5 +1,4 @@
 .NumberLine{
-	//width: 100%;
 	position: relative;
 
 	&--numbersContainer{
@@ -33,6 +32,15 @@
 					text-align: center;
 					color: $color-black;
 					border: 1px solid $color-black;
+				}
+				input::-webkit-outer-spin-button,
+				input::-webkit-inner-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
+
+				input[type=number] {
+					-moz-appearance:textfield; /* Firefox */
 				}
 		
 				&__verticalLine{

@@ -13,6 +13,7 @@
     -ms-user-select: none;
 	-webkit-tap-highlight-color: transparent;
     user-select: none;
+	
 
 
 	&__heading{
@@ -23,6 +24,17 @@
 		font-size: 20px;
 		font-weight: bold;
 		padding: 15px;
+
+		&:not(.openedCard){
+			&:hover{
+				background-color: rgb(233, 233, 233);
+				border-radius: 15px;
+	
+				svg{
+					animation: wiggle 1s ease-in-out infinite;
+				}
+			}
+		}
 
 		&.openedCard{
 			border-bottom: 1px solid #aeaeae88;

@@ -1,10 +1,26 @@
-import { default as React } from 'react';
+import { default as React, useState } from 'react';
 
-const Button = ({text, type, onClick= () => {}}) => {
+const Button = ({text, type, onClick= () => {}, extraClasses}) => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handlePopup = () => {
+    setShowPopup(true);
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 2000);
+  }
+
   return (
-    <button className={`button--${type}`} onClick={()=> {onClick()}}>
-		  {text}
-	  </button>
+    <div className={`button--container ${extraClasses}`}>
+      {type === 'invite' && showPopup &&
+      <div className="button--popup">
+        <span>Uitnodiging gekopieerd!</span>
+      </div>
+      }
+      <button className={`button--${type}`} onClick={()=> {handlePopup(); onClick()}}>
+        {text}
+      </button>
+    </div>
   );
 };
 

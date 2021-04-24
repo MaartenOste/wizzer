@@ -1,11 +1,10 @@
 import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
-import { NumberLine, NavBar, Title } from '../components';
-import {useApi, useAuth} from '../services';
+import { Button, NumberLine, NavBar, Title } from '../components';
+import { useApi, useAuth} from '../services';
 import * as Routes from '../routes';
 import { useParams, useHistory } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
-import {useSwipeable} from 'react-swipeable';
-
+import { useSwipeable } from 'react-swipeable';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const KeysToComponentMap = {
@@ -52,6 +51,7 @@ const FilledInExercisePage = () => {
 
 	useEffect(()=>{
 		if (data) {
+			console.log(data);
 			let correctValues = {};
 	
 			let temp = [];
@@ -95,13 +95,16 @@ const FilledInExercisePage = () => {
 	}, [data]);
 
 	const handleSwipeMenu = (deltaX) =>{
-		if (deltaX <= -50) {
-			history.push(Routes.EXERCISE);
+		if (deltaX >= 50) {
+			history.push(Routes.CLASSGROUP);
+		} else if(deltaX <= -50){
+			history.push(Routes.SETTINGS);
 		}
 	}
 
 	const handlers = useSwipeable({
 		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
+		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)}
 	});
 
 	return (
@@ -109,7 +112,10 @@ const FilledInExercisePage = () => {
 			<div className='page--content' {...handlers}>
 				{data && exercise && currentUser &&
 				<>
-					<Title text={data.exercise.title}/>
+					<div className='page--heading'>
+						<Title text={data.exercise.title}/>
+						<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+					</div>
 					{currentUser && currentUser.userType === 'Teacher'? <div className='filledInExercise--container__diftitle'>Voor differentiëren</div> :<div></div>}
 					{data && exercise && exercise.first}
 					{currentUser && currentUser.userType === 'Teacher'? <div className='filledInExercise--container__diftitle'>Na differentiëren ({difficultyToNl[data.answers.difficulty]})</div> :<div></div>}
@@ -117,7 +123,7 @@ const FilledInExercisePage = () => {
 				</>
 				}
 			</div>
-			<NavBar active={'class'}/>
+			<NavBar active={'exercises'}/>
 		</Fragment>
 	);
 };

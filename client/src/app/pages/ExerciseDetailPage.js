@@ -2,7 +2,7 @@ import { default as React, Fragment, useCallback, useEffect, useState} from 'rea
 import {  useParams } from 'react-router-dom';
 import { useApi } from '../services';
 import { useHistory } from 'react-router';
-import { NavBar, ScoreCard, Title } from '../components';
+import { Button, NavBar, ScoreCard, Title } from '../components';
 import * as Routes from '../routes';
 
 const ExerciseDetailPage = () => {
@@ -28,7 +28,10 @@ const ExerciseDetailPage = () => {
 		<Fragment>
 		<div className='exerciseDetail-container page--content'>
 			{exercises && 
-				<Title text={exercises[0].exercise.title}/>
+				<div className='page--heading'>
+					<Title text={exercises[0].exercise.title}/>
+					<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+				</div>
 			}
 			{exercises && exercises.map((exercise, i)=>{
 				return <ScoreCard onClick={()=>{exercise.score !== 'Nog niet ingediend' && history.push(Routes.COMPLETED_EXERCISE.replace(':id', exercise.id))}} name={`${exercise.completedBy.firstname} ${exercise.completedBy.lastname}`} score={exercise.score} key={i}/>

@@ -6,8 +6,8 @@ import { Carousel } from 'react-responsive-carousel';
 import * as Routes from '../routes';
 import { cloneDeep, isEqual } from 'lodash';
 import {AiFillInfoCircle} from 'react-icons/ai';
-
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useSwipeable } from 'react-swipeable';
 
 const KeysToComponentMap = {
 	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'}
@@ -180,23 +180,34 @@ const FillInExercisePage = () => {
 			answers.scorePreDiff = `${scorePreDiff}/${data.exercise.exercises.first.length}`;
 			answers.scorePostDiff = `${scorePostDiff}/${data.exercise.exercises.easy.length}`
 			score = `${correctAnswers}/${data.exercise.exercises.first.length+data.exercise.exercises.easy.length}`
-			console.log('finished with data: ', answers);
-			console.log('Correct answers: ', totalCorrectValues);
-			console.log('correct: ', `${correctAnswers}/${data.exercise.exercises.first.length+data.exercise.exercises.easy.length}=${correctAnswers/(data.exercise.exercises.first.length+data.exercise.exercises.easy.length)}`);
 		}
 
-
-		console.log(totalCorrectValues);
-		console.log(id, score, answers);
 		await updateCompletedExercise(id, score, answers);
 		history.push(Routes.EXERCISE);
 	}
 
+	const handleSwipeMenu = (deltaX) =>{
+		if (deltaX >= 50) {
+			history.push(Routes.CLASSGROUP);
+		} else if(deltaX <= -50){
+			history.push(Routes.SETTINGS);
+		}
+	}
+
+	const handlers = useSwipeable({
+		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
+		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)}
+	});
+
+
 	return (
 		<Fragment>
 			{
-				data && example && <div className='FillInExercisePage--container page--content'>
-				<Title text={data.exercise.title}/>
+				data && example && <div className='FillInExercisePage--container page--content' {...handlers}>
+				<div className='page--heading'>
+					<Title text={data.exercise.title}/>
+					<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+				</div>
 				<Carousel 
 					swipeable={false}
 					showArrows={false}

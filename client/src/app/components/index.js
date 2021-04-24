@@ -7,3 +7,5 @@ export * from './exerciseType';
 export * from './filter';
 export * from './forms';
 export * from './nav';
+
+export {default as Stage} from './Stage';

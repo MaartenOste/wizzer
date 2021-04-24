@@ -48,7 +48,7 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 			let items = document.getElementsByClassName('NumberLine--number');
 			let maxWidth = 100/Math.floor(containerWidth/biggestDiv);
 
-			for (let i = 0; i < items.length; i++) { 
+			for (let i = 0; i < items.length; i++) {
 				items[i].style.width = `${maxWidth}%`
 			}
 			

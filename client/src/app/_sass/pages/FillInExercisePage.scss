@@ -15,11 +15,11 @@
 				border-radius: 15px;
 				margin: 10px 5px;
 				box-shadow: -2px 3px 3px #00000070;
-				cursor: pointer;
 				font-size: $font-size-medium;
 				padding: 15px;
 				text-align: left;
 				overflow: hidden;
+				min-height: 35vh;
 
 				.slide--content{
 					&__header{

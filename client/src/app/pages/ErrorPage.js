@@ -6,7 +6,7 @@ const ErrorPage = () => {
 
   return (
     <Fragment>
-      <div className='classPage-container'>
+      <div className='classPage-container page--content'>
 		error 404 page not found
 		<Link to={Routes.LOGIN}>Klik hier om in te loggen</Link>
 	  </div>

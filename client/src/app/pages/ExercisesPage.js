@@ -2,8 +2,8 @@ import { default as React, Fragment, useCallback, useEffect, useState} from 'rea
 import * as Routes from '../routes';
 import { useAuth, useApi } from '../services';
 import { useHistory } from 'react-router';
-import { AddButton, ExerciseCard, Filter, NavBar, ToDoExerciseCard, Title } from '../components';
-import {useSwipeable} from 'react-swipeable';
+import { AddButton, ExerciseCard, Filter, NavBar, ScoreCard, ToDoExerciseCard, Title } from '../components';
+import { useSwipeable } from 'react-swipeable';
 import { cloneDeep } from 'lodash';
 
 const ExercisesPage = () => {
@@ -26,6 +26,7 @@ const ExercisesPage = () => {
 					setClassData(data);
 				} else {
 					data = await getFilledInExercisesFromStudent(currentUser.id);
+					console.log(data);
 					data = data.map((ex)=> {
 						return {
 						public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 
@@ -33,6 +34,7 @@ const ExercisesPage = () => {
 						score: ex.score,
 						completedBy: `${ex.completedBy.firstname} ${ex.completedBy.lastname}`,
 						title: ex.exercise.title,
+						dueDate: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).dueDate?.split('-').reverse().join('/'),
 						id: ex._id
 					}}).filter((ex) => {return ex.public}).sort((a,b)=>{return b._addedAt - a._addedAt });
 					console.log(data);
@@ -124,7 +126,7 @@ const ExercisesPage = () => {
   return (
 	<Fragment>
 		<div className='homePage-container page--content' {...handlers}>
-			<div className='homePage--heading'>
+				<div className='page--heading'>
 					<Title text='Oefeningen'/>
 				</div>
 			<div className='exercises--container'>
@@ -160,7 +162,11 @@ const ExercisesPage = () => {
 							if(currentUser.userType === 'Teacher'){
 								return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>}
 							else {
-								return <ToDoExerciseCard id={ex.id} name={ex.title} score={ex.score} key={i}/>
+								if(ex.score === 'Nog niet ingediend'){
+									return <ToDoExerciseCard id={ex.id} name={ex.title} score={ex.score} key={i} dueDate={ex.dueDate}/>
+								} else {
+									return <ScoreCard onClick={()=>{history.push(Routes.COMPLETED_EXERCISE.replace(':id', ex.id))}} name={ex.title} score={ex.score} key={i}/>
+								}
 							}
 						}):
 						'Er zijn nog geen oefeningen aan deze klas toegevoegd'

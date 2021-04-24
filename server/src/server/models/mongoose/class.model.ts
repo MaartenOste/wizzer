@@ -9,6 +9,7 @@ interface IExercises {
   _exerciseGroupId: IExerciseGroup;
   public: boolean;
   _addedAt: Number;
+  dueDate: String;
 }
 
 interface IClass extends Document {
@@ -54,6 +55,10 @@ const classSchema: Schema = new Schema(
           required: false,
           type: Number,
         },
+        dueDate:{
+          type: String,
+          required: true
+        }
       } || null,
     ],
     _studentIds: [

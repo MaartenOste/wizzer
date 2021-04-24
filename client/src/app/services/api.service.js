@@ -164,7 +164,7 @@ const ApiProvider = ({children}) => {
     }
   }
 
-  const addExerciseToClass = async (exerciseId) => {
+  const addExerciseToClass = async (exerciseId, date) => {
     const classUrl = `/api/classes/add_exercise/${exerciseId}`;
     const myHeaders = {
       'Accept': 'application/json',
@@ -174,7 +174,7 @@ const ApiProvider = ({children}) => {
     const options = {
       method: 'POST',
       headers: myHeaders,
-      body: JSON.stringify({userId: currentUser.id}),
+      body: JSON.stringify({userId: currentUser.id, dueDate: date}),
       redirect: 'follow',
     };
     let response;
@@ -248,11 +248,43 @@ const ApiProvider = ({children}) => {
       }
     }
   }
+  const getExerciseById = async (id) => {
+    let url = `/api/exercises/${id}`;
+    let response;
+
+    try {
+      response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
 
   const getCompletedExerciseById = async (id) => {
     let url = `/api/completed_exercises/${id}`;
     let response;
 
+    try {
+      response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      if (response.status === 401 ) {
+        await logout();
+      }
+      else{
+        throw new Error(error);
+      }
+    }
+  }
+
+  const getTopThree = async (id) =>{
+    const url = `/api/classes/topthree/${id}`;
+    let response;
     try {
       response = await fetch(url);
       return await response.json();
@@ -310,6 +342,8 @@ const ApiProvider = ({children}) => {
         getFilledInExercisesFromStudent,
         getClassFromUser,
         getExercises,
+        getExerciseById,
+        getTopThree,
         getUserById,
         joinClassRoom,
         updateClass,

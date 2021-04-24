@@ -1,0 +1,47 @@
+.stage--container{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	height: 50vh;
+	width: 100%;
+	flex-grow: 1;
+
+	&__column{
+		display: flex;
+		flex-direction: column-reverse;
+		flex-grow: 1;
+
+	}
+
+	.stage--name{
+		text-align: center;
+		height: 30%;
+		display: flex;
+		span{
+			margin: auto;
+		}
+	}
+
+	.stage--bar{
+		font-size: 15vh;
+		display: flex;
+		span{
+			margin: auto;
+		}
+		&__second{
+			background-color: rgb(245, 245, 245);
+			height: 55%;
+			//border-right: 1px solid $color-black;
+		}
+		&__first{
+			background-color: $color-white;
+			height: 70%;
+
+		}
+		&__thrid{
+			background-color: rgb(245, 245, 245);
+			height: 40%;
+			//border-left: 1px solid $color-black;
+		}
+	}
+}

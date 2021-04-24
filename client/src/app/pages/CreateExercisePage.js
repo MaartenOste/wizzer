@@ -6,6 +6,8 @@ import { useApi } from '../services';
 import { useHistory } from 'react-router-dom'
 import * as Routes from '../routes';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import ExerciseDetail from '../components/exercises/ExerciseDetail';
+import {useSwipeable} from 'react-swipeable';
 
 const CreateExercisePage = () => {
 	const history = useHistory();
@@ -19,18 +21,20 @@ const CreateExercisePage = () => {
 
 	const [title, setTitle] = useState(localStorage.getItem('newExerciseTitle') || '');
 	const [description, setDescription] = useState(localStorage.getItem('newExerciseDescription') || '');
+	const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0,10));
 	const [videoUrl, setVideoUrl] = useState(localStorage.getItem('newExerciseVideoUrl') || '');
 
 	const [amountBefore, setAmountBefore] = useState(localStorage.getItem('amountBefore') || '');
 	const [amountAfter, setAmountAfter] = useState(localStorage.getItem('amountAfter') || '');
 	const [minScore, setMinScore] = useState(localStorage.getItem('minScore') || '');
 	const [maxScore, setMaxScore] = useState(localStorage.getItem('maxScore') || '');
+	const [selectedExercise, setSelectedExercise] = useState(localStorage.getItem('selectedExercise') || '');
 
 	const [dataForSubType, setDataForSubType] = useState();
 	const [wasCreatingExercise, setWasCreatingExercise] = useState(false);
 
 
-	const initFetch = useCallback(() => {
+	const getSubTypeData = useCallback(() => {
 		const fetchdata = async () => {
 			try {
 				let data = await getExercises(`subType:${exerciseSubType}`);
@@ -45,7 +49,7 @@ const CreateExercisePage = () => {
 
 	useEffect(()=>{
 		if (newExOption === 'choose' && exerciseSubType !== '') {
-			initFetch();
+			getSubTypeData();
 		}
 		// eslint-disable-next-line
 	}, [exerciseSubType])
@@ -140,6 +144,8 @@ const CreateExercisePage = () => {
 			setTitle('');
 			localStorage.removeItem('newExerciseDescription');
 			setDescription('');
+			localStorage.removeItem('newExerciseDueDate');
+			setDueDate('');
 			localStorage.removeItem('completedExerciseGeneral');
 			setCompletedExerciseGeneral(false);
 			localStorage.removeItem('amountAfter');
@@ -156,22 +162,36 @@ const CreateExercisePage = () => {
 		}
 	}
 
-	const handleAddExercise = async (exId) =>{
-		await addExerciseToClass(exId);
+	const handleAddExercise = async () =>{
+		await addExerciseToClass(selectedExercise, dueDate);
 		localStorage.removeItem('newExOption');
 		localStorage.removeItem('exerciseType');
 		localStorage.removeItem('exerciseSubType');
 		history.push(Routes.EXERCISE);
 	}
 
+	const handleSwipeMenu = (deltaX) =>{
+		if (deltaX >= 50) {
+			history.push(Routes.CLASSGROUP);
+		} else if(deltaX <= -50){
+			history.push(Routes.SETTINGS);
+		}
+	}
+
+	const handlers = useSwipeable({
+		onSwipedLeft: (ev)=>{handleSwipeMenu(ev.deltaX)},
+		onSwipedRight: (ev)=>{handleSwipeMenu(ev.deltaX)}
+	});
+
   return (
 	<>
-		<div className='createExPage-container'>
+		<div className='createExPage-container page--content' {...handlers}>
 			{wasCreatingExercise? 
 			<>
-			<div className='createExPage--heading'>
-				<Title text='Verdergaan?'/>
-			</div>
+				<div className='page--heading'>
+					<Title text='Verdergaan?'/>
+					<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+				</div>
 			<div className='createExPage--wasCreating'>
 				<div className='createExPage--wasCreating__heading'>
 					U was een {newExOption === 'create'?'nieuwe oefening aan het maken':'oefening aan het kiezen uit de database '}
@@ -191,8 +211,9 @@ const CreateExercisePage = () => {
 				{
 				newExOption === ''?
 				<>
-					<div className='createExPage--heading'>
+					<div className='page--heading'>
 						<Title text='Nieuwe oefening'/>
+						<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
 					</div>
 					<div className='createExPage--options'>
 						<NewExOptionCard title={'Nieuwe oefening maken'} text={'Wanneer u voor deze optie kiest kan u zelf uw oefening samen-stellen op basis van parameters.'} icon={<IoMdCreate />} onClick={()=>{ localStorage.setItem('newExOption', 'create'); setNewExOption('create');}}/>
@@ -202,27 +223,33 @@ const CreateExercisePage = () => {
 				:
 				newExOption === 'create'?
 				<>
-					<div className='createExPage--heading'>
-						<Title text='Oefening maken'/>
-					</div>
 					{completedExerciseGeneral === false?
 					<>
+						<>
+						<div className='page--heading'>
+							<Title text='Oefening maken'/>
+						</div>
 						<div className="CreateExercise--card">
 							<div className='CreateExercise--card__title'>Algemeen</div>
 							<div className='CreateExercise--card__gensetting'> <div>Titel</div> <input type='text' value={title} onChange={(ev)=>{ setTitle(ev.target.value);}}/> </div>
 							<div className='CreateExercise--card__gensetting'> <div>Beschrijving</div> <input type='text' value={description}  onChange={(ev)=>{ setDescription(ev.target.value);}}/> </div>
+							<div className='CreateExercise--card__gensetting'> <div>Indienen tot en met</div> <input type='date' defaultValue={new Date().toISOString().slice(0,10)} onChange={(ev)=>{setDueDate(ev.target.value)}}/> </div>
 
 							{false && <Input label='Video url' text={videoUrl} textChange={setVideoUrl} extraClasses='CreateExercise--card__input'/>}
 						</div>
 						<div className='CreateExercise--actions'>
 							<Button text='Annuleren' type='secondary' onClick={()=>{localStorage.removeItem('newExOption'); setNewExOption('');}}/>
-							<Button text='Volgende' type='primary' onClick={()=>{if(title !== '' && description !== ''){localStorage.setItem('newExerciseTitle', title); localStorage.setItem('newExerciseDescription', description); localStorage.setItem('completedExerciseGeneral', true); setCompletedExerciseGeneral(true)}}}/>
+							<Button text='Volgende' type='primary' onClick={()=>{if(title !== '' && description !== ''){localStorage.setItem('newExerciseTitle', title); localStorage.setItem('newExerciseDescription', description); localStorage.setItem('newExerciseDueDate', dueDate); localStorage.setItem('completedExerciseGeneral', true); setCompletedExerciseGeneral(true)}}}/>
 						</div>
+						</>
 					</>
 					:
 					<>
-					{completedExerciseDif === false?
+					{completedExerciseDif === false || completedExerciseDif === 'false'?
 					<>
+						<div className='page--heading'>
+							<Title text='Oefening maken'/>
+						</div>
 						<div className="CreateExercise--card">
 							<div className='CreateExercise--card__title'>Differentiëren</div>
 							<div className='CreateExercise--card__difsetting'> <div>Aantal voor differentiëren</div> <input type='number' placeholder={5} value={amountBefore} onChange={(ev)=>{ console.log(ev.target.value); setAmountBefore(parseInt(ev.target.value));}}/> </div>
@@ -232,7 +259,7 @@ const CreateExercisePage = () => {
 							{false && <Input label='Video url' text={videoUrl} textChange={setVideoUrl} extraClasses='CreateExercise--card__input'/>}
 						</div>
 						<div className='CreateExercise--actions'>
-							<Button text='Annuleren' type='secondary' onClick={()=>{localStorage.removeItem('newExerciseTitle'); localStorage.removeItem('newExerciseDescription'); setCompletedExerciseGeneral(false)}}/>
+							<Button text='Annuleren' type='secondary' onClick={()=>{localStorage.removeItem('newExerciseTitle'); localStorage.removeItem('newExerciseDescription'); localStorage.removeItem('newExerciseDueDate'); setCompletedExerciseGeneral(false)}}/>
 							<Button text='Volgende' type='primary' onClick={()=>{if(amountBefore !== '' && amountAfter !== '' && maxScore !== '' && minScore !== ''){
 								localStorage.setItem('amountBefore', amountBefore);
 								localStorage.setItem('amountAfter', amountAfter);
@@ -247,18 +274,44 @@ const CreateExercisePage = () => {
 					<>
 					{exerciseType === ''?
 					<>
+						<div className='page--heading'>
+							<Title text='Oefening maken'/>
+							<Button text='terug' type='primary' onClick={()=>{
+								localStorage.setItem('completedExerciseDif', false);
+								localStorage.removeItem('amountBefore', amountBefore);
+								localStorage.removeItem('amountAfter', amountAfter);
+								localStorage.removeItem('maxScore', maxScore);
+								localStorage.removeItem('minScore', minScore);
+								setCompletedExerciseDif(false);}}/>
+						</div>
 						<ExerciseSubjectSelector onClick={setExerciseType} />
-						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('newExOption'); setNewExOption('')}}/>
+						<div className='page--heading'>
+							<Button text='terug' type='primary' onClick={()=>{
+								localStorage.setItem('completedExerciseDif', false);
+								localStorage.removeItem('amountBefore', amountBefore);
+								localStorage.removeItem('amountAfter', amountAfter);
+								localStorage.removeItem('maxScore', maxScore);
+								localStorage.removeItem('minScore', minScore);
+								setCompletedExerciseDif(false);
+								}
+							}/>
+						</div>
 					</>
 					:
 					<>
 					{!exerciseSubType || exerciseSubType === ''?
 					<>
+						<div className='page--heading'>
+							<Title text='Oefening maken'/>
+							<Button text='terug' type='primary' onClick={()=>{localStorage.removeItem('exerciseType'); setExerciseType('');}}/>
+						</div>
 						Kies een type oefening.
 						{exerciseType && exerciseTypes[exerciseType].map((type, i)=>{
 							return <div className='exerciseTypeCard' key={i} onClick={()=>{localStorage.setItem('exerciseSubType', type.toLowerCase().split(' ').join('-')); setexerciseSubType(type.toLowerCase().split(' ').join('-')); history.push(Routes.CREATE_EXERCISE_DETAIL.replace(':type', type.toLowerCase().split(' ').join('-')))}}>{type}</div>;
 						})}
-						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exerciseType'); setExerciseType('')}}/>
+						<div className='page--heading'>
+							<Button text='terug' type='primary' onClick={()=>{localStorage.removeItem('exerciseType'); setExerciseType('');}}/>
+						</div>
 					</>
 					:
 					<>
@@ -274,8 +327,9 @@ const CreateExercisePage = () => {
 				</>
 				:
 				<>
-					<div className='createExPage--heading'>
+					<div className='page--heading'>
 						<Title text='Oefening kiezen'/>
+						<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
 					</div>
 					{exerciseType === ''?
 					<>
@@ -294,13 +348,35 @@ const CreateExercisePage = () => {
 					</>
 					:
 					<>
-						{dataForSubType && dataForSubType.length>0 ? dataForSubType.map((ex, i)=>{
-							return <div className='exerciseTypeCard' key={i} onClick={()=>{handleAddExercise(ex.id)}}>{ex.title}</div>
-						}):
-						'Er zijn geen oefeningen terug te vinden in de database voor deze soort oefening.'
+						{selectedExercise === ''?
+						<>
+							{dataForSubType && dataForSubType.length>0 ? dataForSubType.map((ex, i)=>{
+								return <div className='exerciseTypeCard' key={i} onClick={()=>{setSelectedExercise(ex.id)}} /*onClick={()=>{handleAddExercise(ex.id)}}*/ >{ex.title} <br/><small><b>door: {ex.createdBy.firstname} {ex.createdBy.lastname}</b></small></div>
+							}):
+							'Er zijn geen oefeningen terug te vinden in de database voor deze soort oefening.'
+							}
+							<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exerciseSubType'); setexerciseSubType('')}}/>
+						</>
+						:
+						<div className="createExercise--lastStep">
+							<div className="createExercise--lastStep__content">
+								<ExerciseDetail id={selectedExercise}/>
+								<div className="CreateExercise--card">
+									<div className='CreateExercise--card__title'>
+										Laatste details
+									</div>
+									<div className='CreateExercise--card__gensetting'> <div>Indienen tot en met</div> <input type='date' defaultValue={new Date().toISOString().slice(0,10)} onChange={(ev)=>{setDueDate(ev.target.value)}}/> </div>
+								</div>
+							</div>
+
+							<div className='FillInExercisePage--container__actions'>
+								<Button text='annuleren' type='secondary' onClick={()=>{localStorage.removeItem('exerciseSubType'); setexerciseSubType('')}}/>
+								<Button text='toevoegen' type='primary' onClick={()=>{handleAddExercise()}}/>
+							</div>
+						</div>
 						}
-						<Button text='annuleren' type='primary' onClick={()=>{localStorage.removeItem('exerciseSubType'); setexerciseSubType('')}}/>
 					</>
+
 					}
 					</>
 					}

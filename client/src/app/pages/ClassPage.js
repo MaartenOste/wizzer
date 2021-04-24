@@ -2,7 +2,7 @@ import { default as React, Fragment, useCallback, useEffect, useState} from 'rea
 import * as Routes from '../routes';
 import { useApi, useAuth } from '../services';
 import { useHistory } from 'react-router';
-import { Button, Title, StudentCard, NavBar } from '../components';
+import { Button, Title, Stage, StudentCard, NavBar } from '../components';
 import {useSwipeable} from 'react-swipeable';
 
 const ClassPage = () => {
@@ -11,7 +11,9 @@ const ClassPage = () => {
 	const [students, setStudents] = useState();
 	const [classId, setClassId] = useState();
 
-	const { getClassFromUser } = useApi();
+	const [topThree, setTopThree] = useState();
+
+	const { getClassFromUser, getTopThree } = useApi();
 	const [hasClass, setHasClass] = useState(null);
 
 	const initFetch = useCallback(() => {
@@ -21,12 +23,17 @@ const ClassPage = () => {
 					setClassId(data.id);
 					setStudents(data.students.sort((a,b)=>{return (''+ a.lastname).localeCompare(b.lastname)}));
 					setHasClass(true);
+					console.log(data);
+					if(currentUser.userType === 'Student'){
+						let topthree = await getTopThree(data.id);
+						setTopThree(topthree);
+					}
 				} catch (error) {
 					setHasClass(false);
 				}
 		}
 		fetchdata();
-	},[ getClassFromUser]);
+	},[ getClassFromUser, getTopThree, currentUser]);
 
 	useEffect(() => {
 		initFetch();
@@ -71,9 +78,14 @@ const ClassPage = () => {
 					</div>
 					{hasClass?
 						<>
-						{students && students.map((student, i) => {
-							return <StudentCard id={student.id} name={`${student.firstname} ${student.lastname}`} key={i}/>
-						})}
+							{currentUser.userType === 'Teacher'?
+								<>
+									{students && students.map((student, i) => {
+										return <StudentCard id={student.id} name={`${student.firstname} ${student.lastname}`} key={i}/>
+									})}
+								</>
+								:<>{topThree &&<Stage first={topThree[0][0]} second={topThree[1][0]} thrid={topThree[2][0]}/>}</>
+							}
 						</>
 						:<>
 							{currentUser.userType === 'Student' ? 'Je ziet nog niet in een klas, klik op de link die je leerkracht je stuurde om bij een klas aan te sluiten':'maak een klas'}

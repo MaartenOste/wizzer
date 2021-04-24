@@ -6,6 +6,8 @@
 	text-transform: capitalize;
 	cursor: pointer;
 
+
+
 	&__heading{
 		display: flex;
 		flex-direction: row;
@@ -20,6 +22,17 @@
 
 		.StudentCard--arrow{
 			font-size: $font-size-large;
+		}
+
+		&:not(.openedCard){
+			&:hover{
+				background-color: rgb(233, 233, 233);
+				border-radius: 15px;
+	
+				svg{
+					animation: wiggle 1s ease-in-out infinite;
+				}
+			}
 		}
 	}
 	
@@ -57,6 +70,7 @@
 			&:hover{
 				background-color: rgb(233, 233, 233);
 				border-radius: 15px;
+
 				svg{
 					animation: wiggle 1s ease-in-out infinite;
 				}
@@ -120,6 +134,17 @@
 		&.openedCard{
 			border-bottom: 1px solid #aeaeae88;
 		}
+
+		&:not(.openedCard){
+			&:hover{
+				background-color: rgb(233, 233, 233);
+				border-radius: 15px;
+				svg{
+					animation: wiggle 1s ease-in-out infinite;
+				}
+				
+			}
+		}
 	}
 
 	&__body{
@@ -146,6 +171,16 @@
 	box-shadow: -2px 3px 3px #00000070;
 	cursor: pointer;
 
+	&:hover{
+		background-color: rgb(233, 233, 233);
+		border-radius: 15px;
+		svg{
+			animation: wiggle 1s ease-in-out infinite;
+		}
+		
+	}
+	
+
 	&__heading{
 		display: flex;
 		flex-direction: row;
@@ -162,15 +197,19 @@
 		}
 
 		.ScoreCard--score{
-			width: 25%;
+			max-width: 25%;
 			font-size: $font-size-small;
 			text-align: center;
 			word-wrap: break-word;
 			display: flex;
 			flex-direction: row;
 			flex-wrap: nowrap;
-			justify-content: space-around;
+			justify-content: space-between;
 			align-items: center;
+
+			svg{
+				margin-left: 5px;
+			}
 		}
 	}
 }
@@ -230,6 +269,17 @@
 			border-bottom: 1px solid #aeaeae88;
 		}
 
+		&:not(.openedCard){
+			&:hover{
+				background-color: rgb(233, 233, 233);
+				border-radius: 15px;
+				svg{
+					animation: wiggle 1s ease-in-out infinite;
+				}
+				
+			}
+		}
+
 		.ToDoExerciseCard--arrow{
 			font-size: $font-size-large;
 		}
@@ -256,10 +306,10 @@
 }
 
 @keyframes wiggle {
-	0% {transform: rotate(15deg) scale(1.5); }
-	15% {transform: rotate(-15deg) scale(1.5);}
-	30% {transform: rotate(15deg) scale(1.5);}
-	45% {transform: rotate(-15deg) scale(1.5);}
-	60% {transform: rotate(0deg) scale(1.5);}
-	100% {transform: rotate(0deg) scale(1.5);}
+	0% {transform: rotate(15deg);}
+	15% {transform: rotate(-15deg);}
+	30% {transform: rotate(15deg);}
+	45% {transform: rotate(-15deg);}
+	60% {transform: rotate(0deg);}
+	100% {transform: rotate(0deg);}
 }
