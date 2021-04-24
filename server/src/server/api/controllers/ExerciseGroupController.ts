@@ -128,7 +128,6 @@ class ExerciseGroupController {
         dueDate: req.body.dueDate,
       };
 
-
       const classGroup = await Class.updateOne(
         { _teacherId: req.session.passport.user.id },
         { $push: { _exercises: data } },
