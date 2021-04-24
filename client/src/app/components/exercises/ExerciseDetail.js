@@ -24,9 +24,7 @@ const ExerciseDetail = ({id}) => {
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
 			let data = await getExerciseById(id);
-			console.log(data);
 			setData(data);
-
 		}
 		fetchdata();
 	},[getExerciseById, id]);
@@ -37,7 +35,6 @@ const ExerciseDetail = ({id}) => {
 
 	useEffect(()=>{
 		if (data){
-			console.log(data);
 			let totalExerciseData ={};
 
 			Object.keys(data.exercises).forEach((el)=>{

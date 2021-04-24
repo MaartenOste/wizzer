@@ -14,7 +14,6 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 					result.push(<div className='NumberLine--number' key={i}><div>{i}</div><div className='NumberLine--number__verticalLine'></div></div>)
 				} else if (filledInValues) {
 					tempCorrectAnswers = [...tempCorrectAnswers, i]
-					console.log('settnig correct answer: ', i);
 					if(i !== parseInt(filledInValues[((i-min)/interval)])){
 						setWrongAnswer(true);
 					}

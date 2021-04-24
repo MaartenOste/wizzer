@@ -23,7 +23,6 @@ const ClassPage = () => {
 					setClassId(data.id);
 					setStudents(data.students.sort((a,b)=>{return (''+ a.lastname).localeCompare(b.lastname)}));
 					setHasClass(true);
-					console.log(data);
 					if(currentUser.userType === 'Student'){
 						let topthree = await getTopThree(data.id);
 						setTopThree(topthree);

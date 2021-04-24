@@ -82,7 +82,6 @@ const ApiProvider = ({children}) => {
   }
 
   const joinClassRoom = async (classId) => {
-    console.log('in join');
     const classUrl = `/api/classes/join/${classId}/${currentUser.id}`;
 
     const options = {
@@ -94,7 +93,6 @@ const ApiProvider = ({children}) => {
     try {
       response = await fetch(classUrl, options);
       let data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       if (response.status === 401 ) {
@@ -194,7 +192,6 @@ const ApiProvider = ({children}) => {
   }
 
   const updateClass = async (classData, exerciseId) => {
-    console.log(classData.id);
     const classUrl = `/api/classes/${classData.id}`;
     const myHeaders = {
       'Accept': 'application/json',
@@ -216,7 +213,6 @@ const ApiProvider = ({children}) => {
     try {
       response = await fetch(classUrl, options);
       let data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       if (response.status === 401 ) {
@@ -229,7 +225,6 @@ const ApiProvider = ({children}) => {
   }
 
   const getExercises = async (filters= '') => {
-    console.log(filters);
     let url = `/api/exercises`;
     if (filters !== '') {
       url = `/api/exercises?filters=${filters}`;
@@ -309,7 +304,6 @@ const ApiProvider = ({children}) => {
       answers,
     }
 
-    console.log(update);
     const options = {
       method: 'PUT',
       headers: myHeaders,

@@ -103,12 +103,10 @@ class AuthService {
                         token: 'azerazer',
                       },
                     });
-                    console.log('saving new user');
 
                     await tempuser.save();
                     return cb(false, tempuser);
                   }
-                  console.log('user found');
                   return cb(false, user);
                 },
               );

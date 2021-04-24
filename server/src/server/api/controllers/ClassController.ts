@@ -49,7 +49,6 @@ class ClassController {
         .populate('exercise')
         .populate('completedBy')
         .exec();
-      console.log(temp);
 
       let result: any = {};
       temp.forEach(el => {

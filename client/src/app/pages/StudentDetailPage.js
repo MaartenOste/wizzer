@@ -16,7 +16,6 @@ const StudentDetailPage = () => {
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
 			let data = await getFilledInExercisesFromStudent(id);
-			console.log(data);
 			data = data.map((ex)=> {
 				return {
 				id: ex.id,
@@ -30,7 +29,6 @@ const StudentDetailPage = () => {
 			if (currentUser.userType === 'Student') {
 				data = data.filter((ex) => {return ex.public});
 			}
-			console.log(data);
 			setExercises(data.sort((a,b)=>{return b._addedAt - a._addedAt }));
 		}
 		fetchdata();

@@ -20,13 +20,11 @@ const ExercisesPage = () => {
 		const fetchdata = async () => {
 			try {
 				let data;
-				console.log(currentUser.userType);
 				if (currentUser.userType === 'Teacher') {
 					data = await getClassFromUser();
 					setClassData(data);
 				} else {
 					data = await getFilledInExercisesFromStudent(currentUser.id);
-					console.log(data);
 					data = data.map((ex)=> {
 						return {
 						public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 
@@ -37,13 +35,10 @@ const ExercisesPage = () => {
 						dueDate: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).dueDate?.split('-').reverse().join('/'),
 						id: ex._id
 					}}).filter((ex) => {return ex.public}).sort((a,b)=>{return b._addedAt - a._addedAt });
-					console.log(data);
 					setExercises(data);
 				}
-				console.log(data);
 				setHasClass(true);
 			} catch (error) {
-				console.error('Completed exercises not found');
 				setHasClass(false);
 			}
 		}
@@ -95,7 +90,6 @@ const ExercisesPage = () => {
 			}
 		}		
 		const response = await deleteExerciseFromClass(id);
-		console.log(response);
 		setClassData(response);
 	}
 

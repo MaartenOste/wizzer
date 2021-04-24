@@ -9,8 +9,6 @@ const ToDoExerciseCard = ({name, score, id, onClick=()=>{}, dueDate=new Date().t
 	const [open, setOpen] = useState();
 	const history = useHistory();
 
-	console.log();
-
 	return (
 	<div className={`ToDoExerciseCard--container ${extraClasses}`}>
 		{score === 'Nog niet ingediend'?

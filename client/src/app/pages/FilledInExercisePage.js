@@ -36,7 +36,6 @@ const FilledInExercisePage = () => {
 		const fetchdata = async () => {
 			try {
 				let temp = await getCompletedExerciseById(id);
-				console.log(temp);
 				setData(temp);
 			} catch (error) {
 				console.error(error);
@@ -51,7 +50,6 @@ const FilledInExercisePage = () => {
 
 	useEffect(()=>{
 		if (data) {
-			console.log(data);
 			let correctValues = {};
 	
 			let temp = [];

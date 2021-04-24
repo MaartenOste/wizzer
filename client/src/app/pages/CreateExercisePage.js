@@ -252,7 +252,7 @@ const CreateExercisePage = () => {
 						</div>
 						<div className="CreateExercise--card">
 							<div className='CreateExercise--card__title'>Differentiëren</div>
-							<div className='CreateExercise--card__difsetting'> <div>Aantal voor differentiëren</div> <input type='number' placeholder={5} value={amountBefore} onChange={(ev)=>{ console.log(ev.target.value); setAmountBefore(parseInt(ev.target.value));}}/> </div>
+							<div className='CreateExercise--card__difsetting'> <div>Aantal voor differentiëren</div> <input type='number' placeholder={5} value={amountBefore} onChange={(ev)=>{setAmountBefore(parseInt(ev.target.value));}}/> </div>
 							<div className='CreateExercise--card__difsetting'> <div>Aantal na differentiëren</div> <input type='number' placeholder={5} value={amountAfter} onChange={(ev)=>{ setAmountAfter(parseInt(ev.target.value));}}/> </div>
 							<div className='CreateExercise--card__difsetting'> <div>Overschakelen naar lager niveau tot</div> <input type='text' placeholder={2} value={maxScore}  onChange={(ev)=>{ setMaxScore(ev.target.value );}}/> </div>
 							<div className='CreateExercise--card__difsetting'> <div>Overschakelen naar hoger niveau vanaf</div> <input type='text'  placeholder={4} value={minScore}  onChange={(ev)=>{ setMinScore(ev.target.value );}}/></div>

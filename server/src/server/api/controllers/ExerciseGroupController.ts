@@ -121,8 +121,6 @@ class ExerciseGroupController {
         throw new NotFoundError();
       }
 
-      console.log(req.body.dueDate);
-
       const data = {
         _exerciseGroupId: exerciseGroup._id,
         public: false,
@@ -130,7 +128,6 @@ class ExerciseGroupController {
         dueDate: req.body.dueDate,
       };
 
-      console.log(data);
 
       const classGroup = await Class.updateOne(
         { _teacherId: req.session.passport.user.id },

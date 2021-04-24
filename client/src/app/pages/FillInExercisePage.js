@@ -143,13 +143,10 @@ const FillInExercisePage = () => {
 			})
 
 			if (correctAnswers/totalCorrectValues.first.length <= data.exercise.exercises.goEasy) {
-				console.log('schakelen naar easy');
 				setDifficulty('easy')
 			} else if (correctAnswers/totalCorrectValues.first.length >= data.exercise.exercises.goHard){
-				console.log('schakelen naar hard');
 				setDifficulty('hard')
 			} else{
-				console.log('schakelen naar medium');
 				setDifficulty('medium')
 			}
 		}
