@@ -17,6 +17,7 @@ const StudentDetailPage = () => {
 		const fetchdata = async () => {
 			let data = await getFilledInExercisesFromStudent(id);
 			data = data.map((ex)=> {
+				console.log(ex);
 				return {
 				id: ex.id,
 				public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 

@@ -224,6 +224,11 @@
 	font-size: $font-size-medium;
 	padding: 15px;
 	text-align: center;
+
+	&.disabled{
+		cursor: auto;
+		background-color: #cacaca;
+	}
 }
 
 .PrivateExercise{

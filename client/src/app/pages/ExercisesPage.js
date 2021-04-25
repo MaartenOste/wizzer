@@ -25,6 +25,7 @@ const ExercisesPage = () => {
 					setClassData(data);
 				} else {
 					data = await getFilledInExercisesFromStudent(currentUser.id);
+					
 					data = data.map((ex)=> {
 						return {
 						public: ex.class._exercises.find((x) => ex._exerciseId === x._exerciseGroupId).public, 
@@ -141,19 +142,20 @@ const ExercisesPage = () => {
 					}
 					{Array.isArray(filteredExercises) ?
 						filteredExercises.length >0?
-							<div className="exercises--mapped__container">
+							<div className={`exercises--mapped__container ${currentUser.userType === 'Teacher'?'teacherexercise':''}`}>
 								{filteredExercises.map((ex, i) => {
 									return <ExerciseCard key={i} id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>
 								})}
 							</div>
 							:
-							<>
+							<div className={`exercises--mapped__container ${currentUser.userType === 'Teacher'?'teacherexercise':''}`}>
 								{exercises.length>0 ?'Geen oefenignen gevonden voor de geselecteerde filters.':'Er zijn nog geen oefeningen aan deze klas toegevoegd'}
-							</>
+							</div>
 					:
-					<div className="exercises--mapped__container">
+					<div className={`exercises--mapped__container ${currentUser.userType === 'Teacher'?'teacherexercise':''}`}>
 					{exercises.length>0 ? exercises.map((ex, i) => {
 							if(currentUser.userType === 'Teacher'){
+								//console.log('exercise: ', ex);
 								return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>}
 							else {
 								if(ex.score === 'Nog niet ingediend'){

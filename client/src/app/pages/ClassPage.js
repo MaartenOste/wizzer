@@ -18,18 +18,18 @@ const ClassPage = () => {
 
 	const initFetch = useCallback(() => {
 		const fetchdata = async () => {
-				try {
-					let data = await getClassFromUser();
-					setClassId(data.id);
-					setStudents(data.students.sort((a,b)=>{return (''+ a.lastname).localeCompare(b.lastname)}));
-					setHasClass(true);
-					if(currentUser.userType === 'Student'){
-						let topthree = await getTopThree(data.id);
-						setTopThree(topthree);
-					}
-				} catch (error) {
-					setHasClass(false);
+			try {
+				let data = await getClassFromUser();
+				setClassId(data.id);
+				setStudents(data.students.sort((a,b)=>{return (''+ a.lastname).localeCompare(b.lastname)}));
+				setHasClass(true);
+				if(currentUser.userType === 'Student'){
+					let topthree = await getTopThree(data.id);
+					setTopThree(topthree);
 				}
+			} catch (error) {
+				setHasClass(false);
+			}
 		}
 		fetchdata();
 	},[ getClassFromUser, getTopThree, currentUser]);

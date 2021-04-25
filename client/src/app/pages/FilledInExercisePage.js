@@ -1,5 +1,5 @@
 import { default as React, Fragment, useCallback, useEffect, useState} from 'react';
-import { Button, NumberLine, NavBar, Title } from '../components';
+import { Button, NumberLine, NavBar, Title, MentalMath } from '../components';
 import { useApi, useAuth} from '../services';
 import * as Routes from '../routes';
 import { useParams, useHistory } from 'react-router-dom';
@@ -8,7 +8,8 @@ import { useSwipeable } from 'react-swipeable';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const KeysToComponentMap = {
-	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'}
+	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'},
+	"hoofdrekenen": {component: MentalMath, autoCorrect: true, instruction: 'Los de oefeningen op.'}
 };
 
 const difficultyToNl = {
@@ -16,7 +17,6 @@ const difficultyToNl = {
 	"medium": "gemiddeld",
 	"easy": "makkelijker"
 };
-
 
 const FilledInExercisePage = () => {
 	const {id} = useParams();

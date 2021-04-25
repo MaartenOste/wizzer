@@ -44,9 +44,7 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 	useEffect(()=>{
 		if (data) {
 			let container = document.querySelector(`#nl-${id}`);
-			//console.log(container.querySelectorAll('.NumberLine--number'));
 			let widths = [].slice.call(container.querySelectorAll('.NumberLine--number')).map(function(div){ return div.getBoundingClientRect().width; });
-			//console.log(widths);
 			
 			let biggestDiv = Math.max.apply(null, widths);
 			let containerWidth = container.getBoundingClientRect().width;

@@ -57,7 +57,7 @@ const classSchema: Schema = new Schema(
         },
         dueDate: {
           type: String,
-          required: true,
+          required: false,
         },
       } || null,
     ],

@@ -214,7 +214,7 @@ class ClassController {
         });
 
         await CompletedExercise.insertMany(exercises);
-
+        
         return res.status(200).json(classGroup);
       } else {
         throw new Error('User already in class');

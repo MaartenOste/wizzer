@@ -23,11 +23,14 @@
 		.webFilters{
 			display: flex;
 			flex-direction: column;
-			width: 60%;
+			width: 35%!important;
 			margin-left: 5%;
 			height: fit-content;
-
-		
+		}
+	}
+	.exercises--mapped__container {
+		&.teacherexercise{
+			width: 60%!important;
 		}
 	}
 }

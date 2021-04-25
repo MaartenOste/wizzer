@@ -1,0 +1,38 @@
+.MentalMath{
+	position: relative;
+
+	&--numbersContainer{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		box-sizing: border-box;
+		margin-bottom: 15px;
+
+		input{
+			text-align: center;
+			padding: 2px 0;
+			width: 50px;
+			font-size: $font-size-medium;
+			color: $color-black;
+			border: 1px solid $color-black;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		input[type=number] {
+			-moz-appearance:textfield; /* Firefox */
+		}
+		
+	}
+
+	&--solution{
+		width: 100%;
+		padding-top: 15px;
+		margin-top: 30px;
+		border-top: solid 2px $color-grey-middle;
+	}
+}

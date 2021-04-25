@@ -1,5 +1,5 @@
 import { default as React, Fragment, useEffect, useState, useCallback} from 'react';
-import { Button, NumberLine, NavBar, Title } from '../components';
+import { Button, NumberLine, NavBar, Title, MentalMath} from '../components';
 import {useApi} from '../services'
 import {  useParams, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
@@ -10,7 +10,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useSwipeable } from 'react-swipeable';
 
 const KeysToComponentMap = {
-	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'}
+	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'},
+	"hoofdrekenen": {component: MentalMath, autoCorrect: true, instruction: 'Los de oefeningen op.'}
 };
 
 const FillInExercisePage = () => {
@@ -137,17 +138,27 @@ const FillInExercisePage = () => {
 	const handlePreDiff = () =>{
 		if(KeysToComponentMap[data.exercise.subType].autoCorrect) {
 			let correctAnswers = 0;
+			console.log(totalCorrectValues);
+			console.log(totalAnswers);
 			totalCorrectValues.first.forEach((el, i)=>{
-				if(isEqual(el,totalAnswers.first[i]))
+				if(isEqual(el,totalAnswers.first[i])){
+					console.log(totalCorrectValues);
+					console.log(totalAnswers.first[i]);
 					correctAnswers++;
+				}
 			})
 
 			if (correctAnswers/totalCorrectValues.first.length <= data.exercise.exercises.goEasy) {
 				setDifficulty('easy')
+				console.log('nr easy');
 			} else if (correctAnswers/totalCorrectValues.first.length >= data.exercise.exercises.goHard){
 				setDifficulty('hard')
+				console.log('nr hard');
+
 			} else{
 				setDifficulty('medium')
+				console.log('nr med');
+
 			}
 		}
 		setSlide(slide+1);
@@ -215,7 +226,7 @@ const FillInExercisePage = () => {
 				>
 					<div>
 						<p>{data.exercise.description}</p>
-							Je gaat zo meteen een oefening over {data.exercise.subType.replace('-', ' ')} maken. Hier is nog even een voorbeeld:
+							Je gaat zo meteen een oefening over {data.exercise.subType.replaceAll('-', ' ')} maken. Hier is nog even een voorbeeld:
 						{example}
 					</div>
 					{exercise && exercise.first}

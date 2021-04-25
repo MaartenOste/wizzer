@@ -62,6 +62,7 @@ const CreateExerciseDetailPage = () => {
 			type: localStorage.getItem('exerciseType'),
 			subType: localStorage.getItem('exerciseSubType'),
 		}
+		console.log(data);
 		await createExercise(data);
 
 		localStorage.removeItem('newExerciseTitle');
@@ -99,7 +100,7 @@ const CreateExerciseDetailPage = () => {
 			<div className='createExDetailPage--container page--content' {...handlers}>
 				<div className='page--heading'>
 					<Title text={type}/>
-					<Button text='terug' type='primary' onClick={()=> {history.goBack()}}/>
+					<Button text='terug' type='primary' onClick={()=> {localStorage.removeItem('exerciseSubType'); history.goBack()}}/>
 				</div>
 				<Carousel 
 					swipeable={false}
@@ -113,6 +114,7 @@ const CreateExerciseDetailPage = () => {
 						De oefeningen die u op volgende pagina's zal maken tellen als basisoefeningen.
 					</div>
 					{exercisesDataBeforeDiff && exercisesDataBeforeDiff.map((x, i)=>{
+						console.log(x);
 						let props = {};
 						x.forEach((state) => {
 							props[`${state.name}`] = state.value;
@@ -120,7 +122,7 @@ const CreateExerciseDetailPage = () => {
 						return <div key={i}>
 								<div className='createExDetailPage--settings__container'>
 							{x.map((state, j)=>{
-								return 	<div  className='createExDetailPage--settings__setting' key={j}>
+								return  <div  className='createExDetailPage--settings__setting' key={j}>
 											<div>{state.displayName}</div>
 											<input type={state.type} placeholder={state.value.toString()} onChange={(ev)=>{ let temp = cloneDeep(exercisesDataBeforeDiff); temp[i][j].value = state.type==='number'?parseInt(ev.target.value):ev.target.value; setExercisesDataBeforeDiff(temp)}}/>
 										</div>
@@ -193,7 +195,7 @@ const CreateExerciseDetailPage = () => {
 					})}
 				</Carousel>
 				<div className='createExDetailPage--container__actions'>
-					<Button type='secondary' text='vorige' onClick={()=>{slide>0 ? setSlide(slide-1): history.push(Routes.CREATE_EXERCISE)}}/>
+					<Button type='secondary' text='vorige' onClick={()=>{if(slide>0){setSlide(slide-1)} else {localStorage.removeItem('exerciseSubType'); history.push(Routes.CREATE_EXERCISE);}}}/>
 					{slide === 3+parseInt(amountBefore)+parseInt(amountAfter)*3?
 						<Button type='primary' text='afronden' onClick={()=>{ handleFinish() }}/>
 						:
