@@ -73,8 +73,9 @@ exerciseGroupSchema.virtual('createdBy', {
 });
 
 exerciseGroupSchema.methods.slugify = function() {
-  this.slug = slug(this.title);
-  this.subType = slug(this.subType);
+  let temp = this as any;
+  temp.slug = slug(temp.title);
+  temp.subType = slug(temp.subType);
 };
 
 exerciseGroupSchema.pre<IExerciseGroup>('validate', function(next) {

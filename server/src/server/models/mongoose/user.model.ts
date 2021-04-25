@@ -108,7 +108,7 @@ userSchema.methods.comparePassword = function(
   candidatePassword: String,
   cb: Function,
 ) {
-  const user = this;
+  const user = this as IUser;
   bcrypt.compare(
     candidatePassword,
     user.localProvider.password,

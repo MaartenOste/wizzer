@@ -18,6 +18,8 @@ interface ICompletedExercise extends Document {
   answers: IAnswer;
 
   _completedBy: IUser['_id'];
+  completedBy: IUser;
+
   _classId: IClass['_id'];
   _exerciseId: IExerciseGroup['_id'];
 

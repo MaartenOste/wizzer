@@ -82,7 +82,8 @@ const classSchema: Schema = new Schema(
 );
 
 classSchema.methods.slugify = function() {
-  this.slug = slug(this.name);
+  let temp = this as any;
+  temp.slug = slug(temp.name);
 };
 
 classSchema.pre<IClass>('validate', function(next) {
