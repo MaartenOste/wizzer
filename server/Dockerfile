@@ -1,6 +1,6 @@
 FROM node:14-slim
 
-WORKDIR user/src/app
+WORKDIR /client
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD []
+CMD ["npm", "run", "serve"]
