@@ -1,6 +1,7 @@
 FROM node:14-slim
 
-WORKDIR /client
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
