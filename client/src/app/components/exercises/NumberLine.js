@@ -1,9 +1,11 @@
 import { default as React, useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=()=>{}, addCorrectValue=()=>{}, onTabPress= ()=>{}, filledInValues = false}) => {
 	const [data, setData] = useState()
 	const [wrongAnswer, setWrongAnswer] = useState(false);
 	const [correctAnswers, setCorrectAnswers] = useState([]);
+	let id = v4().replaceAll('-', '');
 
 	useEffect(()=>{
 		let result = [];
@@ -41,25 +43,35 @@ const NumberLine = ({ min, max, interval, inputFieldsPositions, setFillInValues=
 
 	useEffect(()=>{
 		if (data) {
-			let widths = [].slice.call(document.getElementsByClassName('NumberLine--number')).map(function(div){ return div.getBoundingClientRect().width; });
+			let container = document.querySelector(`#nl-${id}`);
+			//console.log(container.querySelectorAll('.NumberLine--number'));
+			let widths = [].slice.call(container.querySelectorAll('.NumberLine--number')).map(function(div){ return div.getBoundingClientRect().width; });
+			//console.log(widths);
+			
 			let biggestDiv = Math.max.apply(null, widths);
-			let containerWidth = document.getElementsByClassName('NumberLine--numbersContainer')[0].getBoundingClientRect().width
-			let items = document.getElementsByClassName('NumberLine--number');
+			let containerWidth = container.getBoundingClientRect().width;
+			let items = container.querySelectorAll('.NumberLine--number');
 			let maxWidth = 100/Math.floor(containerWidth/biggestDiv);
 
-			for (let i = 0; i < items.length; i++) {
-				items[i].style.width = `${maxWidth}%`
+			if (maxWidth/100 * containerWidth < containerWidth/widths.length) {
+				for (let i = 0; i < items.length; i++) {
+					items[i].style.width = `${100/widths.length}%`
+				}
+			} else {
+				for (let i = 0; i < items.length; i++) {
+					items[i].style.width = `${maxWidth}%`
+				}
 			}
 			
-			let inputs = document.getElementsByClassName('NumberLine--input');
+			let inputs = container.querySelectorAll('.NumberLine--input');
 			for (let i = 0; i < inputs.length; i++) {
 				inputs[i].style.width = `${biggestDiv*0.8}px`
 			}
 		}
-	}, [data]);
+	}, [data, id]);
 	
 	return (
-		<div className='NumberLine'>
+		<div className='NumberLine' id={`nl-${id}`}>
 			{data && 
 				<>
 				<div className='NumberLine--numbersContainer'>

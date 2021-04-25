@@ -27,7 +27,9 @@ const ProfilePage = () => {
   return (
 	<Fragment>
 		<div className='page--content' {...handlers}>
-			<Title text='instellingen'/>
+			<div className='page--heading'>
+				<Title text='Instellingen'/>
+			</div>
 			<Button text='afmelden' type='primary' onClick={()=>{handleLogout()}}/>
 		</div>
 		<NavBar active={'profile'}/>
