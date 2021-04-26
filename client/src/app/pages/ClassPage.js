@@ -41,7 +41,7 @@ const ClassPage = () => {
 	const copyJoinLink = () => {
 		let input = document.createElement("input");
 		document.body.insertBefore(input, document.body.firstChild);
-		input.value = `http://localhost:3000/join/${classId}`;
+		input.value = `https://wizzer.be/join/${classId}`;
 		input.focus();
 		input.select();
 		document.execCommand('copy');

@@ -4,10 +4,6 @@ import { IUserType } from './userType.model';
 import { default as bcrypt } from 'bcrypt';
 import { IClass } from './class.model';
 
-interface ILocalProvider {
-  password: string;
-}
-
 interface ISmartschoolProvider {
   id: string;
   token: string;
@@ -19,7 +15,6 @@ interface IUser extends Document {
   email: string;
   userType: IUserType['name'];
 
-  localProvider?: ILocalProvider;
   smartschoolProvider?: ISmartschoolProvider;
 
   _createdAt: number;
@@ -53,12 +48,6 @@ const userSchema: Schema = new Schema(
       required: true,
       max: 64,
     },
-    localProvider: {
-      password: {
-        type: String,
-        required: false,
-      },
-    },
     smartschoolProvider: {
       id: {
         type: String,
@@ -83,41 +72,6 @@ userSchema.virtual('id').get(function(this: IUser) {
   return this._id;
 });
 
-userSchema.pre('save', function(next) {
-  const member: IUser = this as IUser;
-
-  if (!member.isModified('localProvider.password')) return next();
-
-  try {
-    return bcrypt.genSalt(10, (errSalt, salt) => {
-      if (errSalt) throw errSalt;
-
-      bcrypt.hash(member.localProvider.password, salt, (errHash, hash) => {
-        if (errHash) throw errHash;
-
-        member.localProvider.password = hash;
-        return next();
-      });
-    });
-  } catch (err) {
-    return next(err);
-  }
-});
-
-userSchema.methods.comparePassword = function(
-  candidatePassword: String,
-  cb: Function,
-) {
-  const user = this as IUser;
-  bcrypt.compare(
-    candidatePassword,
-    user.localProvider.password,
-    (err, isMatch) => {
-      if (err) return cb(err, null);
-      return cb(null, isMatch);
-    },
-  );
-};
 
 userSchema.plugin(mongoosePaginate);
 const User = mongoose.model<IUser, IUserModel>('User', userSchema);

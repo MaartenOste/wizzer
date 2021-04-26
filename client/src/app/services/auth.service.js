@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
   }
 
   const signIn = async () => {
-    const classUrl = `http://localhost:8080/api/login/smartschool`;
+    const classUrl = `/api/login/smartschool`;
 
     try {
       window.location.href = classUrl;

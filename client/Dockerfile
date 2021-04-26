@@ -1,14 +1,19 @@
-FROM node:14-slim
+FROM node:14-slim AS builder
 
-WORKDIR /server
-
-COPY ./package.json ./
-COPY ./package-lock.json ./
-
-RUN npm i
+WORKDIR /client
 
 COPY . .
 
-EXPOSE 3000
+RUN npm i && npm run build
 
-CMD ["npm", "run", "start"]
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+
+COPY --from=builder /client/build .
+
+COPY --from=builder /client/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]

@@ -5,7 +5,7 @@ import { default as passportJwt } from 'passport-jwt';
 import { default as jwt } from 'jsonwebtoken';
 const SmartschoolStrategy = require('@diekeure/passport-smartschool');
 import { Environment, IConfig } from '../config';
-import { User } from '../../models/mongoose';
+import { Class, User } from '../../models/mongoose';
 import { Role } from './auth.types';
 import { UnauthorizedError, ForbiddenError } from '../../utilities';
 import { default as axios } from 'axios';
@@ -71,7 +71,7 @@ class AuthService {
         {
           clientID: '42d03a7a0ac7',
           clientSecret: 'ee9d1bbbad97',
-          callbackURL: 'http://localhost:8080/api/auth/smartschool',
+          callbackURL: 'https://wizzer.be/api/auth/smartschool',
           scope: 'userinfo fulluserinfo',
         },
         function(accessToken: any, refreshToken: any, profile: any, cb: any) {
@@ -103,8 +103,21 @@ class AuthService {
                         token: 'azerazer',
                       },
                     });
-
+                    
                     await tempuser.save();
+                    
+                    if (data.basisrol === 'Leerkracht') {
+                      let tempClass = new Class({
+                        name: 'Klas van ' + data.name + ' ' + data.surname,
+                      
+                        _exercises: [],
+                        _studentIds: [],
+                        _teacherId: tempuser.id
+                      });
+                      await tempClass.save();
+                      
+                    }
+
                     return cb(false, tempuser);
                   }
                   return cb(false, user);

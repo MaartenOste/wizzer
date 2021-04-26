@@ -86,89 +86,19 @@ class UserController {
       next(err);
     }
   };
-  /*
-  signupLocal = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response | void> => {
-    const {
-      email,
-      firstname,
-      lastname,
-      phoneNumber,
-      password,
-      _memberTypeId,
-    } = req.body;
 
-    let founMember = await Member.findOne({ email: email });
-    if (founMember) {
-      return res.status(403).json({ error: 'Email is already in use' });
-    }
-
-    const newMember: IMember = new Member({
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phoneNumber: phoneNumber,
-      localProvider:{
-        password: password,
-      },
-      _memberTypeId
-    });
-
-    const member: IMember = await newMember.save();
-
-    const token = this.authService.createToken(member);
-    return res.status(200).json({
-      email: member.email,
-      id: member._id,
-      token: `${token}`,
-      strategy: 'local',
-    });
-  };
-  */
-
-  /*  signInLocal = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    this.authService.passport.authenticate(
-      'local',
-      { session: this.config.auth.smartschool.session },
-      (err, user, info) => {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          return next(new NotFoundError());
-        }
-
-        const token = this.authService.createToken(user);
-        return res.status(200).json({
-          email: user.email,
-          id: user._id,
-          token: `${token}`,
-          strategy: 'local',
-          type: user._memberTypeId,
-        });
-      },
-    )(req, res, next);
-  };
-*/
   signInWithSmartschool = passport.authenticate('smartschool', {
     session: true,
   });
 
   smartschoolCallback = passport.authenticate('smartschool', {
     session: true,
-    failureRedirect: 'http://localhost:3000/login?failed=true',
+    failureRedirect: 'https://wizzer.be/login?failed=true',
   });
 
   smartschoolRedirect = async (req: Request, res: Response) => {
     res.redirect(
-      `http://localhost:3000/login/redirect/${req.session.passport.user.id}`,
+      `https://wizzer.be/login/redirect/${req.session.passport.user.id}`,
     );
   };
 

@@ -1,15 +1,25 @@
-FROM node:14-slim
+FROM node:14-alpine AS builder
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apk add --update \
+  python \
+  python-dev \
+  py-pip \
+  build-base \
+  git \
+  openssh-client \
+&& pip install virtualenv \
+&& rm -rf /var/cache/apk/*
 
-COPY ./package.json ./
-COPY ./package-lock.json ./
-
-RUN npm i
+WORKDIR /server
 
 COPY . .
 
-EXPOSE 8080
+RUN npm i && npm run build
 
-CMD ["npm", "run", "serve"]
+FROM node:14-slim
+
+COPY --from=builder /server .
+
+EXPOSE 80
+
+ENTRYPOINT [ "npm", "run", "serve" ]

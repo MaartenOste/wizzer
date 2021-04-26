@@ -31,7 +31,7 @@ class Config implements IConfig {
       ];
     this.server = {
       host: process.env.NODE_SERVER_HOST || 'localhost',
-      port: Number(process.env.NODE_SERVER_PORT || 8080),
+      port: Number(process.env.NODE_SERVER_PORT || 80),
       protocol:
         ServerProtocol[
           (process.env.NODE_SERVER_PROTOCOL ||

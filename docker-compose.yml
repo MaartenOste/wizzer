@@ -1,55 +1,18 @@
-version: '3.7'
-
+version: "3.9"
 services:
-  server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    image: wizzer-server
-    container_name: wizzer-node-server
-    command: /usr/src/app/node_modules/.bin/nodemon server.js
-    volumes:
-      - ./server/:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
-    env_file: ./server/.env
-    environment:
-      - NODE_ENV=development
-      - NODE_DOCS=true
-      - NODE_SERVER_HOST=localhost
-      - NODE_SERVER_PORT=8080
-      - NODE_SERVER_PROTOCOL=http
-      - MONGODB_CONNECTION=mongodb+srv://admin:Wanker123@wizzer.dtprb.mongodb.net/test?authSource=admin&replicaSet=atlas-gxph0z-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true
-      - AUTH_SMARTSCHOOL_CLIENT_ID='42d03a7a0ac7'
-      - AUTH_SMARTSCHOOL_CLIENT_SECRET='ee9d1bbbad97'
+  frontend:
+    image: "maartenoste/wizzer-client"
     networks:
-      - app-network
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    image: wizzer-client
-    container_name: wizzer-react-client
-    command: npm start
-    volumes:
-      - ./client/:/usr/app
-      - /usr/app/node_modules
-    depends_on:
-      - server
-    ports:
-      - "3000:3000"
+      - sub-etha
+  backend:
+    image: "maartenoste/wizzer-server"
     networks:
-      - app-network
-
+      - sub-etha
+  reverseproxy:
+    ports:
+      - "80:80"
+    image: maartenoste/reverseproxy
+    networks:
+      - sub-etha
 networks:
-    app-network:
-        driver: bridge
-
-volumes:
-    data-volume:
-    node_modules:
-    web-root:
-      driver: local
+  sub-etha:
