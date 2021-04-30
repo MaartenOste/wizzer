@@ -4,12 +4,12 @@
 	"description": "Wiskunde applicatie voor lager onderwijs",
 	"icons": [
 	  {
-		  "src": "/nobglogo.png",
+		  "src": "/logo.png",
 		  "sizes": "192x192",
 		  "type": "image/png"
 	  },
 	  {
-		"src": "/nobglogo.png",
+		"src": "/logo.png",
 		"sizes": "512x512",
 		  "type": "image/png"
 	  }

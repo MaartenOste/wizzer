@@ -1,6 +1,14 @@
 .MentalMath{
 	position: relative;
 
+	&--innerContainer{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		margin: auto;
+	}
+
 	&--numbersContainer{
 		display: flex;
 		flex-direction: row;
@@ -15,6 +23,7 @@
 			font-size: $font-size-medium;
 			color: $color-black;
 			border: 1px solid $color-black;
+			margin-left: 15px;
 		}
 
 		input::-webkit-outer-spin-button,
@@ -36,3 +45,21 @@
 		border-top: solid 2px $color-grey-middle;
 	}
 }
+
+@media only screen and (min-width: 600px) {
+	.MentalMath--numbersContainer{
+		font-size: 50px;
+		margin: 0 auto;
+		align-items: center;
+		
+		input{
+			text-align: center;
+			padding: 2px 0;
+			color: #000;
+			border: 1px solid #000;
+			height: 50px;
+			width: 150px;
+			margin: auto;
+		}
+	}
+  }

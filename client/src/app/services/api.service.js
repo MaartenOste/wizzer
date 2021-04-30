@@ -35,7 +35,6 @@ const ApiProvider = ({children}) => {
     let response;
 
     try {
-      console.log('response: ', response);
       response = await fetch(url);
       return await response.json();
     } catch (error) {

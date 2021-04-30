@@ -15,8 +15,11 @@ const LoginRedirectPage = () => {
 		const fetchdata = async () => {
 			try {
 				let user = await getUserById(id);
+				console.log('user: ', user);
 				setCurrentUser(user);
-				setCookie('wizzerUser', JSON.stringify(user));
+				if(user){
+					setCookie('wizzerUser', JSON.stringify(user));
+				}
 				if (sessionStorage.getItem('joinClassId')) {
 					await joinClassRoom(sessionStorage.getItem('joinClassId'), id);
 				}

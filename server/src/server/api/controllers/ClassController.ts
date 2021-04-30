@@ -52,8 +52,6 @@ class ClassController {
 
       let result: any = {};
       temp.forEach((el:ICompletedExercise) => {
-        console.log(el);
-        
         if (el.score !== 'Nog niet ingediend') {
           if (
             result[`${el.completedBy.firstname} ${el.completedBy.lastname}`]
