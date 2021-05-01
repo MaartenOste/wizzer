@@ -1,8 +1,6 @@
 import { default as mongoose, Schema, Document, PaginateModel } from 'mongoose';
 import { default as mongoosePaginate } from 'mongoose-paginate';
 import { IUserType } from './userType.model';
-import { default as bcrypt } from 'bcrypt';
-import { IClass } from './class.model';
 
 interface ISmartschoolProvider {
   id: string;

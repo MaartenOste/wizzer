@@ -1,6 +1,6 @@
-import { default as express, Application, Response, Router } from 'express';
+import { default as express, Response, Router } from 'express';
 import { Request } from '../controllers/CustomRequest';
-import { IConfig, AuthService, Role } from '../../services';
+import { IConfig, AuthService } from '../../services';
 import {
   ClassController,
   CompletedExerciseController,

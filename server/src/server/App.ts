@@ -2,20 +2,15 @@ import { default as http, createServer, Server } from 'http';
 import {
   default as express,
   Application,
-  NextFunction,
-  Response,
 } from 'express';
-import { Request } from './api/controllers/CustomRequest';
 
 const session = require('express-session');
+
 import { default as Router } from './router';
 import {
   GlobalMiddleware,
-  MorganMiddleware,
-  SwaggerMiddleware,
 } from './middleware';
-import { IAppError } from './utilities';
-import { Environment, ILogger, IConfig, AuthService } from './services';
+import { ILogger, IConfig, AuthService } from './services';
 import { default as passport } from 'passport';
 
 class App {
@@ -39,17 +34,12 @@ class App {
   private createExpress(): void {
     this.app = express();
     GlobalMiddleware.load(this.rootPath, this.app, this.config);
-    if (this.config.env === Environment.development) {
-      MorganMiddleware.load(this.app);
-    }
-    SwaggerMiddleware.load(this.rootPath, this.app, this.config);
     this.app.use(
       session({
         secret: 'MU0q8GTY*FcVfrWrES',
         resave: false,
         saveUninitialized: false,
         cookie: {
-          expires: new Date(Date.now() + 3600000),
           httpOnly: true,
         },
       }),
@@ -59,27 +49,6 @@ class App {
     this.app.use(passport.session());
     this.createRouter();
   }
-
-  /*private errorHandler(
-    error: IAppError,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): void {
-    res.status(error.status ? error.status : 500);
-
-    if (req.accepts('html')) {
-      res.render('pages/404', { url: req.url });
-      return;
-    }
-
-    if (req.accepts('json')) {
-      res.json({ error });
-      return;
-    }
-
-    res.type('txt').send('Not found');
-  }*/
 
   private createServer(): void {
     this.server = createServer(this.app);

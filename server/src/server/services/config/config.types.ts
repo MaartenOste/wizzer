@@ -18,20 +18,9 @@ export interface IServerConfig {
 }
 
 export interface IAuthConfig {
-  bcryptSalt: number;
-  jwt: IJwtConfig;
   smartschool?: ISmartschoolConfig;
 }
 
-export interface IJwtConfig {
-  secret: string;
-  session: boolean;
-}
-
-export interface IFacebookConfig {
-  clientId: string;
-  clientSecret: string;
-}
 
 export interface ISmartschoolConfig {
   clientId: string;

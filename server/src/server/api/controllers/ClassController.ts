@@ -7,7 +7,6 @@ import {
 import { Request } from './CustomRequest';
 import { NotFoundError } from '../../utilities';
 import { default as mongoose } from 'mongoose';
-import CompletedExerciseController from './CompletedExerciseController';
 
 class ClassController {
   index = async (req: Request, res: Response, next: NextFunction) => {

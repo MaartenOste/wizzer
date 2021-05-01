@@ -2,7 +2,6 @@ import { Application, Request, Response, NextFunction } from 'express';
 import { default as path } from 'path';
 
 import ApiRouter from '../api/router';
-import { HomeController, FallbackController } from '../controllers';
 import { IConfig, AuthService, Environment } from '../services';
 
 export default class Router {
@@ -10,8 +9,6 @@ export default class Router {
   private apiRouter: ApiRouter;
   private config: IConfig;
   private authService: AuthService;
-  private homeController: HomeController;
-  private fallbackController: FallbackController;
 
   constructor(
     rootPath: string,
@@ -22,9 +19,6 @@ export default class Router {
     this.app = app;
     this.config = config;
     this.authService = authService;
-
-    this.homeController = new HomeController();
-    this.fallbackController = new FallbackController();
 
     this.apiRouter = new ApiRouter(config, authService);
     this.registerRoutes(rootPath);

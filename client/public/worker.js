@@ -1,6 +1,6 @@
-/*const CACHE_NAME = 'wizzer';
+const CACHE_NAME = 'wizzer';
 const urlsToCache = [
-  '/',
+  //'/',
   '/index.html',
   'logo.png',
   'nobglogo.png'
@@ -26,7 +26,7 @@ self.addEventListener('install', function(event) {
 self.addEventListener('fetch', function(event) {
   event.respondWith(caches.match(event.request)
     .then(function(response) {
-      if (response.ok) {
+      if (response) {
         console.log(`fetch to ${event.request.url} served from cache`);
         return response;
       }
@@ -50,5 +50,3 @@ self.addEventListener('activate', event => {
     })
   );
 });
-
-*/

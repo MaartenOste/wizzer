@@ -1,6 +1,5 @@
 import { default as mongoose, Schema, Document, PaginateModel } from 'mongoose';
 import { default as mongoosePaginate } from 'mongoose-paginate';
-import { default as bcrypt } from 'bcrypt';
 import { default as slug } from 'slug';
 import { IUser } from './user.model';
 import { IExerciseGroup } from './exercisegroup.model';

@@ -43,16 +43,16 @@
     -->
     <input type="hidden" value="%NODE_ENV%" id="node_env_mode" />
     <script>
-      /*var mode = document.querySelector("#node_env_mode").value;
+      var mode = document.querySelector("#node_env_mode").value;
       if (
         mode === "production" &&
         typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === "object"
       ) {
         window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {};
-      }*/
+      }
     </script>
     <script>
-      /*if ('serviceWorker' in navigator) {
+      if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/worker.js').then(function(registration) {
             console.log('Worker registration successful', registration.scope);
@@ -64,7 +64,7 @@
         });
       } else {
         console.log('Service Worker is not supported by browser.');
-      }*/
+      }
     </script>
   </body>
 </html>

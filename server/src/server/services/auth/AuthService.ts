@@ -6,7 +6,6 @@ import { default as jwt } from 'jsonwebtoken';
 const SmartschoolStrategy = require('@diekeure/passport-smartschool');
 import { Environment, IConfig } from '../config';
 import { Class, User } from '../../models/mongoose';
-import { Role } from './auth.types';
 import { UnauthorizedError, ForbiddenError } from '../../utilities';
 import { default as axios } from 'axios';
 
@@ -33,38 +32,6 @@ class AuthService {
     this.passport = passport;
   }
 
-  private initializeLocalStrategy() {
-    passport.use(
-      new this.LocalStrategy(
-        {
-          usernameField: 'email',
-        },
-        async (email: string, password: string, done) => {
-          try {
-            const user = await User.findOne({
-              email: email,
-            });
-            if (!user) {
-              return done(null, false, { message: 'No user by that email' });
-            } else {
-              return user.comparePassword(
-                password,
-                (error: Error, isMatch: boolean) => {
-                  if (!isMatch) {
-                    return done(null, false);
-                  }
-                  return done(null, user);
-                },
-              );
-            }
-          } catch (error) {
-            return done(error, false);
-          }
-        },
-      ),
-    );
-  }
-
   private initializeSmartschoolStrategy() {
     passport.use(
       new this.LocalSmartschoolStrategy(
@@ -85,10 +52,14 @@ class AuthService {
             )
             .then(response => {
               const data = response.data;
+              console.log('user: ', data);
+              
               User.findOne(
                 { 'smartschoolProvider.id': data.userID },
                 async function(err: any, user: any) {
-                  if (!user || user.length === 0) {
+                  console.log('found user: ', user);
+
+                  if (!user || Object.keys(user).length === 0) {
                     let userType;
                     data.basisrol === 'Leerkracht'
                       ? (userType = 'Teacher')
@@ -127,15 +98,6 @@ class AuthService {
         },
       ),
     );
-  }
-
-  public createToken(user: any): string {
-    const payload = {
-      id: user._id,
-    };
-    return jwt.sign(payload, this.config.auth.jwt.secret, {
-      expiresIn: 60 * 120,
-    });
   }
 }
 
