@@ -138,27 +138,18 @@ const FillInExercisePage = () => {
 	const handlePreDiff = () =>{
 		if(KeysToComponentMap[data.exercise.subType].autoCorrect) {
 			let correctAnswers = 0;
-			console.log(totalCorrectValues);
-			console.log(totalAnswers);
 			totalCorrectValues.first.forEach((el, i)=>{
 				if(isEqual(el,totalAnswers.first[i])){
-					console.log(totalCorrectValues);
-					console.log(totalAnswers.first[i]);
 					correctAnswers++;
 				}
 			})
 
 			if (correctAnswers/totalCorrectValues.first.length <= data.exercise.exercises.goEasy) {
 				setDifficulty('easy')
-				console.log('nr easy');
 			} else if (correctAnswers/totalCorrectValues.first.length >= data.exercise.exercises.goHard){
 				setDifficulty('hard')
-				console.log('nr hard');
-
 			} else{
 				setDifficulty('medium')
-				console.log('nr med');
-
 			}
 		}
 		setSlide(slide+1);

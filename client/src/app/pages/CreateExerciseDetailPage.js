@@ -62,7 +62,6 @@ const CreateExerciseDetailPage = () => {
 			type: localStorage.getItem('exerciseType'),
 			subType: localStorage.getItem('exerciseSubType'),
 		}
-		console.log(data);
 		await createExercise(data);
 
 		localStorage.removeItem('newExerciseTitle');
@@ -114,7 +113,6 @@ const CreateExerciseDetailPage = () => {
 						De oefeningen die u op volgende pagina's zal maken tellen als basisoefeningen.
 					</div>
 					{exercisesDataBeforeDiff && exercisesDataBeforeDiff.map((x, i)=>{
-						console.log(x);
 						let props = {};
 						x.forEach((state) => {
 							props[`${state.name}`] = state.value;

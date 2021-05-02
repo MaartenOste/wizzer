@@ -3,9 +3,8 @@ import { default as bodyParser } from 'body-parser';
 
 import { default as cors } from 'cors';
 import { default as helmet } from 'helmet';
-import { default as path } from 'path';
 
-import { IConfig, Environment } from '../services';
+import { IConfig } from '../services';
 
 class GlobalMiddleware {
   public static load(rootPath: string, app: Application, config: IConfig) {

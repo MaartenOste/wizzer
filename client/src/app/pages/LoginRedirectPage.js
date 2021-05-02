@@ -15,7 +15,6 @@ const LoginRedirectPage = () => {
 		const fetchdata = async () => {
 			try {
 				let user = await getUserById(id);
-				console.log('user: ', user);
 				setCurrentUser(user);
 				if(user){
 					setCookie('wizzerUser', JSON.stringify(user));

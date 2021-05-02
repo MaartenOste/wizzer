@@ -155,7 +155,6 @@ const ExercisesPage = () => {
 					<div className={`exercises--mapped__container ${currentUser.userType === 'Teacher'?'teacherexercise':''}`}>
 					{exercises.length>0 ? exercises.map((ex, i) => {
 							if(currentUser.userType === 'Teacher'){
-								//console.log('exercise: ', ex);
 								return <ExerciseCard key={i}  id={ex.data.id} name={ex.data.title} isPublic={ex.public} deleteExercise={deleteExercise} makeExercisePublic={makeExercisePublic}/>}
 							else {
 								if(ex.score === 'Nog niet ingediend'){

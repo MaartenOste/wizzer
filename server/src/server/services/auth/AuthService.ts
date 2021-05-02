@@ -1,21 +1,14 @@
-import { Request, Response, NextFunction, response } from 'express';
 import { default as passport, PassportStatic } from 'passport';
-import { default as passportLocal } from 'passport-local';
-import { default as passportJwt } from 'passport-jwt';
-import { default as jwt } from 'jsonwebtoken';
 const SmartschoolStrategy = require('@diekeure/passport-smartschool');
-import { Environment, IConfig } from '../config';
+import { IConfig } from '../config';
 import { Class, User } from '../../models/mongoose';
-import { UnauthorizedError, ForbiddenError } from '../../utilities';
 import { default as axios } from 'axios';
 
 class AuthService {
   private config: IConfig;
   public passport: PassportStatic;
-  private LocalStrategy = passportLocal.Strategy;
   private LocalSmartschoolStrategy = SmartschoolStrategy;
-  private ExtractJwt = passportJwt.ExtractJwt;
-  private JwtStrategy = passportJwt.Strategy;
+
 
   constructor(config: IConfig) {
     this.config = config;
@@ -52,12 +45,10 @@ class AuthService {
             )
             .then(response => {
               const data = response.data;
-              console.log('user: ', data);
               
               User.findOne(
                 { 'smartschoolProvider.id': data.userID },
                 async function(err: any, user: any) {
-                  console.log('found user: ', user);
 
                   if (!user || Object.keys(user).length === 0) {
                     let userType;

@@ -103,13 +103,8 @@ class UserController {
   };
 
   logout = async (req: Request, res: Response) => {
-    console.log('session.pp before logout: ', req.session.passport);
-    
     req.logout();
     req.session.destroy();
-
-    console.log('session.pp: ', req.session?.passport);
-    
     res.sendStatus(200);
   };
 }

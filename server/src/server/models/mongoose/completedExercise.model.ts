@@ -1,6 +1,5 @@
 import { default as mongoose, Schema, Document, PaginateModel } from 'mongoose';
 import { default as mongoosePaginate } from 'mongoose-paginate';
-import { default as slug } from 'slug';
 import { IClass } from './class.model';
 import { IExerciseGroup } from './exercisegroup.model';
 import { IUser } from './user.model';

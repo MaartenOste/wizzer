@@ -27,7 +27,7 @@ const MentalMath = ({expression, setFillInValues=()=>{}, addCorrectValue=()=>{},
 					addCorrectValue(0, mexp.eval(expression));
 				} catch (error) {
 				}
-				result =[ <div className="MentalMath--innerContainer">{expression} = <input type="text" defaultValue={''} onKeyDown={onTabPress} onChange={(ev)=>{console.log(ev.target.value);setFillInValues(0, parseInt(ev.target.value))}}></input></div>];
+				result =[ <div className="MentalMath--innerContainer">{expression} = <input type="text" defaultValue={''} onKeyDown={onTabPress} onChange={(ev)=>{setFillInValues(0, parseInt(ev.target.value))}}></input></div>];
 			}
 			setData(result);
 		}

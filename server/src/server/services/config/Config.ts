@@ -6,7 +6,6 @@ import {
   IServerConfig,
   ServerProtocol,
   IAuthConfig,
-  ISmartschoolConfig,
 } from './config.types';
 
 class Config implements IConfig {

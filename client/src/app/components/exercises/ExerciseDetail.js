@@ -1,10 +1,12 @@
 import { default as React, useEffect, useCallback, useState } from 'react';
 import { useApi } from '../../services';
-import { Button, NumberLine } from '../../components';
+import { Button, NumberLine, MentalMath } from '../../components';
 import { Carousel } from 'react-responsive-carousel';
 
 const KeysToComponentMap = {
-	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'}
+	"getallenassen": {component: NumberLine, autoCorrect: true, instruction: 'Vul de getallen in op de open gelaten plaatsen.'},
+	"hoofdrekenen": {component: MentalMath, autoCorrect: true, instruction: 'Los de oefeningen op.'}
+
 };
 
 const difficultyToNl = {
