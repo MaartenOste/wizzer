@@ -41,6 +41,9 @@ const LoginPage = () => {
 				{errorPopup && <div className='errorpopup'>{errorPopup}</div>}
 				<Button text={'Aanmelden met smartschool'} type={'primary'} onClick={handleLogin}/>
 			</div>
+			<div className="copyright">
+				© Arteveldehogeschool, opleiding Grafische en digitale media 2021
+			</div>
 		</div>
     </Fragment>
   );
